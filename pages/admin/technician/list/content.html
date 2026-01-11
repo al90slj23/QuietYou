@@ -1,0 +1,445 @@
+<div class="page-technician-list">
+  <!-- 统计卡片 -->
+  <div class="stat-cards" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="stat-card">
+      <div class="stat-card-title">总技师数</div>
+      <div class="stat-card-value">386</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">待审核</div>
+      <div class="stat-card-value" style="color:var(--warning-color)">5</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">已认证</div>
+      <div class="stat-card-value" style="color:var(--success-color)">368</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">已拒绝</div>
+      <div class="stat-card-value" style="color:var(--error-color)">13</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">当前在线</div>
+      <div class="stat-card-value" style="color:var(--primary-color)">89</div>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="card">
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="搜索技师ID/姓名/手机号" id="searchInput">
+      <select class="filter-select" id="verifyFilter">
+        <option value="">认证状态</option>
+        <option value="0">待审核</option>
+        <option value="1">已认证</option>
+        <option value="2">已拒绝</option>
+      </select>
+      <select class="filter-select" id="onlineFilter">
+        <option value="">在线状态</option>
+        <option value="1">在线</option>
+        <option value="0">离线</option>
+        <option value="2">忙碌</option>
+      </select>
+      <select class="filter-select" id="shopFilter">
+        <option value="">所属商家</option>
+        <option value="1">轻松养生馆</option>
+        <option value="2">康乐推拿店</option>
+        <option value="3">悦享SPA</option>
+      </select>
+      <button class="btn btn-primary" onclick="searchTechs()">搜索</button>
+      <button class="btn btn-default" onclick="resetFilters()">重置</button>
+    </div>
+  </div>
+
+  <!-- 技师列表 -->
+  <div class="card">
+    <div class="card-title">
+      <span>技师列表</span>
+      <button class="btn btn-primary" onclick="ADMIN.navigateTo('technician/pending')">待审核 (5)</button>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>技师ID</th>
+          <th>头像</th>
+          <th>姓名</th>
+          <th>手机号</th>
+          <th>所属商家</th>
+          <th>评分</th>
+          <th>订单数</th>
+          <th>认证状态</th>
+          <th>在线状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="techTableBody">
+        <!-- 动态生成 -->
+      </tbody>
+    </table>
+    
+    <div class="pagination" id="pagination">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 技师详情弹窗 -->
+<div class="modal-overlay" id="techDetailModal" style="display:none">
+  <div class="modal" style="min-width:700px">
+    <div class="modal-header">
+      <span class="modal-title">技师详情</span>
+      <span class="modal-close" onclick="closeTechDetail()">×</span>
+    </div>
+    <div class="modal-body" id="techDetailContent">
+      <!-- 动态生成 -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeTechDetail()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.tech-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.rating-stars {
+  color: #ffc107;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.action-btn.danger:hover {
+  background: #fde8ea;
+  color: var(--error-color);
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+}
+
+.detail-label {
+  width: 80px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.detail-value {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.cert-images {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cert-image {
+  width: 120px;
+  height: 80px;
+  background: var(--bg-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.online-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.online-dot.online { background: var(--success-color); }
+.online-dot.offline { background: var(--text-placeholder); }
+.online-dot.busy { background: var(--warning-color); }
+</style>
+
+<script>
+(function() {
+  // 模拟技师数据
+  const mockTechs = [
+    { id: 20001, avatar: '👨', name: '李师傅', phone: '138****1234', shop: '轻松养生馆', shopId: 1, rating: 4.98, orders: 128, verify: 1, online: 1 },
+    { id: 20002, avatar: '👨', name: '王师傅', phone: '139****5678', shop: '康乐推拿店', shopId: 2, rating: 4.95, orders: 115, verify: 1, online: 1 },
+    { id: 20003, avatar: '👩', name: '张师傅', phone: '137****9012', shop: '悦享SPA', shopId: 3, rating: 4.92, orders: 108, verify: 1, online: 2 },
+    { id: 20004, avatar: '👨', name: '刘师傅', phone: '136****3456', shop: '轻松养生馆', shopId: 1, rating: 4.90, orders: 96, verify: 1, online: 0 },
+    { id: 20005, avatar: '👩', name: '陈师傅', phone: '135****7890', shop: '康乐推拿店', shopId: 2, rating: 4.88, orders: 89, verify: 1, online: 1 },
+    { id: 20006, avatar: '👨', name: '赵师傅', phone: '134****2345', shop: '悦享SPA', shopId: 3, rating: 4.85, orders: 76, verify: 1, online: 0 },
+    { id: 20007, avatar: '👨', name: '孙师傅', phone: '133****6789', shop: '轻松养生馆', shopId: 1, rating: 0, orders: 0, verify: 0, online: 0 },
+    { id: 20008, avatar: '👩', name: '周师傅', phone: '132****0123', shop: '康乐推拿店', shopId: 2, rating: 4.75, orders: 45, verify: 1, online: 1 },
+    { id: 20009, avatar: '👨', name: '吴师傅', phone: '131****4567', shop: '', shopId: 0, rating: 0, orders: 0, verify: 2, online: 0 },
+    { id: 20010, avatar: '👩', name: '郑师傅', phone: '130****8901', shop: '悦享SPA', shopId: 3, rating: 4.80, orders: 62, verify: 1, online: 1 }
+  ];
+
+  const verifyMap = {
+    0: { text: '待审核', class: 'warning' },
+    1: { text: '已认证', class: 'success' },
+    2: { text: '已拒绝', class: 'error' }
+  };
+
+  const onlineMap = {
+    0: { text: '离线', class: 'offline' },
+    1: { text: '在线', class: 'online' },
+    2: { text: '忙碌', class: 'busy' }
+  };
+
+  let currentPage = 1;
+  const pageSize = 10;
+  let filteredTechs = [...mockTechs];
+
+  function init() {
+    renderTable();
+    renderPagination();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('techTableBody');
+    const start = (currentPage - 1) * pageSize;
+    const pageTechs = filteredTechs.slice(start, start + pageSize);
+
+    tbody.innerHTML = pageTechs.map(tech => {
+      const verify = verifyMap[tech.verify];
+      const online = onlineMap[tech.online];
+      
+      return `
+        <tr>
+          <td>${tech.id}</td>
+          <td><div class="tech-avatar">${tech.avatar}</div></td>
+          <td>${tech.name}</td>
+          <td>${tech.phone}</td>
+          <td>${tech.shop || '-'}</td>
+          <td><span class="rating-stars">⭐</span> ${tech.rating || '-'}</td>
+          <td>${tech.orders}</td>
+          <td><span class="status-tag ${verify.class}">${verify.text}</span></td>
+          <td>
+            <span class="online-dot ${online.class}"></span>${online.text}
+          </td>
+          <td>
+            <div class="action-btns">
+              <button class="action-btn" onclick="viewTechDetail(${tech.id})">详情</button>
+              ${tech.verify === 0 ? `<button class="action-btn" onclick="reviewTech(${tech.id})">审核</button>` : ''}
+              ${tech.verify === 1 ? `<button class="action-btn danger" onclick="suspendTech(${tech.id})">停用</button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredTechs.length / pageSize);
+    const pagination = document.getElementById('pagination');
+    
+    let html = `
+      <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
+    `;
+    
+    for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+      html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+    
+    html += `
+      <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    `;
+    
+    pagination.innerHTML = html;
+  }
+
+  window.goToPage = function(page) {
+    const totalPages = Math.ceil(filteredTechs.length / pageSize);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable();
+    renderPagination();
+  };
+
+  window.searchTechs = function() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const verify = document.getElementById('verifyFilter').value;
+    const online = document.getElementById('onlineFilter').value;
+    const shop = document.getElementById('shopFilter').value;
+    
+    filteredTechs = mockTechs.filter(tech => {
+      const matchKeyword = !keyword || 
+        tech.id.toString().includes(keyword) ||
+        tech.name.toLowerCase().includes(keyword) ||
+        tech.phone.includes(keyword);
+      const matchVerify = !verify || tech.verify.toString() === verify;
+      const matchOnline = !online || tech.online.toString() === online;
+      const matchShop = !shop || tech.shopId.toString() === shop;
+      return matchKeyword && matchVerify && matchOnline && matchShop;
+    });
+    
+    currentPage = 1;
+    renderTable();
+    renderPagination();
+  };
+
+  window.resetFilters = function() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('verifyFilter').value = '';
+    document.getElementById('onlineFilter').value = '';
+    document.getElementById('shopFilter').value = '';
+    filteredTechs = [...mockTechs];
+    currentPage = 1;
+    renderTable();
+    renderPagination();
+  };
+
+  window.viewTechDetail = function(techId) {
+    const tech = mockTechs.find(t => t.id === techId);
+    if (!tech) return;
+
+    const verify = verifyMap[tech.verify];
+    const online = onlineMap[tech.online];
+
+    const content = `
+      <div class="detail-section">
+        <div class="detail-section-title">基本信息</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">技师ID</span>
+            <span class="detail-value">${tech.id}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">姓名</span>
+            <span class="detail-value">${tech.name}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">手机号</span>
+            <span class="detail-value">${tech.phone}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">所属商家</span>
+            <span class="detail-value">${tech.shop || '无'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">认证状态</span>
+            <span class="detail-value">
+              <span class="status-tag ${verify.class}">${verify.text}</span>
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">在线状态</span>
+            <span class="detail-value">
+              <span class="online-dot ${online.class}"></span>${online.text}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">服务统计</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">评分</span>
+            <span class="detail-value"><span class="rating-stars">⭐</span> ${tech.rating || '-'}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">完成订单</span>
+            <span class="detail-value">${tech.orders} 单</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">完成率</span>
+            <span class="detail-value">98.5%</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">投诉数</span>
+            <span class="detail-value">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">认证资料</div>
+        <div class="cert-images">
+          <div class="cert-image">身份证正面</div>
+          <div class="cert-image">身份证背面</div>
+          <div class="cert-image">健康证</div>
+          <div class="cert-image">专业证书</div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('techDetailContent').innerHTML = content;
+    document.getElementById('techDetailModal').style.display = 'flex';
+  };
+
+  window.closeTechDetail = function() {
+    document.getElementById('techDetailModal').style.display = 'none';
+  };
+
+  window.reviewTech = async function(techId) {
+    const tech = mockTechs.find(t => t.id === techId);
+    if (!tech) return;
+
+    const confirmed = await ADMIN.showConfirm(`确定要通过技师 ${tech.name} 的认证申请吗？`);
+    if (confirmed) {
+      tech.verify = 1;
+      renderTable();
+      ADMIN.showToast('已通过认证');
+    }
+  };
+
+  window.suspendTech = async function(techId) {
+    const tech = mockTechs.find(t => t.id === techId);
+    if (!tech) return;
+
+    const confirmed = await ADMIN.showConfirm(`确定要停用技师 ${tech.name} 吗？`);
+    if (confirmed) {
+      tech.verify = 2;
+      tech.online = 0;
+      renderTable();
+      ADMIN.showToast('已停用技师');
+    }
+  };
+
+  init();
+})();
+</script>

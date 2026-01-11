@@ -1,0 +1,381 @@
+<div class="page-container tech-order-list">
+  <!-- 订单状态标签页 -->
+  <div class="order-tabs">
+    <div class="tab-item active" data-status="all" onclick="switchTab('all')">全部</div>
+    <div class="tab-item" data-status="pending" onclick="switchTab('pending')">待接单</div>
+    <div class="tab-item" data-status="accepted" onclick="switchTab('accepted')">待服务</div>
+    <div class="tab-item" data-status="in_progress" onclick="switchTab('in_progress')">进行中</div>
+    <div class="tab-item" data-status="completed" onclick="switchTab('completed')">已完成</div>
+  </div>
+
+  <!-- 订单列表 -->
+  <div id="orderList" class="order-list">
+    <!-- 动态加载 -->
+  </div>
+</div>
+
+<style>
+.tech-order-list {
+  padding: 0;
+  background: var(--bg-color);
+}
+
+.order-tabs {
+  display: flex;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 12px 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background: var(--primary-color);
+  border-radius: 1px;
+}
+
+.order-list {
+  padding: 12px;
+}
+
+.tech-order-card {
+  background: var(--bg-white);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.tech-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tech-order-no {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.tech-order-status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.status-pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.status-accepted {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.status-in_progress {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status-completed {
+  background: #f5f5f5;
+  color: #9e9e9e;
+}
+
+.status-cancelled {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.tech-order-body {
+  padding: 12px;
+}
+
+.tech-order-service {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.tech-order-info {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.tech-order-info-icon {
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.tech-order-price {
+  font-size: 16px;
+  color: var(--danger-color);
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.tech-order-actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.tech-order-actions .btn {
+  flex: 1;
+}
+</style>
+
+<script>
+(function() {
+  // 模拟订单数据
+  const mockOrders = [
+    {
+      id: 'ORD20260111001',
+      service: '中式推拿 60分钟',
+      customerName: '李**',
+      phone: '138****8888',
+      time: '2026-01-11 14:00',
+      address: '朝阳区建国路88号SOHO现代城A座1205',
+      status: 'pending',
+      price: 298,
+      createTime: '2026-01-11 10:30'
+    },
+    {
+      id: 'ORD20260111002',
+      service: '肩颈舒缓 45分钟',
+      customerName: '王**',
+      phone: '139****9999',
+      time: '2026-01-11 16:30',
+      address: '朝阳区望京SOHO T1 2208',
+      status: 'accepted',
+      price: 198,
+      createTime: '2026-01-11 09:15'
+    },
+    {
+      id: 'ORD20260110003',
+      service: '足底按摩 90分钟',
+      customerName: '张**',
+      phone: '137****7777',
+      time: '2026-01-10 19:00',
+      address: '海淀区中关村软件园二期',
+      status: 'in_progress',
+      price: 358,
+      createTime: '2026-01-10 15:00'
+    },
+    {
+      id: 'ORD20260109004',
+      service: '全身精油SPA 120分钟',
+      customerName: '赵**',
+      phone: '136****6666',
+      time: '2026-01-09 14:00',
+      address: '西城区金融街购物中心',
+      status: 'completed',
+      price: 598,
+      createTime: '2026-01-09 10:00'
+    },
+    {
+      id: 'ORD20260108005',
+      service: '中式推拿 60分钟',
+      customerName: '孙**',
+      phone: '135****5555',
+      time: '2026-01-08 10:00',
+      address: '东城区王府井大街',
+      status: 'completed',
+      price: 298,
+      createTime: '2026-01-08 08:30'
+    }
+  ];
+
+  let currentStatus = 'all';
+
+  // 状态文本映射
+  const statusTextMap = {
+    'pending': '待接单',
+    'accepted': '待服务',
+    'in_progress': '进行中',
+    'completed': '已完成',
+    'cancelled': '已取消'
+  };
+
+  // 初始化
+  function init() {
+    renderOrders();
+  }
+
+  // 切换标签
+  window.switchTab = function(status) {
+    currentStatus = status;
+    
+    // 更新标签样式
+    document.querySelectorAll('.tab-item').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.status === status);
+    });
+    
+    renderOrders();
+  };
+
+  // 渲染订单列表
+  function renderOrders() {
+    const container = document.getElementById('orderList');
+    
+    // 过滤订单
+    const filteredOrders = currentStatus === 'all' 
+      ? mockOrders 
+      : mockOrders.filter(o => o.status === currentStatus);
+    
+    if (filteredOrders.length === 0) {
+      container.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">暂无订单</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filteredOrders.map(order => {
+      const statusText = statusTextMap[order.status];
+      
+      // 根据状态生成操作按钮
+      let actionsHtml = '';
+      switch (order.status) {
+        case 'pending':
+          actionsHtml = `
+            <button class="btn btn-secondary" onclick="rejectOrder('${order.id}')">拒绝</button>
+            <button class="btn btn-primary" onclick="acceptOrder('${order.id}')">接单</button>
+          `;
+          break;
+        case 'accepted':
+          actionsHtml = `
+            <button class="btn btn-secondary" onclick="callCustomer('${order.phone}')">联系客户</button>
+            <button class="btn btn-primary" onclick="startDepart('${order.id}')">出发</button>
+          `;
+          break;
+        case 'in_progress':
+          actionsHtml = `
+            <button class="btn btn-secondary" onclick="callCustomer('${order.phone}')">联系客户</button>
+            <button class="btn btn-success" onclick="completeOrder('${order.id}')">完成服务</button>
+          `;
+          break;
+        case 'completed':
+          actionsHtml = `
+            <button class="btn btn-secondary" onclick="viewOrderDetail('${order.id}')">查看详情</button>
+          `;
+          break;
+      }
+
+      return `
+        <div class="tech-order-card" onclick="viewOrderDetail('${order.id}')">
+          <div class="tech-order-header">
+            <span class="tech-order-no">订单号：${order.id}</span>
+            <span class="tech-order-status status-${order.status}">${statusText}</span>
+          </div>
+          <div class="tech-order-body">
+            <div class="tech-order-service">${order.service}</div>
+            <div class="tech-order-info">
+              <span class="tech-order-info-icon">👤</span>
+              <span>${order.customerName} ${order.phone}</span>
+            </div>
+            <div class="tech-order-info">
+              <span class="tech-order-info-icon">📅</span>
+              <span>${order.time}</span>
+            </div>
+            <div class="tech-order-info">
+              <span class="tech-order-info-icon">📍</span>
+              <span>${order.address}</span>
+            </div>
+            <div class="tech-order-price">¥${order.price}</div>
+          </div>
+          <div class="tech-order-actions" onclick="event.stopPropagation()">
+            ${actionsHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 接单
+  window.acceptOrder = function(orderId) {
+    TECH.showToast('已接单');
+    const order = mockOrders.find(o => o.id === orderId);
+    if (order) {
+      order.status = 'accepted';
+      renderOrders();
+    }
+  };
+
+  // 拒绝订单
+  window.rejectOrder = async function(orderId) {
+    const confirmed = await TECH.showConfirm('确定要拒绝此订单吗？');
+    if (confirmed) {
+      TECH.showToast('已拒绝订单');
+      const index = mockOrders.findIndex(o => o.id === orderId);
+      if (index > -1) {
+        mockOrders.splice(index, 1);
+        renderOrders();
+      }
+    }
+  };
+
+  // 出发
+  window.startDepart = function(orderId) {
+    TECH.showToast('已开始出发');
+    TECH.navigateTo('order/detail', { id: orderId, action: 'depart' });
+  };
+
+  // 完成服务
+  window.completeOrder = async function(orderId) {
+    const confirmed = await TECH.showConfirm('确认已完成服务？');
+    if (confirmed) {
+      TECH.showToast('服务已完成');
+      const order = mockOrders.find(o => o.id === orderId);
+      if (order) {
+        order.status = 'completed';
+        renderOrders();
+      }
+    }
+  };
+
+  // 联系客户
+  window.callCustomer = function(phone) {
+    TECH.showToast('正在拨打客户电话...');
+    // 实际应调用电话功能
+  };
+
+  // 查看订单详情
+  window.viewOrderDetail = function(orderId) {
+    TECH.navigateTo('order/detail', { id: orderId });
+  };
+
+  init();
+})();
+</script>

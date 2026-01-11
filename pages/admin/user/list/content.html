@@ -1,0 +1,364 @@
+<div class="page-user-list">
+  <!-- 筛选栏 -->
+  <div class="card">
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="搜索用户ID/手机号/昵称" id="searchInput">
+      <select class="filter-select" id="statusFilter">
+        <option value="">全部状态</option>
+        <option value="1">正常</option>
+        <option value="0">已禁用</option>
+      </select>
+      <input type="date" class="filter-input" id="dateFrom" style="min-width:140px">
+      <span style="color:var(--text-secondary)">至</span>
+      <input type="date" class="filter-input" id="dateTo" style="min-width:140px">
+      <button class="btn btn-primary" onclick="searchUsers()">搜索</button>
+      <button class="btn btn-default" onclick="resetFilters()">重置</button>
+    </div>
+  </div>
+
+  <!-- 用户列表 -->
+  <div class="card">
+    <div class="card-title">
+      <span>用户列表</span>
+      <span class="total-count">共 <span id="totalCount">12,580</span> 位用户</span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>用户ID</th>
+          <th>头像</th>
+          <th>昵称</th>
+          <th>手机号</th>
+          <th>注册时间</th>
+          <th>订单数</th>
+          <th>消费金额</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody">
+        <!-- 动态生成 -->
+      </tbody>
+    </table>
+    
+    <div class="pagination" id="pagination">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 用户详情弹窗 -->
+<div class="modal-overlay" id="userDetailModal" style="display:none">
+  <div class="modal" style="min-width:600px">
+    <div class="modal-header">
+      <span class="modal-title">用户详情</span>
+      <span class="modal-close" onclick="closeUserDetail()">×</span>
+    </div>
+    <div class="modal-body" id="userDetailContent">
+      <!-- 动态生成 -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeUserDetail()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.total-count {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text-secondary);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.action-btn.danger:hover {
+  background: #fde8ea;
+  color: var(--error-color);
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+}
+
+.detail-label {
+  width: 80px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.detail-value {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.order-history {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.order-history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.order-history-item:last-child {
+  border-bottom: none;
+}
+</style>
+
+<script>
+(function() {
+  // 模拟用户数据
+  const mockUsers = [
+    { id: 10001, avatar: '👤', nickname: '小明', phone: '138****1234', registerTime: '2025-12-01 10:30', orders: 15, amount: 4580, status: 1 },
+    { id: 10002, avatar: '👩', nickname: '小红', phone: '139****5678', registerTime: '2025-12-05 14:20', orders: 8, amount: 2360, status: 1 },
+    { id: 10003, avatar: '👨', nickname: '张三', phone: '137****9012', registerTime: '2025-12-10 09:15', orders: 22, amount: 6890, status: 1 },
+    { id: 10004, avatar: '👤', nickname: '李四', phone: '136****3456', registerTime: '2025-12-15 16:45', orders: 5, amount: 1580, status: 0 },
+    { id: 10005, avatar: '👩', nickname: '王五', phone: '135****7890', registerTime: '2025-12-20 11:30', orders: 12, amount: 3680, status: 1 },
+    { id: 10006, avatar: '👨', nickname: '赵六', phone: '134****2345', registerTime: '2025-12-25 08:00', orders: 3, amount: 890, status: 1 },
+    { id: 10007, avatar: '👤', nickname: '钱七', phone: '133****6789', registerTime: '2026-01-01 13:20', orders: 18, amount: 5460, status: 1 },
+    { id: 10008, avatar: '👩', nickname: '孙八', phone: '132****0123', registerTime: '2026-01-05 17:40', orders: 7, amount: 2180, status: 1 },
+    { id: 10009, avatar: '👨', nickname: '周九', phone: '131****4567', registerTime: '2026-01-08 10:10', orders: 0, amount: 0, status: 1 },
+    { id: 10010, avatar: '👤', nickname: '吴十', phone: '130****8901', registerTime: '2026-01-10 15:55', orders: 2, amount: 596, status: 1 }
+  ];
+
+  let currentPage = 1;
+  const pageSize = 10;
+  let filteredUsers = [...mockUsers];
+
+  function init() {
+    renderTable();
+    renderPagination();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('userTableBody');
+    const start = (currentPage - 1) * pageSize;
+    const pageUsers = filteredUsers.slice(start, start + pageSize);
+
+    tbody.innerHTML = pageUsers.map(user => `
+      <tr>
+        <td>${user.id}</td>
+        <td><div class="user-avatar">${user.avatar}</div></td>
+        <td>${user.nickname}</td>
+        <td>${user.phone}</td>
+        <td>${user.registerTime}</td>
+        <td>${user.orders}</td>
+        <td>¥${user.amount.toLocaleString()}</td>
+        <td>
+          <span class="status-tag ${user.status === 1 ? 'success' : 'error'}">
+            ${user.status === 1 ? '正常' : '已禁用'}
+          </span>
+        </td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn" onclick="viewUserDetail(${user.id})">详情</button>
+            <button class="action-btn ${user.status === 1 ? 'danger' : ''}" onclick="toggleUserStatus(${user.id})">
+              ${user.status === 1 ? '禁用' : '启用'}
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    document.getElementById('totalCount').textContent = filteredUsers.length.toLocaleString();
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredUsers.length / pageSize);
+    const pagination = document.getElementById('pagination');
+    
+    let html = `
+      <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
+    `;
+    
+    for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+      html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+    
+    html += `
+      <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    `;
+    
+    pagination.innerHTML = html;
+  }
+
+  window.goToPage = function(page) {
+    const totalPages = Math.ceil(filteredUsers.length / pageSize);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable();
+    renderPagination();
+  };
+
+  window.searchUsers = function() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+    
+    filteredUsers = mockUsers.filter(user => {
+      const matchKeyword = !keyword || 
+        user.id.toString().includes(keyword) ||
+        user.nickname.toLowerCase().includes(keyword) ||
+        user.phone.includes(keyword);
+      const matchStatus = !status || user.status.toString() === status;
+      return matchKeyword && matchStatus;
+    });
+    
+    currentPage = 1;
+    renderTable();
+    renderPagination();
+  };
+
+  window.resetFilters = function() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('dateFrom').value = '';
+    document.getElementById('dateTo').value = '';
+    filteredUsers = [...mockUsers];
+    currentPage = 1;
+    renderTable();
+    renderPagination();
+  };
+
+  window.viewUserDetail = function(userId) {
+    const user = mockUsers.find(u => u.id === userId);
+    if (!user) return;
+
+    const content = `
+      <div class="detail-section">
+        <div class="detail-section-title">基本信息</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">用户ID</span>
+            <span class="detail-value">${user.id}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">昵称</span>
+            <span class="detail-value">${user.nickname}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">手机号</span>
+            <span class="detail-value">${user.phone}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">注册时间</span>
+            <span class="detail-value">${user.registerTime}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">状态</span>
+            <span class="detail-value">
+              <span class="status-tag ${user.status === 1 ? 'success' : 'error'}">
+                ${user.status === 1 ? '正常' : '已禁用'}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">消费统计</div>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">订单数</span>
+            <span class="detail-value">${user.orders} 单</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">消费金额</span>
+            <span class="detail-value">¥${user.amount.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">最近订单</div>
+        <div class="order-history">
+          <div class="order-history-item">
+            <span>QY20260110001 - 中式推拿60分钟</span>
+            <span>¥298</span>
+          </div>
+          <div class="order-history-item">
+            <span>QY20260108002 - 肩颈舒缓45分钟</span>
+            <span>¥198</span>
+          </div>
+          <div class="order-history-item">
+            <span>QY20260105003 - 足底按摩90分钟</span>
+            <span>¥358</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('userDetailContent').innerHTML = content;
+    document.getElementById('userDetailModal').style.display = 'flex';
+  };
+
+  window.closeUserDetail = function() {
+    document.getElementById('userDetailModal').style.display = 'none';
+  };
+
+  window.toggleUserStatus = async function(userId) {
+    const user = mockUsers.find(u => u.id === userId);
+    if (!user) return;
+
+    const action = user.status === 1 ? '禁用' : '启用';
+    const confirmed = await ADMIN.showConfirm(`确定要${action}用户 ${user.nickname} 吗？`);
+    
+    if (confirmed) {
+      user.status = user.status === 1 ? 0 : 1;
+      renderTable();
+      ADMIN.showToast(`已${action}用户`);
+    }
+  };
+
+  init();
+})();
+</script>

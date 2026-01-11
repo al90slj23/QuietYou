@@ -1,0 +1,14 @@
+{
+  "name": "qingyang-platform",
+  "version": "1.0.0",
+  "description": "轻养到家 - 上门按摩服务平台",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "fast-check": "^3.0.0"
+  }
+}

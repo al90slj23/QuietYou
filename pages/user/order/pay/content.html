@@ -1,0 +1,604 @@
+<div class="order-pay-page" id="orderPayPage">
+  <!-- 订单信息 -->
+  <div class="section card">
+    <div class="order-info">
+      <div class="order-no">
+        <span class="label">订单编号</span>
+        <span class="value" id="orderNo">QY20260111143000ABCD</span>
+      </div>
+      <div class="order-service">
+        <div class="service-icon" id="serviceIcon">💆</div>
+        <div class="service-detail">
+          <div class="service-name" id="serviceName">全身中式推拿</div>
+          <div class="service-tech">技师：<span id="techName">张师傅</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 支付金额 -->
+  <div class="section card">
+    <div class="pay-amount">
+      <span class="label">支付金额</span>
+      <span class="amount" id="payAmount">¥298.00</span>
+    </div>
+  </div>
+
+  <!-- 支付方式 -->
+  <div class="section card">
+    <div class="section-title">选择支付方式</div>
+    <div class="pay-methods">
+      <label class="pay-method active" data-method="wechat">
+        <input type="radio" name="payMethod" value="wechat" checked>
+        <span class="method-icon">💚</span>
+        <span class="method-name">微信支付</span>
+        <span class="method-check">✓</span>
+      </label>
+      <label class="pay-method" data-method="alipay">
+        <input type="radio" name="payMethod" value="alipay">
+        <span class="method-icon">💙</span>
+        <span class="method-name">支付宝</span>
+        <span class="method-check">✓</span>
+      </label>
+      <label class="pay-method" data-method="balance">
+        <input type="radio" name="payMethod" value="balance">
+        <span class="method-icon">💰</span>
+        <span class="method-name">余额支付</span>
+        <span class="method-sub">可用余额 ¥0.00</span>
+        <span class="method-check">✓</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- 支付倒计时 -->
+  <div class="section countdown-section">
+    <span class="countdown-text">请在 <span id="countdown">15:00</span> 内完成支付</span>
+    <span class="countdown-tip">超时订单将自动取消</span>
+  </div>
+
+  <!-- 底部操作栏 -->
+  <div class="bottom-bar">
+    <button class="btn btn-secondary btn-cancel" onclick="cancelOrder()">取消订单</button>
+    <button class="btn btn-primary btn-pay" onclick="confirmPay()">确认支付 ¥<span id="payBtn">298.00</span></button>
+  </div>
+</div>
+
+<!-- 支付结果弹窗 -->
+<div class="pay-result-modal" id="payResultModal" style="display: none;">
+  <div class="modal-content">
+    <div class="result-icon" id="resultIcon">✅</div>
+    <div class="result-title" id="resultTitle">支付成功</div>
+    <div class="result-desc" id="resultDesc">订单已提交，等待技师接单</div>
+    <div class="result-actions">
+      <button class="btn btn-primary btn-block" onclick="viewOrder()">查看订单</button>
+      <button class="btn btn-secondary btn-block" onclick="backToHome()">返回首页</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.order-pay-page {
+  background: var(--bg-color);
+  min-height: 100%;
+  padding-bottom: 80px;
+}
+
+.section {
+  margin: 12px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* Order Info */
+.order-info {
+  padding: 4px 0;
+}
+
+.order-no {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 12px;
+}
+
+.order-no .label {
+  font-size: 13px;
+  color: var(--text-placeholder);
+}
+
+.order-no .value {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.order-service {
+  display: flex;
+  align-items: center;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.service-detail {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.service-tech {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Pay Amount */
+.pay-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.pay-amount .label {
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.pay-amount .amount {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+/* Pay Methods */
+.pay-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pay-method {
+  display: flex;
+  align-items: center;
+  padding: 14px 12px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.pay-method.active {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.pay-method input {
+  display: none;
+}
+
+.method-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.method-name {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.method-sub {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-left: 8px;
+}
+
+.method-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--border-color);
+  color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.pay-method.active .method-check {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+/* Countdown */
+.countdown-section {
+  text-align: center;
+  padding: 16px;
+}
+
+.countdown-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.countdown-text #countdown {
+  color: var(--danger-color);
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.countdown-tip {
+  display: block;
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-top: 4px;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 100;
+}
+
+.btn-cancel {
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 24px;
+}
+
+.btn-pay {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 24px;
+}
+
+/* Pay Result Modal */
+.pay-result-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 80%;
+  max-width: 320px;
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.result-icon.success {
+  color: var(--primary-color);
+}
+
+.result-icon.fail {
+  color: var(--danger-color);
+}
+
+.result-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.result-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-actions .btn {
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+}
+
+/* Loading */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  background: var(--bg-white);
+  padding: 24px 32px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.loading-spinner {
+  font-size: 32px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+</style>
+
+
+<script>
+(function() {
+  // 从 sessionStorage 获取订单数据
+  const orderDataStr = sessionStorage.getItem('currentOrder');
+  
+  if (!orderDataStr) {
+    QY.showToast('订单数据不存在');
+    setTimeout(() => QY.navigateTo('home'), 1500);
+    return;
+  }
+
+  const orderData = JSON.parse(orderDataStr);
+  
+  // 支付状态
+  let paymentStatus = 'pending'; // pending, processing, success, failed
+  let countdownTimer = null;
+  let remainingSeconds = 15 * 60; // 15分钟
+
+  // 渲染订单信息
+  function renderOrderInfo() {
+    document.getElementById('orderNo').textContent = orderData.orderNo;
+    document.getElementById('serviceIcon').textContent = orderData.serviceIcon;
+    document.getElementById('serviceName').textContent = orderData.serviceName;
+    document.getElementById('techName').textContent = orderData.techName;
+    
+    const price = parseFloat(orderData.price).toFixed(2);
+    document.getElementById('payAmount').textContent = '¥' + price;
+    document.getElementById('payBtn').textContent = price;
+  }
+
+  // 初始化支付方式选择
+  function initPayMethods() {
+    const methods = document.querySelectorAll('.pay-method');
+    methods.forEach(method => {
+      method.addEventListener('click', () => {
+        methods.forEach(m => m.classList.remove('active'));
+        method.classList.add('active');
+        method.querySelector('input').checked = true;
+      });
+    });
+  }
+
+  // 开始倒计时
+  function startCountdown() {
+    updateCountdownDisplay();
+    
+    countdownTimer = setInterval(() => {
+      remainingSeconds--;
+      
+      if (remainingSeconds <= 0) {
+        clearInterval(countdownTimer);
+        handleTimeout();
+        return;
+      }
+      
+      updateCountdownDisplay();
+    }, 1000);
+  }
+
+  // 更新倒计时显示
+  function updateCountdownDisplay() {
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+    document.getElementById('countdown').textContent = 
+      `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+
+  // 处理超时
+  function handleTimeout() {
+    paymentStatus = 'timeout';
+    showPayResult(false, '支付超时', '订单已自动取消，请重新下单');
+  }
+
+  // 取消订单
+  window.cancelOrder = function() {
+    if (paymentStatus !== 'pending') return;
+    
+    if (confirm('确定要取消订单吗？')) {
+      clearInterval(countdownTimer);
+      
+      // 更新订单状态
+      orderData.status = 6; // 已取消
+      sessionStorage.setItem('currentOrder', JSON.stringify(orderData));
+      
+      QY.showToast('订单已取消');
+      setTimeout(() => QY.navigateTo('home'), 1500);
+    }
+  };
+
+  // 确认支付
+  window.confirmPay = function() {
+    if (paymentStatus !== 'pending') return;
+    
+    paymentStatus = 'processing';
+    
+    // 获取选中的支付方式
+    const selectedMethod = document.querySelector('input[name="payMethod"]:checked').value;
+    
+    // 显示加载
+    showLoading('正在处理支付...');
+    
+    // 模拟支付过程（Demo阶段）
+    simulatePayment(selectedMethod);
+  };
+
+  // 模拟支付
+  function simulatePayment(method) {
+    // 模拟支付延迟
+    setTimeout(() => {
+      hideLoading();
+      
+      // Demo阶段：90%概率成功，10%概率失败
+      const isSuccess = Math.random() > 0.1;
+      
+      if (isSuccess) {
+        handlePaymentSuccess(method);
+      } else {
+        handlePaymentFailed('支付失败，请重试');
+      }
+    }, 2000);
+  }
+
+  // 处理支付成功
+  function handlePaymentSuccess(method) {
+    clearInterval(countdownTimer);
+    paymentStatus = 'success';
+    
+    // 更新订单状态
+    orderData.status = 1; // 已支付/待接单
+    orderData.payMethod = method;
+    orderData.payTime = new Date().toISOString();
+    orderData.payTransactionId = 'PAY' + Date.now();
+    
+    sessionStorage.setItem('currentOrder', JSON.stringify(orderData));
+    
+    // 显示成功结果
+    showPayResult(true, '支付成功', '订单已提交，等待技师接单');
+  }
+
+  // 处理支付失败
+  function handlePaymentFailed(reason) {
+    paymentStatus = 'pending'; // 允许重试
+    
+    // 显示失败结果
+    showPayResult(false, '支付失败', reason);
+  }
+
+  // 显示支付结果
+  function showPayResult(success, title, desc) {
+    const modal = document.getElementById('payResultModal');
+    const icon = document.getElementById('resultIcon');
+    const titleEl = document.getElementById('resultTitle');
+    const descEl = document.getElementById('resultDesc');
+    
+    icon.textContent = success ? '✅' : '❌';
+    icon.className = 'result-icon ' + (success ? 'success' : 'fail');
+    titleEl.textContent = title;
+    descEl.textContent = desc;
+    
+    modal.style.display = 'flex';
+  }
+
+  // 查看订单
+  window.viewOrder = function() {
+    document.getElementById('payResultModal').style.display = 'none';
+    QY.navigateTo('order/detail', { orderNo: orderData.orderNo });
+  };
+
+  // 返回首页
+  window.backToHome = function() {
+    document.getElementById('payResultModal').style.display = 'none';
+    
+    if (paymentStatus === 'success') {
+      QY.navigateTo('home');
+    } else {
+      // 支付失败或超时，允许重试
+      paymentStatus = 'pending';
+    }
+  };
+
+  // 显示加载
+  function showLoading(text) {
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.id = 'loadingOverlay';
+    overlay.innerHTML = `
+      <div class="loading-content">
+        <div class="loading-spinner">⏳</div>
+        <div class="loading-text">${text}</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  // 隐藏加载
+  function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+      overlay.remove();
+    }
+  }
+
+  // 页面卸载时清理
+  window.addEventListener('beforeunload', () => {
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+    }
+  });
+
+  // 初始化
+  renderOrderInfo();
+  initPayMethods();
+  startCountdown();
+
+})();
+</script>

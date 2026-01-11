@@ -1,0 +1,480 @@
+<div class="order-confirm-page" id="orderConfirmPage">
+  <!-- 订单摘要 -->
+  <div class="section card">
+    <div class="section-title">订单信息</div>
+    
+    <!-- 服务信息 -->
+    <div class="summary-item">
+      <div class="summary-icon" id="serviceIcon">💆</div>
+      <div class="summary-content">
+        <div class="summary-label">服务项目</div>
+        <div class="summary-value" id="serviceName">全身中式推拿</div>
+        <div class="summary-sub" id="serviceDuration">60分钟</div>
+      </div>
+    </div>
+
+    <!-- 技师信息 -->
+    <div class="summary-item">
+      <div class="summary-icon" id="techAvatar">👨</div>
+      <div class="summary-content">
+        <div class="summary-label">服务技师</div>
+        <div class="summary-value" id="techName">张师傅</div>
+        <div class="summary-sub">
+          <span class="rating-star">⭐</span>
+          <span id="techRating">4.9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 预约时间 -->
+    <div class="summary-item">
+      <div class="summary-icon">📅</div>
+      <div class="summary-content">
+        <div class="summary-label">预约时间</div>
+        <div class="summary-value" id="scheduleDateTime">2026-01-12 14:00</div>
+      </div>
+    </div>
+
+    <!-- 服务地址 -->
+    <div class="summary-item">
+      <div class="summary-icon">📍</div>
+      <div class="summary-content">
+        <div class="summary-label">服务地址</div>
+        <div class="summary-value" id="contactInfo">张三 13800138001</div>
+        <div class="summary-sub" id="addressDetail">北京市朝阳区建国路88号SOHO现代城A座1201</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 备注 -->
+  <div class="section card" id="remarkSection" style="display: none;">
+    <div class="section-title">备注</div>
+    <div class="remark-content" id="remarkContent"></div>
+  </div>
+
+  <!-- 费用明细 -->
+  <div class="section card">
+    <div class="section-title">费用明细</div>
+    <div class="price-detail">
+      <div class="price-row">
+        <span class="price-label">服务费</span>
+        <span class="price-value" id="servicePrice">¥298</span>
+      </div>
+      <div class="price-row">
+        <span class="price-label">优惠</span>
+        <span class="price-value discount" id="discountPrice">-¥0</span>
+      </div>
+      <div class="price-row total">
+        <span class="price-label">合计</span>
+        <span class="price-value" id="totalPrice">¥298</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 服务协议 -->
+  <div class="section agreement-section">
+    <label class="agreement-checkbox">
+      <input type="checkbox" id="agreeCheckbox" checked>
+      <span class="checkmark"></span>
+      <span class="agreement-text">
+        我已阅读并同意
+        <a href="javascript:void(0)" onclick="showAgreement('service')">《服务协议》</a>
+        和
+        <a href="javascript:void(0)" onclick="showAgreement('privacy')">《隐私政策》</a>
+      </span>
+    </label>
+  </div>
+
+  <!-- 底部操作栏 -->
+  <div class="bottom-bar">
+    <div class="price-summary">
+      <span class="price-label">应付金额</span>
+      <span class="price-value" id="payAmount">¥298</span>
+    </div>
+    <button class="btn btn-primary btn-submit" onclick="submitOrder()">提交订单</button>
+  </div>
+</div>
+
+<style>
+.order-confirm-page {
+  background: var(--bg-color);
+  min-height: 100%;
+  padding-bottom: 80px;
+}
+
+.section {
+  margin: 12px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* Summary Items */
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.summary-item:first-child {
+  padding-top: 0;
+}
+
+.summary-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.summary-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.summary-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.rating-star {
+  color: var(--warning-color);
+}
+
+/* Remark */
+.remark-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: 6px;
+}
+
+/* Price Detail */
+.price-detail {
+  margin-top: 8px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.price-row .price-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.price-row .price-value {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.price-row .price-value.discount {
+  color: var(--primary-color);
+}
+
+.price-row.total {
+  border-top: 1px solid var(--border-color);
+  margin-top: 8px;
+  padding-top: 12px;
+}
+
+.price-row.total .price-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.price-row.total .price-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+/* Agreement */
+.agreement-section {
+  padding: 0 12px;
+}
+
+.agreement-checkbox {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.agreement-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.agreement-checkbox input:checked + .checkmark {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.agreement-checkbox input:checked + .checkmark::after {
+  content: '✓';
+  color: #fff;
+  font-size: 12px;
+}
+
+.agreement-text {
+  line-height: 1.5;
+}
+
+.agreement-text a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.price-summary {
+  flex: 1;
+}
+
+.price-summary .price-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.price-summary .price-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--danger-color);
+  margin-left: 8px;
+}
+
+.btn-submit {
+  padding: 12px 40px;
+  font-size: 16px;
+  border-radius: 24px;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  background: var(--bg-white);
+  padding: 24px 32px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.loading-spinner {
+  font-size: 32px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+</style>
+
+<script>
+(function() {
+  // 从 sessionStorage 获取订单数据
+  const orderDataStr = sessionStorage.getItem('pendingOrder');
+  
+  if (!orderDataStr) {
+    QY.showToast('订单数据不存在');
+    setTimeout(() => QY.goBack(), 1500);
+    return;
+  }
+
+  const orderData = JSON.parse(orderDataStr);
+
+  // 渲染订单摘要
+  function renderOrderSummary() {
+    // 服务信息
+    document.getElementById('serviceIcon').textContent = orderData.serviceIcon;
+    document.getElementById('serviceName').textContent = orderData.serviceName;
+    document.getElementById('serviceDuration').textContent = orderData.duration + '分钟';
+    
+    // 技师信息
+    document.getElementById('techAvatar').textContent = orderData.techAvatar;
+    document.getElementById('techName').textContent = orderData.techName;
+    
+    // 预约时间
+    const dateTime = formatDateTime(orderData.date, orderData.time);
+    document.getElementById('scheduleDateTime').textContent = dateTime;
+    
+    // 服务地址
+    document.getElementById('contactInfo').textContent = `${orderData.contactName} ${orderData.contactPhone}`;
+    document.getElementById('addressDetail').textContent = orderData.address;
+    
+    // 备注
+    if (orderData.remark) {
+      document.getElementById('remarkSection').style.display = 'block';
+      document.getElementById('remarkContent').textContent = orderData.remark;
+    }
+    
+    // 费用
+    const price = orderData.price;
+    document.getElementById('servicePrice').textContent = '¥' + price;
+    document.getElementById('totalPrice').textContent = '¥' + price;
+    document.getElementById('payAmount').textContent = '¥' + price;
+  }
+
+  // 格式化日期时间
+  function formatDateTime(date, time) {
+    const [year, month, day] = date.split('-');
+    const dayOfWeek = getDayOfWeek(new Date(date));
+    return `${month}月${day}日 ${dayOfWeek} ${time}`;
+  }
+
+  // 获取星期几
+  function getDayOfWeek(date) {
+    const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return days[date.getDay()];
+  }
+
+  // 显示协议
+  window.showAgreement = function(type) {
+    const titles = {
+      service: '服务协议',
+      privacy: '隐私政策'
+    };
+    QY.showToast('查看' + titles[type]);
+  };
+
+  // 提交订单
+  window.submitOrder = function() {
+    // 检查协议
+    const agreed = document.getElementById('agreeCheckbox').checked;
+    if (!agreed) {
+      QY.showToast('请先同意服务协议');
+      return;
+    }
+
+    // 显示加载
+    showLoading('正在创建订单...');
+
+    // 模拟创建订单
+    setTimeout(() => {
+      // 生成订单号
+      const orderNo = 'QY' + Date.now() + Math.random().toString(36).substr(2, 4).toUpperCase();
+      
+      // 构建完整订单数据
+      const fullOrderData = {
+        ...orderData,
+        orderNo: orderNo,
+        status: 0, // 待支付
+        createTime: new Date().toISOString()
+      };
+      
+      // 存储订单数据
+      sessionStorage.setItem('currentOrder', JSON.stringify(fullOrderData));
+      
+      hideLoading();
+      
+      // 跳转到支付页面
+      QY.navigateTo('order/pay', { orderNo: orderNo });
+    }, 1000);
+  };
+
+  // 显示加载
+  function showLoading(text) {
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.id = 'loadingOverlay';
+    overlay.innerHTML = `
+      <div class="loading-content">
+        <div class="loading-spinner">⏳</div>
+        <div class="loading-text">${text}</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+  }
+
+  // 隐藏加载
+  function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+      overlay.remove();
+    }
+  }
+
+  // 初始化
+  renderOrderSummary();
+
+})();
+</script>

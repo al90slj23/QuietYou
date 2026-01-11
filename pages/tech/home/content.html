@@ -1,0 +1,329 @@
+<div class="page-container tech-home">
+  <!-- 技师状态卡片 -->
+  <div class="card status-card">
+    <div class="tech-profile">
+      <img class="tech-avatar" src="https://via.placeholder.com/60" alt="头像">
+      <div class="tech-info">
+        <div class="tech-name">张师傅</div>
+        <div class="tech-shop">轻养养生馆（朝阳店）</div>
+      </div>
+      <div class="status-toggle">
+        <label class="switch">
+          <input type="checkbox" id="onlineSwitch" onchange="toggleOnlineStatus()">
+          <span class="switch-slider"></span>
+        </label>
+        <span class="status-text" id="statusText">离线</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 今日统计 -->
+  <div class="card">
+    <div class="card-title">今日数据</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value" id="todayOrders">0</div>
+        <div class="stat-label">订单数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="todayIncome">0</div>
+        <div class="stat-label">收入(元)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="todayHours">0</div>
+        <div class="stat-label">服务时长(h)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 待处理订单 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>待处理订单</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;" onclick="TECH.navigateTo('order/list')">查看全部 ></span>
+    </div>
+    <div id="pendingOrders">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <!-- 快捷操作 -->
+  <div class="card">
+    <div class="card-title">快捷操作</div>
+    <div class="quick-actions">
+      <div class="quick-action-item" onclick="TECH.navigateTo('schedule')">
+        <div class="quick-action-icon">📅</div>
+        <div class="quick-action-label">排班管理</div>
+      </div>
+      <div class="quick-action-item" onclick="TECH.navigateTo('wallet')">
+        <div class="quick-action-icon">💰</div>
+        <div class="quick-action-label">我的钱包</div>
+      </div>
+      <div class="quick-action-item" onclick="TECH.navigateTo('order/list')">
+        <div class="quick-action-icon">📋</div>
+        <div class="quick-action-label">全部订单</div>
+      </div>
+      <div class="quick-action-item" onclick="TECH.navigateTo('profile')">
+        <div class="quick-action-icon">⚙️</div>
+        <div class="quick-action-label">个人设置</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.tech-home .status-card {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #1976d2 100%);
+  color: #fff;
+}
+
+.tech-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tech-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.tech-info {
+  flex: 1;
+}
+
+.tech-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tech-shop {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.status-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-text {
+  font-size: 12px;
+}
+
+.status-text.online {
+  color: #4caf50;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  cursor: pointer;
+}
+
+.quick-action-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.quick-action-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pending-order-item {
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.pending-order-item:last-child {
+  margin-bottom: 0;
+}
+
+.pending-order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pending-order-service {
+  font-weight: 500;
+}
+
+.pending-order-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pending-order-address {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.pending-order-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.pending-order-actions .btn {
+  padding: 6px 16px;
+  font-size: 13px;
+}
+</style>
+
+<script>
+(function() {
+  // 模拟技师数据
+  const technicianData = {
+    id: 'T001',
+    name: '张师傅',
+    avatar: 'https://via.placeholder.com/60',
+    shop: '轻养养生馆（朝阳店）',
+    isOnline: false,
+    todayStats: {
+      orders: 3,
+      income: 580,
+      hours: 4.5
+    }
+  };
+
+  // 模拟待处理订单
+  const pendingOrders = [
+    {
+      id: 'ORD20260111001',
+      service: '中式推拿 60分钟',
+      time: '2026-01-11 14:00',
+      address: '朝阳区建国路88号SOHO现代城A座1205',
+      status: 'pending_accept',
+      price: 298
+    },
+    {
+      id: 'ORD20260111002',
+      service: '肩颈舒缓 45分钟',
+      time: '2026-01-11 16:30',
+      address: '朝阳区望京SOHO T1 2208',
+      status: 'accepted',
+      price: 198
+    }
+  ];
+
+  // 初始化页面
+  function init() {
+    updateStats();
+    renderPendingOrders();
+    
+    // 恢复在线状态
+    const savedStatus = localStorage.getItem('tech_online_status');
+    if (savedStatus === 'true') {
+      document.getElementById('onlineSwitch').checked = true;
+      updateStatusDisplay(true);
+    }
+  }
+
+  // 更新统计数据
+  function updateStats() {
+    document.getElementById('todayOrders').textContent = technicianData.todayStats.orders;
+    document.getElementById('todayIncome').textContent = technicianData.todayStats.income;
+    document.getElementById('todayHours').textContent = technicianData.todayStats.hours;
+  }
+
+  // 渲染待处理订单
+  function renderPendingOrders() {
+    const container = document.getElementById('pendingOrders');
+    
+    if (pendingOrders.length === 0) {
+      container.innerHTML = '<div class="empty"><div class="empty-text">暂无待处理订单</div></div>';
+      return;
+    }
+
+    container.innerHTML = pendingOrders.map(order => {
+      const statusText = order.status === 'pending_accept' ? '待接单' : '待服务';
+      const statusClass = order.status === 'pending_accept' ? 'text-warning' : 'text-primary';
+      
+      let actionsHtml = '';
+      if (order.status === 'pending_accept') {
+        actionsHtml = `
+          <button class="btn btn-secondary" onclick="rejectOrder('${order.id}')">拒绝</button>
+          <button class="btn btn-primary" onclick="acceptOrder('${order.id}')">接单</button>
+        `;
+      } else {
+        actionsHtml = `
+          <button class="btn btn-primary" onclick="viewOrderDetail('${order.id}')">查看详情</button>
+        `;
+      }
+
+      return `
+        <div class="pending-order-item">
+          <div class="pending-order-header">
+            <span class="pending-order-service">${order.service}</span>
+            <span class="${statusClass}">${statusText}</span>
+          </div>
+          <div class="pending-order-time">📅 ${order.time}</div>
+          <div class="pending-order-address">📍 ${order.address}</div>
+          <div class="pending-order-actions">
+            ${actionsHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 更新状态显示
+  function updateStatusDisplay(isOnline) {
+    const statusText = document.getElementById('statusText');
+    statusText.textContent = isOnline ? '在线' : '离线';
+    statusText.className = 'status-text' + (isOnline ? ' online' : '');
+  }
+
+  // 切换在线状态
+  window.toggleOnlineStatus = function() {
+    const isOnline = document.getElementById('onlineSwitch').checked;
+    localStorage.setItem('tech_online_status', isOnline);
+    updateStatusDisplay(isOnline);
+    
+    TECH.showToast(isOnline ? '已上线，可以接收新订单' : '已下线，暂停接单');
+  };
+
+  // 接单
+  window.acceptOrder = function(orderId) {
+    TECH.showToast('已接单');
+    // 实际应调用API
+    setTimeout(() => {
+      TECH.navigateTo('order/detail', { id: orderId });
+    }, 500);
+  };
+
+  // 拒绝订单
+  window.rejectOrder = async function(orderId) {
+    const confirmed = await TECH.showConfirm('确定要拒绝此订单吗？');
+    if (confirmed) {
+      TECH.showToast('已拒绝订单');
+      // 实际应调用API，然后刷新列表
+    }
+  };
+
+  // 查看订单详情
+  window.viewOrderDetail = function(orderId) {
+    TECH.navigateTo('order/detail', { id: orderId });
+  };
+
+  init();
+})();
+</script>

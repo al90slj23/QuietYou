@@ -1,0 +1,512 @@
+<div class="page-finance">
+  <!-- 统计卡片 -->
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-card-title">本月总收入</div>
+      <div class="stat-card-value">¥128,560</div>
+      <div class="stat-card-trend up">↑ 18.3% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">平台佣金</div>
+      <div class="stat-card-value">¥19,284</div>
+      <div class="stat-card-trend up">↑ 15.2% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">待结算</div>
+      <div class="stat-card-value" style="color:var(--warning-color)">¥12,680</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">待处理提现</div>
+      <div class="stat-card-value" style="color:var(--error-color)">8</div>
+    </div>
+  </div>
+
+  <!-- 收入趋势 -->
+  <div class="card">
+    <div class="card-title">
+      <span>收入趋势（近30天）</span>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--primary-color)"></span>总收入</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--success-color)"></span>平台佣金</span>
+      </div>
+    </div>
+    <div class="chart-container">
+      <div class="simple-chart">
+        <div class="chart-bars" id="chartBars">
+          <!-- 动态生成 -->
+        </div>
+        <div class="chart-labels" id="chartLabels">
+          <!-- 动态生成 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="finance-grid">
+    <!-- 待处理提现 -->
+    <div class="card">
+      <div class="card-title">
+        <span>待处理提现</span>
+        <span class="card-link" onclick="ADMIN.navigateTo('finance/withdraw')">查看全部 ></span>
+      </div>
+      <div class="withdraw-list" id="withdrawList">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+
+    <!-- 收入分布 -->
+    <div class="card">
+      <div class="card-title">本月收入分布</div>
+      <div class="income-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">订单总额</span>
+            <span class="breakdown-value">¥128,560</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill" style="width:100%;background:var(--primary-color)"></div>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">平台佣金 (15%)</span>
+            <span class="breakdown-value">¥19,284</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill" style="width:15%;background:var(--success-color)"></div>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">商家分成 (30%)</span>
+            <span class="breakdown-value">¥38,568</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill" style="width:30%;background:var(--warning-color)"></div>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">技师收入 (55%)</span>
+            <span class="breakdown-value">¥70,708</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill" style="width:55%;background:#9c27b0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 佣金设置 -->
+  <div class="card">
+    <div class="card-title">佣金比例设置</div>
+    <div class="commission-settings">
+      <div class="commission-item">
+        <div class="commission-label">平台默认佣金比例</div>
+        <div class="commission-input">
+          <input type="number" class="form-control" id="platformRate" value="15" min="0" max="100" style="width:80px">
+          <span>%</span>
+        </div>
+        <div class="commission-desc">从每笔订单中抽取的平台服务费</div>
+      </div>
+      <div class="commission-item">
+        <div class="commission-label">商家默认分成比例</div>
+        <div class="commission-input">
+          <input type="number" class="form-control" id="shopRate" value="30" min="0" max="100" style="width:80px">
+          <span>%</span>
+        </div>
+        <div class="commission-desc">商家从技师订单中获得的分成</div>
+      </div>
+      <div class="commission-item">
+        <div class="commission-label">技师默认分成比例</div>
+        <div class="commission-input">
+          <input type="number" class="form-control" id="techRate" value="55" min="0" max="100" style="width:80px">
+          <span>%</span>
+        </div>
+        <div class="commission-desc">技师从订单中获得的收入</div>
+      </div>
+      <div class="commission-actions">
+        <button class="btn btn-primary" onclick="saveCommissionSettings()">保存设置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近交易 -->
+  <div class="card">
+    <div class="card-title">最近交易</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>交易时间</th>
+          <th>交易类型</th>
+          <th>关联订单</th>
+          <th>金额</th>
+          <th>状态</th>
+        </tr>
+      </thead>
+      <tbody id="transactionTableBody">
+        <!-- 动态生成 -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+.finance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.chart-container {
+  padding: 20px 0;
+}
+
+.simple-chart {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.chart-bar-group {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.chart-bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+}
+
+.chart-labels {
+  display: flex;
+  gap: 8px;
+  padding: 12px 10px 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.chart-label {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-placeholder);
+}
+
+.card-link {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.withdraw-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.withdraw-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.withdraw-item:last-child {
+  border-bottom: none;
+}
+
+.withdraw-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+.withdraw-info {
+  flex: 1;
+}
+
+.withdraw-name {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.withdraw-time {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-top: 2px;
+}
+
+.withdraw-amount {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-right: 12px;
+}
+
+.withdraw-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.withdraw-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.withdraw-btn.approve {
+  background: var(--success-color);
+  color: #fff;
+}
+
+.withdraw-btn.reject {
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.income-breakdown {
+  padding: 8px 0;
+}
+
+.breakdown-item {
+  margin-bottom: 16px;
+}
+
+.breakdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.breakdown-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.breakdown-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.breakdown-bar {
+  height: 8px;
+  background: var(--bg-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdown-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.commission-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.commission-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.commission-label {
+  width: 160px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.commission-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.commission-desc {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.commission-actions {
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+</style>
+
+<script>
+(function() {
+  // 模拟收入数据（近7天）
+  const revenueData = [
+    { date: '1/5', total: 3800, commission: 570 },
+    { date: '1/6', total: 4200, commission: 630 },
+    { date: '1/7', total: 5100, commission: 765 },
+    { date: '1/8', total: 4600, commission: 690 },
+    { date: '1/9', total: 5800, commission: 870 },
+    { date: '1/10', total: 5200, commission: 780 },
+    { date: '1/11', total: 4960, commission: 744 }
+  ];
+
+  // 模拟待处理提现
+  const pendingWithdraws = [
+    { id: 1, type: 'tech', name: '李师傅', avatar: '👨', amount: 1280, time: '2026-01-11 10:30' },
+    { id: 2, type: 'shop', name: '轻松养生馆', avatar: '🏪', amount: 3580, time: '2026-01-11 09:15' },
+    { id: 3, type: 'tech', name: '王师傅', avatar: '👨', amount: 860, time: '2026-01-10 16:20' },
+    { id: 4, type: 'tech', name: '张师傅', avatar: '👩', amount: 1560, time: '2026-01-10 14:00' },
+    { id: 5, type: 'shop', name: '康乐推拿店', avatar: '🏠', amount: 2680, time: '2026-01-10 11:30' }
+  ];
+
+  // 模拟最近交易
+  const transactions = [
+    { time: '2026-01-11 15:30', type: '订单收入', order: 'QY20260111001', amount: 298, status: 'success' },
+    { time: '2026-01-11 14:20', type: '提现支出', order: '-', amount: -1280, status: 'success' },
+    { time: '2026-01-11 12:00', type: '订单收入', order: 'QY20260111002', amount: 198, status: 'success' },
+    { time: '2026-01-11 10:30', type: '订单退款', order: 'QY20260110003', amount: -598, status: 'success' },
+    { time: '2026-01-10 18:00', type: '订单收入', order: 'QY20260110001', amount: 358, status: 'success' }
+  ];
+
+  function init() {
+    renderChart();
+    renderWithdraws();
+    renderTransactions();
+  }
+
+  function renderChart() {
+    const maxValue = Math.max(...revenueData.map(d => d.total));
+    
+    document.getElementById('chartBars').innerHTML = revenueData.map(d => {
+      const totalHeight = (d.total / maxValue * 100).toFixed(0);
+      const commissionHeight = (d.commission / maxValue * 100).toFixed(0);
+      return `
+        <div class="chart-bar-group">
+          <div class="chart-bar" style="height:${totalHeight}%;background:var(--primary-color)"></div>
+          <div class="chart-bar" style="height:${commissionHeight}%;background:var(--success-color)"></div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('chartLabels').innerHTML = revenueData.map(d => `
+      <div class="chart-label">${d.date}</div>
+    `).join('');
+  }
+
+  function renderWithdraws() {
+    const container = document.getElementById('withdrawList');
+    container.innerHTML = pendingWithdraws.map(w => `
+      <div class="withdraw-item">
+        <div class="withdraw-avatar">${w.avatar}</div>
+        <div class="withdraw-info">
+          <div class="withdraw-name">${w.name}</div>
+          <div class="withdraw-time">${w.time}</div>
+        </div>
+        <div class="withdraw-amount">¥${w.amount.toLocaleString()}</div>
+        <div class="withdraw-actions">
+          <button class="withdraw-btn approve" onclick="approveWithdraw(${w.id})">通过</button>
+          <button class="withdraw-btn reject" onclick="rejectWithdraw(${w.id})">拒绝</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderTransactions() {
+    const tbody = document.getElementById('transactionTableBody');
+    tbody.innerHTML = transactions.map(tx => `
+      <tr>
+        <td>${tx.time}</td>
+        <td>${tx.type}</td>
+        <td>${tx.order}</td>
+        <td style="color:${tx.amount >= 0 ? 'var(--success-color)' : 'var(--error-color)'}">
+          ${tx.amount >= 0 ? '+' : ''}¥${Math.abs(tx.amount)}
+        </td>
+        <td><span class="status-tag success">已完成</span></td>
+      </tr>
+    `).join('');
+  }
+
+  window.approveWithdraw = async function(id) {
+    const confirmed = await ADMIN.showConfirm('确定要通过该提现申请吗？');
+    if (confirmed) {
+      const index = pendingWithdraws.findIndex(w => w.id === id);
+      if (index > -1) {
+        pendingWithdraws.splice(index, 1);
+        renderWithdraws();
+        ADMIN.showToast('提现已通过');
+      }
+    }
+  };
+
+  window.rejectWithdraw = async function(id) {
+    const confirmed = await ADMIN.showConfirm('确定要拒绝该提现申请吗？');
+    if (confirmed) {
+      const index = pendingWithdraws.findIndex(w => w.id === id);
+      if (index > -1) {
+        pendingWithdraws.splice(index, 1);
+        renderWithdraws();
+        ADMIN.showToast('提现已拒绝');
+      }
+    }
+  };
+
+  window.saveCommissionSettings = function() {
+    const platform = parseFloat(document.getElementById('platformRate').value);
+    const shop = parseFloat(document.getElementById('shopRate').value);
+    const tech = parseFloat(document.getElementById('techRate').value);
+
+    if (platform + shop + tech !== 100) {
+      ADMIN.showToast('三项比例之和必须等于100%');
+      return;
+    }
+
+    ADMIN.showToast('佣金设置已保存');
+  };
+
+  init();
+})();
+</script>

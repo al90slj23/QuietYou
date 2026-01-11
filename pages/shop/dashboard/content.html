@@ -1,0 +1,381 @@
+<div class="page-container shop-dashboard">
+  <!-- 商家信息卡片 -->
+  <div class="card shop-info-card">
+    <div class="shop-profile">
+      <img class="shop-logo" src="https://via.placeholder.com/60" alt="店铺Logo">
+      <div class="shop-info">
+        <div class="shop-name">轻养养生馆（朝阳店）</div>
+        <div class="shop-status">
+          <span class="status-badge status-active">营业中</span>
+          <span class="shop-rating">⭐ 4.8分</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 今日数据 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>今日数据</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;">2026-01-11</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value" id="todayOrders">8</div>
+        <div class="stat-label">订单数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="todayRevenue">2,580</div>
+        <div class="stat-label">营业额(元)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="onlineTechs">5</div>
+        <div class="stat-label">在线技师</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本月概览 -->
+  <div class="card">
+    <div class="card-title">本月概览</div>
+    <div class="month-overview">
+      <div class="overview-item">
+        <div class="overview-label">总订单</div>
+        <div class="overview-value">156</div>
+        <div class="overview-trend up">↑ 12%</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-label">总营业额</div>
+        <div class="overview-value">¥38,560</div>
+        <div class="overview-trend up">↑ 8%</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-label">商家分成</div>
+        <div class="overview-value">¥7,712</div>
+        <div class="overview-trend up">↑ 8%</div>
+      </div>
+      <div class="overview-item">
+        <div class="overview-label">平均评分</div>
+        <div class="overview-value">4.8</div>
+        <div class="overview-trend">持平</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 技师状态 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>技师状态</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;cursor:pointer;" onclick="SHOP.navigateTo('technician/list')">管理 ></span>
+    </div>
+    <div class="tech-status-list" id="techStatusList">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+
+  <!-- 最近订单 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>最近订单</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;cursor:pointer;" onclick="SHOP.navigateTo('order/list')">全部 ></span>
+    </div>
+    <div class="recent-orders" id="recentOrders">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+
+  <!-- 快捷操作 -->
+  <div class="card">
+    <div class="card-title">快捷操作</div>
+    <div class="quick-actions">
+      <div class="quick-action-item" onclick="SHOP.navigateTo('technician/invite')">
+        <div class="quick-action-icon">➕</div>
+        <div class="quick-action-label">邀请技师</div>
+      </div>
+      <div class="quick-action-item" onclick="SHOP.navigateTo('order/list')">
+        <div class="quick-action-icon">📋</div>
+        <div class="quick-action-label">订单管理</div>
+      </div>
+      <div class="quick-action-item" onclick="SHOP.navigateTo('finance')">
+        <div class="quick-action-icon">💰</div>
+        <div class="quick-action-label">财务管理</div>
+      </div>
+      <div class="quick-action-item" onclick="SHOP.navigateTo('profile')">
+        <div class="quick-action-icon">⚙️</div>
+        <div class="quick-action-label">店铺设置</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.shop-info-card {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #ff8c00 100%);
+  color: #fff;
+}
+
+.shop-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shop-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.shop-info {
+  flex: 1;
+}
+
+.shop-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.shop-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.status-active {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.shop-rating {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.month-overview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.overview-item {
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.overview-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.overview-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.overview-trend {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-top: 4px;
+}
+
+.overview-trend.up {
+  color: var(--success-color);
+}
+
+.overview-trend.down {
+  color: var(--danger-color);
+}
+
+.tech-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tech-status-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.tech-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.tech-info {
+  flex: 1;
+}
+
+.tech-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tech-orders {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.tech-status {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.tech-status.online {
+  background: #e8f5e9;
+  color: var(--success-color);
+}
+
+.tech-status.busy {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.tech-status.offline {
+  background: #f5f5f5;
+  color: var(--text-placeholder);
+}
+
+.recent-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recent-order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.order-info {
+  flex: 1;
+}
+
+.order-service {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.order-tech {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.order-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  cursor: pointer;
+}
+
+.quick-action-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.quick-action-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+</style>
+
+<script>
+(function() {
+  // 模拟技师状态数据
+  const technicians = [
+    { id: 1, name: '张师傅', avatar: 'https://via.placeholder.com/40', status: 'online', todayOrders: 3 },
+    { id: 2, name: '李师傅', avatar: 'https://via.placeholder.com/40', status: 'busy', todayOrders: 2 },
+    { id: 3, name: '王师傅', avatar: 'https://via.placeholder.com/40', status: 'online', todayOrders: 2 },
+    { id: 4, name: '赵师傅', avatar: 'https://via.placeholder.com/40', status: 'offline', todayOrders: 1 },
+    { id: 5, name: '陈师傅', avatar: 'https://via.placeholder.com/40', status: 'online', todayOrders: 0 }
+  ];
+
+  // 模拟最近订单
+  const recentOrders = [
+    { id: 'ORD001', service: '中式推拿 60分钟', tech: '张师傅', amount: 298, time: '14:30' },
+    { id: 'ORD002', service: '肩颈舒缓 45分钟', tech: '李师傅', amount: 198, time: '13:00' },
+    { id: 'ORD003', service: '足底按摩 90分钟', tech: '王师傅', amount: 358, time: '11:30' }
+  ];
+
+  // 状态文本映射
+  const statusTextMap = {
+    'online': '在线',
+    'busy': '服务中',
+    'offline': '离线'
+  };
+
+  // 初始化
+  function init() {
+    renderTechStatus();
+    renderRecentOrders();
+  }
+
+  // 渲染技师状态
+  function renderTechStatus() {
+    const container = document.getElementById('techStatusList');
+    
+    container.innerHTML = technicians.slice(0, 4).map(tech => `
+      <div class="tech-status-item">
+        <img class="tech-avatar" src="${tech.avatar}" alt="${tech.name}">
+        <div class="tech-info">
+          <div class="tech-name">${tech.name}</div>
+          <div class="tech-orders">今日 ${tech.todayOrders} 单</div>
+        </div>
+        <span class="tech-status ${tech.status}">${statusTextMap[tech.status]}</span>
+      </div>
+    `).join('');
+  }
+
+  // 渲染最近订单
+  function renderRecentOrders() {
+    const container = document.getElementById('recentOrders');
+    
+    container.innerHTML = recentOrders.map(order => `
+      <div class="recent-order-item" onclick="SHOP.navigateTo('order/detail', {id: '${order.id}'})">
+        <div class="order-info">
+          <div class="order-service">${order.service}</div>
+          <div class="order-tech">${order.tech} · ${order.time}</div>
+        </div>
+        <div class="order-amount">¥${order.amount}</div>
+      </div>
+    `).join('');
+  }
+
+  init();
+})();
+</script>

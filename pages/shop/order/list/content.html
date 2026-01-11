@@ -1,0 +1,386 @@
+<div class="page-container shop-order-list">
+  <!-- 筛选栏 -->
+  <div class="card filter-card">
+    <div class="filter-row">
+      <div class="filter-item">
+        <label>技师</label>
+        <select id="techFilter" onchange="applyFilters()">
+          <option value="">全部技师</option>
+          <option value="T001">张师傅</option>
+          <option value="T002">李师傅</option>
+          <option value="T003">王师傅</option>
+          <option value="T004">赵师傅</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>日期</label>
+        <select id="dateFilter" onchange="applyFilters()">
+          <option value="today">今天</option>
+          <option value="week">本周</option>
+          <option value="month">本月</option>
+          <option value="all">全部</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>状态</label>
+        <select id="statusFilter" onchange="applyFilters()">
+          <option value="">全部状态</option>
+          <option value="pending">待服务</option>
+          <option value="in_progress">进行中</option>
+          <option value="completed">已完成</option>
+          <option value="cancelled">已取消</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 统计摘要 -->
+  <div class="card summary-card">
+    <div class="summary-item">
+      <span class="summary-label">筛选结果</span>
+      <span class="summary-value" id="orderCount">12 单</span>
+    </div>
+    <div class="summary-item">
+      <span class="summary-label">总金额</span>
+      <span class="summary-value text-danger" id="totalAmount">¥3,580</span>
+    </div>
+    <div class="summary-item">
+      <span class="summary-label">商家分成</span>
+      <span class="summary-value text-primary" id="shopCommission">¥716</span>
+    </div>
+  </div>
+
+  <!-- 订单列表 -->
+  <div id="orderList" class="order-list">
+    <!-- 动态生成 -->
+  </div>
+</div>
+
+<style>
+.shop-order-list {
+  padding-bottom: 20px;
+}
+
+.filter-card {
+  padding: 12px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-item {
+  flex: 1;
+}
+
+.filter-item label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.filter-item select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--bg-white);
+}
+
+.summary-card {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shop-order-card {
+  background: var(--bg-white);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.shop-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--bg-color);
+}
+
+.shop-order-no {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.shop-order-status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.status-pending { background: #e3f2fd; color: #2196f3; }
+.status-in_progress { background: #fff3e0; color: #ff9800; }
+.status-completed { background: #e8f5e9; color: #4caf50; }
+.status-cancelled { background: #ffebee; color: #f44336; }
+
+.shop-order-body {
+  padding: 12px;
+}
+
+.shop-order-service {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.shop-order-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 13px;
+}
+
+.shop-order-info-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shop-order-info-label {
+  color: var(--text-secondary);
+}
+
+.shop-order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.shop-order-amount {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.shop-order-commission {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.shop-order-commission span {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+</style>
+
+<script>
+(function() {
+  // 模拟订单数据
+  const orders = [
+    {
+      id: 'ORD20260111001',
+      service: '中式推拿 60分钟',
+      techId: 'T001',
+      techName: '张师傅',
+      customer: '李**',
+      time: '2026-01-11 14:00',
+      address: '朝阳区建国路88号',
+      status: 'completed',
+      amount: 298,
+      shopCommission: 59.6,
+      createDate: '2026-01-11'
+    },
+    {
+      id: 'ORD20260111002',
+      service: '肩颈舒缓 45分钟',
+      techId: 'T002',
+      techName: '李师傅',
+      customer: '王**',
+      time: '2026-01-11 16:30',
+      address: '朝阳区望京SOHO',
+      status: 'in_progress',
+      amount: 198,
+      shopCommission: 39.6,
+      createDate: '2026-01-11'
+    },
+    {
+      id: 'ORD20260111003',
+      service: '足底按摩 90分钟',
+      techId: 'T003',
+      techName: '王师傅',
+      customer: '张**',
+      time: '2026-01-11 19:00',
+      address: '海淀区中关村',
+      status: 'pending',
+      amount: 358,
+      shopCommission: 71.6,
+      createDate: '2026-01-11'
+    },
+    {
+      id: 'ORD20260110004',
+      service: '全身精油SPA 120分钟',
+      techId: 'T001',
+      techName: '张师傅',
+      customer: '赵**',
+      time: '2026-01-10 14:00',
+      address: '西城区金融街',
+      status: 'completed',
+      amount: 598,
+      shopCommission: 119.6,
+      createDate: '2026-01-10'
+    },
+    {
+      id: 'ORD20260109005',
+      service: '中式推拿 60分钟',
+      techId: 'T004',
+      techName: '赵师傅',
+      customer: '孙**',
+      time: '2026-01-09 10:00',
+      address: '东城区王府井',
+      status: 'cancelled',
+      amount: 298,
+      shopCommission: 0,
+      createDate: '2026-01-09'
+    }
+  ];
+
+  const statusTextMap = {
+    'pending': '待服务',
+    'in_progress': '进行中',
+    'completed': '已完成',
+    'cancelled': '已取消'
+  };
+
+  // 初始化
+  function init() {
+    applyFilters();
+  }
+
+  // 应用筛选
+  window.applyFilters = function() {
+    const techFilter = document.getElementById('techFilter').value;
+    const dateFilter = document.getElementById('dateFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    let filtered = [...orders];
+
+    // 技师筛选
+    if (techFilter) {
+      filtered = filtered.filter(o => o.techId === techFilter);
+    }
+
+    // 日期筛选
+    const today = '2026-01-11';
+    if (dateFilter === 'today') {
+      filtered = filtered.filter(o => o.createDate === today);
+    } else if (dateFilter === 'week') {
+      // 简化：本周
+      filtered = filtered.filter(o => o.createDate >= '2026-01-06');
+    } else if (dateFilter === 'month') {
+      // 简化：本月
+      filtered = filtered.filter(o => o.createDate >= '2026-01-01');
+    }
+
+    // 状态筛选
+    if (statusFilter) {
+      filtered = filtered.filter(o => o.status === statusFilter);
+    }
+
+    // 更新统计
+    const totalAmount = filtered.reduce((sum, o) => sum + o.amount, 0);
+    const totalCommission = filtered.reduce((sum, o) => sum + o.shopCommission, 0);
+
+    document.getElementById('orderCount').textContent = `${filtered.length} 单`;
+    document.getElementById('totalAmount').textContent = `¥${totalAmount.toLocaleString()}`;
+    document.getElementById('shopCommission').textContent = `¥${totalCommission.toFixed(2)}`;
+
+    renderOrders(filtered);
+  };
+
+  // 渲染订单列表
+  function renderOrders(orderList) {
+    const container = document.getElementById('orderList');
+
+    if (orderList.length === 0) {
+      container.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">📋</div>
+          <div class="empty-text">暂无订单</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = orderList.map(order => `
+      <div class="shop-order-card" onclick="viewOrderDetail('${order.id}')">
+        <div class="shop-order-header">
+          <span class="shop-order-no">${order.id}</span>
+          <span class="shop-order-status status-${order.status}">${statusTextMap[order.status]}</span>
+        </div>
+        <div class="shop-order-body">
+          <div class="shop-order-service">${order.service}</div>
+          <div class="shop-order-info">
+            <div class="shop-order-info-item">
+              <span class="shop-order-info-label">技师：</span>
+              <span>${order.techName}</span>
+            </div>
+            <div class="shop-order-info-item">
+              <span class="shop-order-info-label">客户：</span>
+              <span>${order.customer}</span>
+            </div>
+            <div class="shop-order-info-item">
+              <span class="shop-order-info-label">时间：</span>
+              <span>${order.time}</span>
+            </div>
+            <div class="shop-order-info-item">
+              <span class="shop-order-info-label">地址：</span>
+              <span>${order.address}</span>
+            </div>
+          </div>
+        </div>
+        <div class="shop-order-footer">
+          <div>
+            <div class="shop-order-amount">¥${order.amount}</div>
+            <div class="shop-order-commission">商家分成：<span>¥${order.shopCommission.toFixed(2)}</span></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 查看订单详情
+  window.viewOrderDetail = function(orderId) {
+    SHOP.navigateTo('order/detail', { id: orderId });
+  };
+
+  init();
+})();
+</script>

@@ -1,0 +1,557 @@
+<div class="technician-detail-page" id="technicianDetailPage">
+  <!-- 技师头部信息 -->
+  <div class="tech-header">
+    <div class="tech-avatar-section">
+      <div class="tech-avatar" id="techAvatar">👨</div>
+      <div class="tech-status" id="techStatus">在线</div>
+    </div>
+    <div class="tech-basic-info">
+      <div class="tech-name-row">
+        <span class="tech-name" id="techName">张师傅</span>
+        <span class="tech-gender" id="techGender">♂</span>
+      </div>
+      <div class="tech-shop" id="techShop">康乐养生馆</div>
+      <div class="tech-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="techRating">4.9</span>
+          <span class="stat-label">评分</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="techOrders">328</span>
+          <span class="stat-label">服务</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-value" id="techYears">5年</span>
+          <span class="stat-label">经验</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 照片集 -->
+  <div class="section card">
+    <div class="section-title">照片集</div>
+    <div class="photo-gallery" id="photoGallery">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <!-- 个人简介 -->
+  <div class="section card">
+    <div class="section-title">个人简介</div>
+    <div class="tech-intro" id="techIntro">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <!-- 服务项目 -->
+  <div class="section card">
+    <div class="section-title">服务项目</div>
+    <div class="service-items" id="serviceItems">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <!-- 用户评价 -->
+  <div class="section card">
+    <div class="section-title flex flex-between">
+      <span>用户评价 (<span id="reviewCount">0</span>)</span>
+      <span class="text-secondary" style="font-size: 12px; font-weight: normal;">
+        好评率 <span id="goodRate">100%</span>
+      </span>
+    </div>
+    <div class="review-list" id="reviewList">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <!-- 底部操作栏 -->
+  <div class="bottom-bar">
+    <div class="price-info">
+      <span class="price-label">起步价</span>
+      <span class="price-value" id="techPrice">¥198</span>
+    </div>
+    <button class="btn btn-primary btn-book" onclick="bookService()">立即预约</button>
+  </div>
+</div>
+
+<style>
+.technician-detail-page {
+  background: var(--bg-color);
+  min-height: 100%;
+  padding-bottom: 70px;
+}
+
+/* Header */
+.tech-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #10b981 100%);
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+}
+
+.tech-avatar-section {
+  position: relative;
+  margin-right: 16px;
+}
+
+.tech-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.tech-status {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  color: #fff;
+  background: var(--primary-color);
+  white-space: nowrap;
+}
+
+.tech-status.busy {
+  background: var(--warning-color);
+}
+
+.tech-status.offline {
+  background: var(--text-placeholder);
+}
+
+.tech-basic-info {
+  flex: 1;
+  color: #fff;
+}
+
+.tech-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tech-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.tech-gender {
+  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tech-shop {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+
+.tech-stats {
+  display: flex;
+  align-items: center;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 20px;
+}
+
+/* Section */
+.section {
+  margin: 12px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* Photo Gallery */
+.photo-gallery {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.photo-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.photo-item {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e8f8ef 0%, #d1fae5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+/* Intro */
+.tech-intro {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Service Items */
+.service-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.service-item-info {
+  flex: 1;
+}
+
+.service-item-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.service-item-duration {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.service-item-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.service-item-price::before {
+  content: '¥';
+  font-size: 12px;
+}
+
+/* Review List */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-item {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.review-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.review-user-info {
+  flex: 1;
+}
+
+.review-user-name {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.review-time {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.review-rating {
+  color: var(--warning-color);
+  font-size: 12px;
+}
+
+.review-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.review-photos {
+  display: flex;
+  gap: 8px;
+}
+
+.review-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.review-service {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  margin-top: 8px;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.price-info {
+  flex: 1;
+}
+
+.price-label {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  display: block;
+}
+
+.price-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.btn-book {
+  padding: 12px 32px;
+  font-size: 16px;
+  border-radius: 24px;
+}
+
+/* Empty Reviews */
+.empty-reviews {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-placeholder);
+}
+</style>
+
+
+<script>
+(function() {
+  // 获取技师ID
+  const params = QY.getParams();
+  const techId = parseInt(params.id) || 1;
+
+  // Mock 数据 - 技师详情
+  const technicianData = {
+    1: {
+      id: 1, name: '张师傅', gender: 1, avatar: '👨', shopName: '康乐养生馆',
+      rating: 4.9, ratingCount: 156, orderCount: 328, years: 5, price: 198,
+      status: 1, statusText: '在线',
+      intro: '从事按摩推拿行业5年，擅长中式推拿、肩颈调理。曾在多家知名养生馆工作，积累了丰富的实践经验。手法专业，力度适中，深受顾客好评。',
+      photos: ['💆', '🧘', '💪'],
+      services: [
+        { id: 1, name: '全身中式推拿', duration: 60, price: 298 },
+        { id: 2, name: '肩颈深度调理', duration: 45, price: 198 },
+        { id: 3, name: '背部推拿放松', duration: 45, price: 218 }
+      ]
+    },
+    2: {
+      id: 2, name: '李师傅', gender: 2, avatar: '👩', shopName: '悦享SPA会所',
+      rating: 4.8, ratingCount: 98, orderCount: 256, years: 3, price: 228,
+      status: 1, statusText: '在线',
+      intro: '专业SPA理疗师，擅长精油按摩、泰式按摩。温柔细致，注重客户体验，让您在放松中享受专业服务。',
+      photos: ['🌸', '🧘', '💆'],
+      services: [
+        { id: 4, name: '精油香薰SPA', duration: 90, price: 458 },
+        { id: 5, name: '泰式古法按摩', duration: 90, price: 398 },
+        { id: 6, name: '全身中式推拿', duration: 60, price: 288 }
+      ]
+    }
+  };
+
+  // Mock 数据 - 评价列表（按时间降序排列）
+  const reviewsData = [
+    { id: 1, techId: 1, userId: 101, userName: '用户***8', avatar: '😊', rating: 5, content: '张师傅手法很专业，力度刚刚好，做完整个人都轻松了很多。下次还会预约！', photos: ['📷'], serviceName: '全身中式推拿', createdAt: '2026-01-10 18:30' },
+    { id: 2, techId: 1, userId: 102, userName: '用户***2', avatar: '😄', rating: 5, content: '肩颈调理效果很好，困扰我很久的肩膀酸痛缓解了不少。', photos: [], serviceName: '肩颈深度调理', createdAt: '2026-01-09 20:15' },
+    { id: 3, techId: 1, userId: 103, userName: '用户***5', avatar: '🙂', rating: 4, content: '服务态度很好，准时到达，整体体验不错。', photos: [], serviceName: '背部推拿放松', createdAt: '2026-01-08 14:20' },
+    { id: 4, techId: 1, userId: 104, userName: '用户***9', avatar: '😊', rating: 5, content: '非常满意！师傅很专业，会根据身体情况调整手法。强烈推荐！', photos: ['📷', '📷'], serviceName: '全身中式推拿', createdAt: '2026-01-07 16:45' },
+    { id: 5, techId: 2, userId: 105, userName: '用户***1', avatar: '😄', rating: 5, content: '精油SPA太舒服了，整个人都放松下来了。李师傅手法很温柔。', photos: ['📷'], serviceName: '精油香薰SPA', createdAt: '2026-01-10 15:00' },
+    { id: 6, techId: 2, userId: 106, userName: '用户***7', avatar: '🙂', rating: 4, content: '泰式按摩很正宗，拉伸到位，就是有点疼，不过效果很好。', photos: [], serviceName: '泰式古法按摩', createdAt: '2026-01-09 19:30' }
+  ];
+
+  // 获取技师数据
+  const tech = technicianData[techId] || technicianData[1];
+  
+  // 获取该技师的评价（按时间降序）
+  const reviews = reviewsData
+    .filter(r => r.techId === tech.id)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // 渲染技师基本信息
+  function renderBasicInfo() {
+    document.getElementById('techAvatar').textContent = tech.avatar;
+    document.getElementById('techName').textContent = tech.name;
+    document.getElementById('techGender').textContent = tech.gender === 1 ? '♂' : '♀';
+    document.getElementById('techGender').className = `tech-gender ${tech.gender === 1 ? 'male' : 'female'}`;
+    document.getElementById('techShop').textContent = tech.shopName;
+    document.getElementById('techRating').textContent = tech.rating;
+    document.getElementById('techOrders').textContent = tech.orderCount;
+    document.getElementById('techYears').textContent = tech.years + '年';
+    document.getElementById('techPrice').textContent = '¥' + tech.price;
+    
+    const statusEl = document.getElementById('techStatus');
+    statusEl.textContent = tech.statusText;
+    if (tech.status === 2) statusEl.classList.add('busy');
+    if (tech.status === 0) statusEl.classList.add('offline');
+  }
+
+  // 渲染照片集
+  function renderPhotos() {
+    const gallery = document.getElementById('photoGallery');
+    gallery.innerHTML = tech.photos.map(photo => `
+      <div class="photo-item">${photo}</div>
+    `).join('');
+  }
+
+  // 渲染个人简介
+  function renderIntro() {
+    document.getElementById('techIntro').textContent = tech.intro;
+  }
+
+  // 渲染服务项目
+  function renderServices() {
+    const container = document.getElementById('serviceItems');
+    container.innerHTML = tech.services.map(service => `
+      <div class="service-item" onclick="QY.navigateTo('order/create', { techId: ${tech.id}, serviceId: ${service.id} })">
+        <div class="service-item-info">
+          <div class="service-item-name">${service.name}</div>
+          <div class="service-item-duration">${service.duration}分钟</div>
+        </div>
+        <div class="service-item-price">${service.price}</div>
+      </div>
+    `).join('');
+  }
+
+  // 渲染评价列表
+  function renderReviews() {
+    document.getElementById('reviewCount').textContent = reviews.length;
+    
+    // 计算好评率
+    const goodReviews = reviews.filter(r => r.rating >= 4).length;
+    const goodRate = reviews.length > 0 ? Math.round(goodReviews / reviews.length * 100) : 100;
+    document.getElementById('goodRate').textContent = goodRate + '%';
+
+    const container = document.getElementById('reviewList');
+    
+    if (reviews.length === 0) {
+      container.innerHTML = '<div class="empty-reviews">暂无评价</div>';
+      return;
+    }
+
+    container.innerHTML = reviews.map(review => `
+      <div class="review-item">
+        <div class="review-header">
+          <div class="review-avatar">${review.avatar}</div>
+          <div class="review-user-info">
+            <div class="review-user-name">${review.userName}</div>
+            <div class="review-time">${review.createdAt}</div>
+          </div>
+          <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+        </div>
+        <div class="review-content">${review.content}</div>
+        ${review.photos.length > 0 ? `
+          <div class="review-photos">
+            ${review.photos.map(p => `<div class="review-photo">${p}</div>`).join('')}
+          </div>
+        ` : ''}
+        <div class="review-service">服务项目：${review.serviceName}</div>
+      </div>
+    `).join('');
+  }
+
+  // 预约服务
+  window.bookService = function() {
+    if (tech.status === 0) {
+      QY.showToast('技师当前离线，请选择其他技师');
+      return;
+    }
+    QY.navigateTo('order/create', { techId: tech.id });
+  };
+
+  // 初始化
+  renderBasicInfo();
+  renderPhotos();
+  renderIntro();
+  renderServices();
+  renderReviews();
+
+})();
+</script>

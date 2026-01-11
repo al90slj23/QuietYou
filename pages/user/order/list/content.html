@@ -1,0 +1,482 @@
+<div class="order-list-page" id="orderListPage">
+  <!-- 订单状态标签页 -->
+  <div class="status-tabs">
+    <div class="tab-item active" data-status="all" onclick="switchTab('all', this)">全部</div>
+    <div class="tab-item" data-status="0" onclick="switchTab('0', this)">待支付</div>
+    <div class="tab-item" data-status="1,2" onclick="switchTab('1,2', this)">待服务</div>
+    <div class="tab-item" data-status="3,4" onclick="switchTab('3,4', this)">进行中</div>
+    <div class="tab-item" data-status="5" onclick="switchTab('5', this)">已完成</div>
+    <div class="tab-item" data-status="6,7" onclick="switchTab('6,7', this)">已取消</div>
+  </div>
+
+  <!-- 订单列表 -->
+  <div class="order-list" id="orderList">
+    <!-- 动态加载 -->
+  </div>
+
+  <!-- 空状态 -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <div class="empty-icon">📋</div>
+    <div class="empty-text">暂无订单</div>
+    <button class="btn btn-primary" onclick="QY.navigateTo('home')">去预约服务</button>
+  </div>
+</div>
+
+<style>
+.order-list-page {
+  background: var(--bg-color);
+  min-height: 100%;
+}
+
+/* Status Tabs */
+.status-tabs {
+  display: flex;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.status-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-item {
+  flex-shrink: 0;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background: var(--primary-color);
+  border-radius: 1px;
+}
+
+/* Order List */
+.order-list {
+  padding: 12px;
+}
+
+/* Order Card */
+.order-card {
+  background: var(--bg-white);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-no {
+  font-size: 12px;
+  color: var(--text-placeholder);
+  font-family: monospace;
+}
+
+.order-status {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.order-status.pending { color: var(--warning-color); }
+.order-status.paid { color: var(--primary-color); }
+.order-status.accepted { color: var(--primary-color); }
+.order-status.departing { color: #3b82f6; }
+.order-status.serving { color: #8b5cf6; }
+.order-status.completed { color: var(--text-placeholder); }
+.order-status.cancelled { color: var(--text-placeholder); }
+.order-status.refunded { color: var(--danger-color); }
+
+.order-card-body {
+  padding: 12px;
+}
+
+.order-service {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.service-tech {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.service-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.service-price::before {
+  content: '¥';
+  font-size: 12px;
+}
+
+.order-detail-row {
+  display: flex;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.order-detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.detail-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.order-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+.order-card-footer .btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 16px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: var(--text-placeholder);
+  margin-bottom: 24px;
+}
+
+.empty-state .btn {
+  padding: 10px 24px;
+  border-radius: 20px;
+}
+</style>
+
+<script>
+(function() {
+  // 订单状态映射
+  const STATUS_MAP = {
+    0: { text: '待支付', class: 'pending' },
+    1: { text: '待接单', class: 'paid' },
+    2: { text: '待服务', class: 'accepted' },
+    3: { text: '技师出发中', class: 'departing' },
+    4: { text: '服务中', class: 'serving' },
+    5: { text: '已完成', class: 'completed' },
+    6: { text: '已取消', class: 'cancelled' },
+    7: { text: '已退款', class: 'refunded' }
+  };
+
+  // Mock 订单数据
+  const mockOrders = [
+    {
+      orderNo: 'QY20260111143000A1B2',
+      status: 5,
+      serviceName: '全身中式推拿',
+      serviceIcon: '💆',
+      techName: '张师傅',
+      price: 298,
+      scheduleDate: '2026-01-10',
+      scheduleTime: '14:00',
+      address: '北京市朝阳区建国路88号SOHO现代城A座1201',
+      createTime: '2026-01-10 13:30:00',
+      hasReview: true
+    },
+    {
+      orderNo: 'QY20260111150000C3D4',
+      status: 4,
+      serviceName: '肩颈深度调理',
+      serviceIcon: '💪',
+      techName: '李师傅',
+      price: 198,
+      scheduleDate: '2026-01-11',
+      scheduleTime: '15:00',
+      address: '北京市海淀区中关村大街1号',
+      createTime: '2026-01-11 14:30:00',
+      hasReview: false
+    },
+    {
+      orderNo: 'QY20260111160000E5F6',
+      status: 2,
+      serviceName: '精油香薰SPA',
+      serviceIcon: '🌸',
+      techName: '王师傅',
+      price: 458,
+      scheduleDate: '2026-01-12',
+      scheduleTime: '16:00',
+      address: '北京市西城区金融街8号',
+      createTime: '2026-01-11 15:00:00',
+      hasReview: false
+    },
+    {
+      orderNo: 'QY20260111170000G7H8',
+      status: 0,
+      serviceName: '泰式古法按摩',
+      serviceIcon: '🧘',
+      techName: '赵师傅',
+      price: 398,
+      scheduleDate: '2026-01-13',
+      scheduleTime: '17:00',
+      address: '北京市东城区王府井大街1号',
+      createTime: '2026-01-11 16:00:00',
+      hasReview: false
+    },
+    {
+      orderNo: 'QY20260111180000I9J0',
+      status: 6,
+      serviceName: '背部推拿放松',
+      serviceIcon: '🧘',
+      techName: '孙师傅',
+      price: 218,
+      scheduleDate: '2026-01-09',
+      scheduleTime: '18:00',
+      address: '北京市丰台区丽泽商务区',
+      createTime: '2026-01-09 17:00:00',
+      cancelReason: '用户取消',
+      hasReview: false
+    }
+  ];
+
+  let currentStatus = 'all';
+  let orders = [...mockOrders];
+
+  // 切换标签
+  window.switchTab = function(status, element) {
+    // 更新标签状态
+    document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+    
+    currentStatus = status;
+    renderOrders();
+  };
+
+  // 筛选订单
+  function filterOrders() {
+    if (currentStatus === 'all') {
+      return orders;
+    }
+    
+    const statusList = currentStatus.split(',').map(Number);
+    return orders.filter(order => statusList.includes(order.status));
+  }
+
+  // 渲染订单列表
+  function renderOrders() {
+    const filtered = filterOrders();
+    const container = document.getElementById('orderList');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (filtered.length === 0) {
+      container.innerHTML = '';
+      emptyState.style.display = 'flex';
+      return;
+    }
+    
+    emptyState.style.display = 'none';
+    
+    container.innerHTML = filtered.map(order => {
+      const status = STATUS_MAP[order.status];
+      const actions = getOrderActions(order);
+      
+      return `
+        <div class="order-card" onclick="viewOrderDetail('${order.orderNo}')">
+          <div class="order-card-header">
+            <span class="order-no">${order.orderNo}</span>
+            <span class="order-status ${status.class}">${status.text}</span>
+          </div>
+          <div class="order-card-body">
+            <div class="order-service">
+              <div class="service-icon">${order.serviceIcon}</div>
+              <div class="service-info">
+                <div class="service-name">${order.serviceName}</div>
+                <div class="service-tech">技师：${order.techName}</div>
+              </div>
+              <div class="service-price">${order.price}</div>
+            </div>
+            <div class="order-detail-row">
+              <span class="detail-icon">📅</span>
+              <span class="detail-text">${formatDateTime(order.scheduleDate, order.scheduleTime)}</span>
+            </div>
+            <div class="order-detail-row">
+              <span class="detail-icon">📍</span>
+              <span class="detail-text">${order.address}</span>
+            </div>
+          </div>
+          ${actions.length > 0 ? `
+            <div class="order-card-footer" onclick="event.stopPropagation()">
+              ${actions.map(action => `
+                <button class="btn ${action.primary ? 'btn-primary' : 'btn-secondary'}" 
+                        onclick="${action.handler}">
+                  ${action.text}
+                </button>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 获取订单操作按钮
+  function getOrderActions(order) {
+    const actions = [];
+    
+    switch (order.status) {
+      case 0: // 待支付
+        actions.push({ text: '取消订单', handler: `cancelOrder('${order.orderNo}')`, primary: false });
+        actions.push({ text: '去支付', handler: `payOrder('${order.orderNo}')`, primary: true });
+        break;
+      case 1: // 待接单
+      case 2: // 待服务
+        actions.push({ text: '取消订单', handler: `cancelOrder('${order.orderNo}')`, primary: false });
+        actions.push({ text: '联系技师', handler: `contactTech('${order.orderNo}')`, primary: true });
+        break;
+      case 3: // 技师出发中
+      case 4: // 服务中
+        actions.push({ text: '联系技师', handler: `contactTech('${order.orderNo}')`, primary: true });
+        break;
+      case 5: // 已完成
+        if (!order.hasReview) {
+          actions.push({ text: '去评价', handler: `reviewOrder('${order.orderNo}')`, primary: true });
+        }
+        actions.push({ text: '再次预约', handler: `rebookOrder('${order.orderNo}')`, primary: false });
+        break;
+      case 6: // 已取消
+      case 7: // 已退款
+        actions.push({ text: '再次预约', handler: `rebookOrder('${order.orderNo}')`, primary: true });
+        break;
+    }
+    
+    return actions;
+  }
+
+  // 格式化日期时间
+  function formatDateTime(date, time) {
+    const [year, month, day] = date.split('-');
+    const d = new Date(date);
+    const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return `${month}月${day}日 ${dayNames[d.getDay()]} ${time}`;
+  }
+
+  // 查看订单详情
+  window.viewOrderDetail = function(orderNo) {
+    QY.navigateTo('order/detail', { orderNo });
+  };
+
+  // 取消订单
+  window.cancelOrder = function(orderNo) {
+    if (confirm('确定要取消订单吗？')) {
+      const order = orders.find(o => o.orderNo === orderNo);
+      if (order) {
+        order.status = 6;
+        order.cancelReason = '用户取消';
+        renderOrders();
+        QY.showToast('订单已取消');
+      }
+    }
+  };
+
+  // 去支付
+  window.payOrder = function(orderNo) {
+    const order = orders.find(o => o.orderNo === orderNo);
+    if (order) {
+      sessionStorage.setItem('currentOrder', JSON.stringify(order));
+      QY.navigateTo('order/pay', { orderNo });
+    }
+  };
+
+  // 联系技师
+  window.contactTech = function(orderNo) {
+    QY.showToast('正在呼叫技师...');
+  };
+
+  // 去评价
+  window.reviewOrder = function(orderNo) {
+    QY.navigateTo('order/detail', { orderNo, action: 'review' });
+  };
+
+  // 再次预约
+  window.rebookOrder = function(orderNo) {
+    const order = orders.find(o => o.orderNo === orderNo);
+    if (order) {
+      QY.navigateTo('technician/detail', { id: 1 }); // 简化处理
+    }
+  };
+
+  // 初始化
+  renderOrders();
+
+})();
+</script>

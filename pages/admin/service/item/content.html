@@ -1,0 +1,379 @@
+<div class="page-service-item">
+  <!-- 筛选栏 -->
+  <div class="card">
+    <div class="filter-bar">
+      <select class="filter-select" id="categoryFilter">
+        <option value="">全部分类</option>
+        <option value="1">中式推拿</option>
+        <option value="2">泰式按摩</option>
+        <option value="3">足疗保健</option>
+        <option value="4">精油SPA</option>
+        <option value="5">艾灸理疗</option>
+      </select>
+      <select class="filter-select" id="statusFilter">
+        <option value="">全部状态</option>
+        <option value="1">启用</option>
+        <option value="0">禁用</option>
+      </select>
+      <button class="btn btn-primary" onclick="showAddItem()">+ 添加服务</button>
+      <button class="btn btn-default" onclick="ADMIN.navigateTo('service/category')">管理分类</button>
+    </div>
+  </div>
+
+  <!-- 服务列表 -->
+  <div class="card">
+    <div class="card-title">服务项目</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>图标</th>
+          <th>服务名称</th>
+          <th>所属分类</th>
+          <th>基础价格</th>
+          <th>时长</th>
+          <th>排序</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="itemTableBody">
+        <!-- 动态生成 -->
+      </tbody>
+    </table>
+    
+    <div class="pagination" id="pagination">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+</div>
+
+<!-- 添加/编辑服务弹窗 -->
+<div class="modal-overlay" id="itemModal" style="display:none">
+  <div class="modal" style="min-width:600px">
+    <div class="modal-header">
+      <span class="modal-title" id="itemModalTitle">添加服务</span>
+      <span class="modal-close" onclick="closeItemModal()">×</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group" style="flex:1">
+          <label class="form-label required">服务名称</label>
+          <input type="text" class="form-control" id="itemName" placeholder="请输入服务名称">
+        </div>
+        <div class="form-group" style="width:150px">
+          <label class="form-label required">所属分类</label>
+          <select class="form-control" id="itemCategory">
+            <option value="1">中式推拿</option>
+            <option value="2">泰式按摩</option>
+            <option value="3">足疗保健</option>
+            <option value="4">精油SPA</option>
+            <option value="5">艾灸理疗</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1">
+          <label class="form-label required">基础价格 (元)</label>
+          <input type="number" class="form-control" id="itemPrice" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label">最高价格 (元)</label>
+          <input type="number" class="form-control" id="itemPriceMax" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label required">服务时长 (分钟)</label>
+          <input type="number" class="form-control" id="itemDuration" placeholder="60" min="15" step="15">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">服务描述</label>
+        <textarea class="form-control" id="itemDesc" rows="3" placeholder="请输入服务描述"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">服务流程</label>
+        <textarea class="form-control" id="itemProcess" rows="3" placeholder="请输入服务流程"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">注意事项</label>
+        <textarea class="form-control" id="itemNotice" rows="2" placeholder="请输入注意事项"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">排序</label>
+        <input type="number" class="form-control" id="itemSort" value="0" min="0" style="width:100px">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeItemModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveItem()">保存</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.service-icon {
+  font-size: 24px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.action-btn.danger:hover {
+  background: #fde8ea;
+  color: var(--error-color);
+}
+</style>
+
+<script>
+(function() {
+  // 模拟服务数据
+  let services = [
+    { id: 1, icon: '💆', name: '中式推拿60分钟', categoryId: 1, category: '中式推拿', price: 198, priceMax: 298, duration: 60, sort: 1, status: 1 },
+    { id: 2, icon: '💆', name: '中式推拿90分钟', categoryId: 1, category: '中式推拿', price: 268, priceMax: 398, duration: 90, sort: 2, status: 1 },
+    { id: 3, icon: '💆', name: '肩颈舒缓45分钟', categoryId: 1, category: '中式推拿', price: 158, priceMax: 238, duration: 45, sort: 3, status: 1 },
+    { id: 4, icon: '🧘', name: '泰式按摩60分钟', categoryId: 2, category: '泰式按摩', price: 228, priceMax: 328, duration: 60, sort: 1, status: 1 },
+    { id: 5, icon: '🧘', name: '泰式按摩90分钟', categoryId: 2, category: '泰式按摩', price: 298, priceMax: 428, duration: 90, sort: 2, status: 1 },
+    { id: 6, icon: '🦶', name: '足底按摩60分钟', categoryId: 3, category: '足疗保健', price: 168, priceMax: 258, duration: 60, sort: 1, status: 1 },
+    { id: 7, icon: '🦶', name: '足底按摩90分钟', categoryId: 3, category: '足疗保健', price: 238, priceMax: 358, duration: 90, sort: 2, status: 1 },
+    { id: 8, icon: '🌿', name: '全身精油SPA', categoryId: 4, category: '精油SPA', price: 398, priceMax: 598, duration: 90, sort: 1, status: 1 },
+    { id: 9, icon: '🌿', name: '香薰精油护理', categoryId: 4, category: '精油SPA', price: 298, priceMax: 458, duration: 60, sort: 2, status: 1 },
+    { id: 10, icon: '🔥', name: '艾灸理疗60分钟', categoryId: 5, category: '艾灸理疗', price: 188, priceMax: 288, duration: 60, sort: 1, status: 0 }
+  ];
+
+  const categoryIcons = {
+    1: '💆',
+    2: '🧘',
+    3: '🦶',
+    4: '🌿',
+    5: '🔥'
+  };
+
+  let currentPage = 1;
+  const pageSize = 10;
+  let filteredServices = [...services];
+  let editingId = null;
+
+  function init() {
+    renderTable();
+    renderPagination();
+    bindFilters();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('itemTableBody');
+    const start = (currentPage - 1) * pageSize;
+    const pageServices = filteredServices.slice(start, start + pageSize);
+
+    tbody.innerHTML = pageServices.map(item => `
+      <tr>
+        <td><span class="service-icon">${item.icon}</span></td>
+        <td>${item.name}</td>
+        <td>${item.category}</td>
+        <td>¥${item.price}${item.priceMax ? ' - ¥' + item.priceMax : ''}</td>
+        <td>${item.duration}分钟</td>
+        <td>${item.sort}</td>
+        <td>
+          <span class="status-tag ${item.status === 1 ? 'success' : 'error'}">
+            ${item.status === 1 ? '启用' : '禁用'}
+          </span>
+        </td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn" onclick="editItem(${item.id})">编辑</button>
+            <button class="action-btn" onclick="toggleStatus(${item.id})">
+              ${item.status === 1 ? '禁用' : '启用'}
+            </button>
+            <button class="action-btn danger" onclick="deleteItem(${item.id})">删除</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredServices.length / pageSize);
+    const pagination = document.getElementById('pagination');
+    
+    let html = `
+      <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
+    `;
+    
+    for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+      html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }
+    
+    html += `
+      <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    `;
+    
+    pagination.innerHTML = html;
+  }
+
+  function bindFilters() {
+    document.getElementById('categoryFilter').addEventListener('change', filterServices);
+    document.getElementById('statusFilter').addEventListener('change', filterServices);
+  }
+
+  function filterServices() {
+    const category = document.getElementById('categoryFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    
+    filteredServices = services.filter(item => {
+      const matchCategory = !category || item.categoryId.toString() === category;
+      const matchStatus = !status || item.status.toString() === status;
+      return matchCategory && matchStatus;
+    });
+    
+    currentPage = 1;
+    renderTable();
+    renderPagination();
+  }
+
+  window.goToPage = function(page) {
+    const totalPages = Math.ceil(filteredServices.length / pageSize);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable();
+    renderPagination();
+  };
+
+  window.showAddItem = function() {
+    editingId = null;
+    document.getElementById('itemModalTitle').textContent = '添加服务';
+    document.getElementById('itemName').value = '';
+    document.getElementById('itemCategory').value = '1';
+    document.getElementById('itemPrice').value = '';
+    document.getElementById('itemPriceMax').value = '';
+    document.getElementById('itemDuration').value = '60';
+    document.getElementById('itemDesc').value = '';
+    document.getElementById('itemProcess').value = '';
+    document.getElementById('itemNotice').value = '';
+    document.getElementById('itemSort').value = '0';
+    document.getElementById('itemModal').style.display = 'flex';
+  };
+
+  window.editItem = function(id) {
+    const item = services.find(s => s.id === id);
+    if (!item) return;
+
+    editingId = id;
+    document.getElementById('itemModalTitle').textContent = '编辑服务';
+    document.getElementById('itemName').value = item.name;
+    document.getElementById('itemCategory').value = item.categoryId;
+    document.getElementById('itemPrice').value = item.price;
+    document.getElementById('itemPriceMax').value = item.priceMax || '';
+    document.getElementById('itemDuration').value = item.duration;
+    document.getElementById('itemDesc').value = item.desc || '';
+    document.getElementById('itemProcess').value = item.process || '';
+    document.getElementById('itemNotice').value = item.notice || '';
+    document.getElementById('itemSort').value = item.sort;
+    document.getElementById('itemModal').style.display = 'flex';
+  };
+
+  window.closeItemModal = function() {
+    document.getElementById('itemModal').style.display = 'none';
+    editingId = null;
+  };
+
+  window.saveItem = function() {
+    const name = document.getElementById('itemName').value.trim();
+    const categoryId = parseInt(document.getElementById('itemCategory').value);
+    const price = parseFloat(document.getElementById('itemPrice').value);
+    const priceMax = parseFloat(document.getElementById('itemPriceMax').value) || null;
+    const duration = parseInt(document.getElementById('itemDuration').value);
+    const sort = parseInt(document.getElementById('itemSort').value) || 0;
+
+    if (!name) {
+      ADMIN.showToast('请输入服务名称');
+      return;
+    }
+    if (isNaN(price) || price <= 0) {
+      ADMIN.showToast('请输入有效的基础价格');
+      return;
+    }
+    if (isNaN(duration) || duration < 15) {
+      ADMIN.showToast('服务时长至少15分钟');
+      return;
+    }
+
+    const categoryNames = { 1: '中式推拿', 2: '泰式按摩', 3: '足疗保健', 4: '精油SPA', 5: '艾灸理疗' };
+
+    if (editingId) {
+      const item = services.find(s => s.id === editingId);
+      if (item) {
+        item.name = name;
+        item.categoryId = categoryId;
+        item.category = categoryNames[categoryId];
+        item.icon = categoryIcons[categoryId];
+        item.price = price;
+        item.priceMax = priceMax;
+        item.duration = duration;
+        item.sort = sort;
+      }
+      ADMIN.showToast('服务已更新');
+    } else {
+      const newId = Math.max(...services.map(s => s.id)) + 1;
+      services.push({
+        id: newId,
+        icon: categoryIcons[categoryId],
+        name,
+        categoryId,
+        category: categoryNames[categoryId],
+        price,
+        priceMax,
+        duration,
+        sort,
+        status: 1
+      });
+      ADMIN.showToast('服务已添加');
+    }
+
+    filterServices();
+    closeItemModal();
+  };
+
+  window.toggleStatus = function(id) {
+    const item = services.find(s => s.id === id);
+    if (item) {
+      item.status = item.status === 1 ? 0 : 1;
+      filterServices();
+      ADMIN.showToast(item.status === 1 ? '已启用' : '已禁用');
+    }
+  };
+
+  window.deleteItem = async function(id) {
+    const item = services.find(s => s.id === id);
+    if (!item) return;
+
+    const confirmed = await ADMIN.showConfirm(`确定要删除服务 ${item.name} 吗？`);
+    if (confirmed) {
+      services = services.filter(s => s.id !== id);
+      filterServices();
+      ADMIN.showToast('服务已删除');
+    }
+  };
+
+  init();
+})();
+</script>

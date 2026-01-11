@@ -1,0 +1,21 @@
+# 环境配置（包含敏感信息）
+.env
+
+# 依赖
+node_modules/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Kiro
+.kiro/
+
+# 部署脚本
+deploy.sh
+
+# 日志
+*.log

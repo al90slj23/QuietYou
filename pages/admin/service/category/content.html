@@ -1,0 +1,349 @@
+<div class="page-service-category">
+  <!-- 操作栏 -->
+  <div class="card">
+    <div class="filter-bar">
+      <button class="btn btn-primary" onclick="showAddCategory()">+ 添加分类</button>
+      <button class="btn btn-default" onclick="ADMIN.navigateTo('service/item')">管理服务项目</button>
+    </div>
+  </div>
+
+  <!-- 分类列表 -->
+  <div class="card">
+    <div class="card-title">服务分类</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>排序</th>
+          <th>图标</th>
+          <th>分类名称</th>
+          <th>描述</th>
+          <th>服务项目数</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="categoryTableBody">
+        <!-- 动态生成 -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 添加/编辑分类弹窗 -->
+<div class="modal-overlay" id="categoryModal" style="display:none">
+  <div class="modal" style="min-width:500px">
+    <div class="modal-header">
+      <span class="modal-title" id="categoryModalTitle">添加分类</span>
+      <span class="modal-close" onclick="closeCategoryModal()">×</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label required">分类名称</label>
+        <input type="text" class="form-control" id="categoryName" placeholder="请输入分类名称">
+      </div>
+      <div class="form-group">
+        <label class="form-label required">图标</label>
+        <div class="icon-picker" id="iconPicker">
+          <span class="icon-option selected" data-icon="💆">💆</span>
+          <span class="icon-option" data-icon="🧘">🧘</span>
+          <span class="icon-option" data-icon="🦶">🦶</span>
+          <span class="icon-option" data-icon="💪">💪</span>
+          <span class="icon-option" data-icon="🌿">🌿</span>
+          <span class="icon-option" data-icon="🔥">🔥</span>
+          <span class="icon-option" data-icon="💎">💎</span>
+          <span class="icon-option" data-icon="🌸">🌸</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述</label>
+        <textarea class="form-control" id="categoryDesc" rows="3" placeholder="请输入分类描述"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">排序</label>
+        <input type="number" class="form-control" id="categorySort" value="0" min="0">
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">数字越小越靠前</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" onclick="closeCategoryModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveCategory()">保存</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.icon-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.icon-option {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-option:hover {
+  border-color: var(--primary-color);
+}
+
+.icon-option.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.category-icon {
+  font-size: 24px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.action-btn.danger:hover {
+  background: #fde8ea;
+  color: var(--error-color);
+}
+
+.sort-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sort-btn {
+  padding: 2px 6px;
+  font-size: 10px;
+  border: none;
+  background: var(--bg-color);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.sort-btn:hover {
+  background: var(--primary-light);
+}
+</style>
+
+<script>
+(function() {
+  // 模拟分类数据
+  let categories = [
+    { id: 1, icon: '💆', name: '中式推拿', desc: '传统中医推拿手法，疏通经络', items: 8, sort: 1, status: 1 },
+    { id: 2, icon: '🧘', name: '泰式按摩', desc: '正宗泰式按摩，舒展筋骨', items: 5, sort: 2, status: 1 },
+    { id: 3, icon: '🦶', name: '足疗保健', desc: '足底穴位按摩，促进血液循环', items: 6, sort: 3, status: 1 },
+    { id: 4, icon: '🌿', name: '精油SPA', desc: '芳香精油护理，放松身心', items: 4, sort: 4, status: 1 },
+    { id: 5, icon: '🔥', name: '艾灸理疗', desc: '传统艾灸疗法，温经散寒', items: 3, sort: 5, status: 1 },
+    { id: 6, icon: '💎', name: '刮痧拔罐', desc: '中医刮痧拔罐，祛湿排毒', items: 4, sort: 6, status: 0 }
+  ];
+
+  let editingId = null;
+  let selectedIcon = '💆';
+
+  function init() {
+    renderTable();
+    initIconPicker();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('categoryTableBody');
+    
+    // 按排序排列
+    const sorted = [...categories].sort((a, b) => a.sort - b.sort);
+
+    tbody.innerHTML = sorted.map((cat, index) => `
+      <tr>
+        <td>
+          <div class="sort-btns">
+            <button class="sort-btn" onclick="moveUp(${cat.id})" ${index === 0 ? 'disabled' : ''}>▲</button>
+            <button class="sort-btn" onclick="moveDown(${cat.id})" ${index === sorted.length - 1 ? 'disabled' : ''}>▼</button>
+          </div>
+        </td>
+        <td><span class="category-icon">${cat.icon}</span></td>
+        <td>${cat.name}</td>
+        <td>${cat.desc}</td>
+        <td>${cat.items}</td>
+        <td>
+          <span class="status-tag ${cat.status === 1 ? 'success' : 'error'}">
+            ${cat.status === 1 ? '启用' : '禁用'}
+          </span>
+        </td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn" onclick="editCategory(${cat.id})">编辑</button>
+            <button class="action-btn" onclick="toggleStatus(${cat.id})">
+              ${cat.status === 1 ? '禁用' : '启用'}
+            </button>
+            <button class="action-btn danger" onclick="deleteCategory(${cat.id})">删除</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function initIconPicker() {
+    const picker = document.getElementById('iconPicker');
+    picker.addEventListener('click', (e) => {
+      if (e.target.classList.contains('icon-option')) {
+        picker.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+        e.target.classList.add('selected');
+        selectedIcon = e.target.dataset.icon;
+      }
+    });
+  }
+
+  window.showAddCategory = function() {
+    editingId = null;
+    document.getElementById('categoryModalTitle').textContent = '添加分类';
+    document.getElementById('categoryName').value = '';
+    document.getElementById('categoryDesc').value = '';
+    document.getElementById('categorySort').value = categories.length + 1;
+    
+    // 重置图标选择
+    const picker = document.getElementById('iconPicker');
+    picker.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+    picker.querySelector('[data-icon="💆"]').classList.add('selected');
+    selectedIcon = '💆';
+    
+    document.getElementById('categoryModal').style.display = 'flex';
+  };
+
+  window.editCategory = function(id) {
+    const cat = categories.find(c => c.id === id);
+    if (!cat) return;
+
+    editingId = id;
+    document.getElementById('categoryModalTitle').textContent = '编辑分类';
+    document.getElementById('categoryName').value = cat.name;
+    document.getElementById('categoryDesc').value = cat.desc;
+    document.getElementById('categorySort').value = cat.sort;
+    
+    // 设置图标选择
+    const picker = document.getElementById('iconPicker');
+    picker.querySelectorAll('.icon-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.icon === cat.icon);
+    });
+    selectedIcon = cat.icon;
+    
+    document.getElementById('categoryModal').style.display = 'flex';
+  };
+
+  window.closeCategoryModal = function() {
+    document.getElementById('categoryModal').style.display = 'none';
+    editingId = null;
+  };
+
+  window.saveCategory = function() {
+    const name = document.getElementById('categoryName').value.trim();
+    const desc = document.getElementById('categoryDesc').value.trim();
+    const sort = parseInt(document.getElementById('categorySort').value) || 0;
+
+    if (!name) {
+      ADMIN.showToast('请输入分类名称');
+      return;
+    }
+
+    if (editingId) {
+      // 编辑
+      const cat = categories.find(c => c.id === editingId);
+      if (cat) {
+        cat.name = name;
+        cat.icon = selectedIcon;
+        cat.desc = desc;
+        cat.sort = sort;
+      }
+      ADMIN.showToast('分类已更新');
+    } else {
+      // 添加
+      const newId = Math.max(...categories.map(c => c.id)) + 1;
+      categories.push({
+        id: newId,
+        icon: selectedIcon,
+        name,
+        desc,
+        items: 0,
+        sort,
+        status: 1
+      });
+      ADMIN.showToast('分类已添加');
+    }
+
+    renderTable();
+    closeCategoryModal();
+  };
+
+  window.toggleStatus = function(id) {
+    const cat = categories.find(c => c.id === id);
+    if (cat) {
+      cat.status = cat.status === 1 ? 0 : 1;
+      renderTable();
+      ADMIN.showToast(cat.status === 1 ? '已启用' : '已禁用');
+    }
+  };
+
+  window.deleteCategory = async function(id) {
+    const cat = categories.find(c => c.id === id);
+    if (!cat) return;
+
+    if (cat.items > 0) {
+      ADMIN.showToast('该分类下有服务项目，无法删除');
+      return;
+    }
+
+    const confirmed = await ADMIN.showConfirm(`确定要删除分类 ${cat.name} 吗？`);
+    if (confirmed) {
+      categories = categories.filter(c => c.id !== id);
+      renderTable();
+      ADMIN.showToast('分类已删除');
+    }
+  };
+
+  window.moveUp = function(id) {
+    const sorted = [...categories].sort((a, b) => a.sort - b.sort);
+    const index = sorted.findIndex(c => c.id === id);
+    if (index > 0) {
+      const temp = sorted[index].sort;
+      sorted[index].sort = sorted[index - 1].sort;
+      sorted[index - 1].sort = temp;
+      renderTable();
+    }
+  };
+
+  window.moveDown = function(id) {
+    const sorted = [...categories].sort((a, b) => a.sort - b.sort);
+    const index = sorted.findIndex(c => c.id === id);
+    if (index < sorted.length - 1) {
+      const temp = sorted[index].sort;
+      sorted[index].sort = sorted[index + 1].sort;
+      sorted[index + 1].sort = temp;
+      renderTable();
+    }
+  };
+
+  init();
+})();
+</script>

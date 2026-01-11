@@ -1,0 +1,511 @@
+<div class="page-dashboard">
+  <!-- 统计卡片 -->
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-card-title">总用户数</div>
+      <div class="stat-card-value" id="totalUsers">12,580</div>
+      <div class="stat-card-trend up">↑ 12.5% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">认证技师</div>
+      <div class="stat-card-value" id="totalTechs">386</div>
+      <div class="stat-card-trend up">↑ 8.2% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">合作商家</div>
+      <div class="stat-card-value" id="totalShops">52</div>
+      <div class="stat-card-trend up">↑ 5.0% 较上月</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">本月收入</div>
+      <div class="stat-card-value" id="monthRevenue">¥128,560</div>
+      <div class="stat-card-trend up">↑ 18.3% 较上月</div>
+    </div>
+  </div>
+
+  <!-- 今日数据 -->
+  <div class="card">
+    <div class="card-title">今日数据</div>
+    <div class="today-stats">
+      <div class="today-stat-item">
+        <div class="today-stat-icon">📦</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">68</div>
+          <div class="today-stat-label">新订单</div>
+        </div>
+      </div>
+      <div class="today-stat-item">
+        <div class="today-stat-icon">✅</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">52</div>
+          <div class="today-stat-label">已完成</div>
+        </div>
+      </div>
+      <div class="today-stat-item">
+        <div class="today-stat-icon">💰</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">¥8,960</div>
+          <div class="today-stat-label">交易额</div>
+        </div>
+      </div>
+      <div class="today-stat-item">
+        <div class="today-stat-icon">👤</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">156</div>
+          <div class="today-stat-label">活跃用户</div>
+        </div>
+      </div>
+      <div class="today-stat-item">
+        <div class="today-stat-icon">💆</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">89</div>
+          <div class="today-stat-label">在线技师</div>
+        </div>
+      </div>
+      <div class="today-stat-item">
+        <div class="today-stat-icon">⭐</div>
+        <div class="today-stat-info">
+          <div class="today-stat-value">4.8</div>
+          <div class="today-stat-label">平均评分</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- 待处理事项 -->
+    <div class="card">
+      <div class="card-title">待处理事项</div>
+      <div class="pending-list" id="pendingList">
+        <div class="pending-item" onclick="ADMIN.navigateTo('technician/pending')">
+          <span class="pending-icon">💆</span>
+          <span class="pending-text">技师审核</span>
+          <span class="pending-count">5</span>
+        </div>
+        <div class="pending-item" onclick="ADMIN.navigateTo('shop/pending')">
+          <span class="pending-icon">🏪</span>
+          <span class="pending-text">商家审核</span>
+          <span class="pending-count">2</span>
+        </div>
+        <div class="pending-item" onclick="ADMIN.navigateTo('finance/withdraw')">
+          <span class="pending-icon">💳</span>
+          <span class="pending-text">提现申请</span>
+          <span class="pending-count">8</span>
+        </div>
+        <div class="pending-item" onclick="ADMIN.navigateTo('order/list', {status: 'refund'})">
+          <span class="pending-icon">↩️</span>
+          <span class="pending-text">退款处理</span>
+          <span class="pending-count">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 最近订单 -->
+    <div class="card">
+      <div class="card-title">
+        <span>最近订单</span>
+        <span class="card-link" onclick="ADMIN.navigateTo('order/list')">查看全部 ></span>
+      </div>
+      <div class="recent-orders" id="recentOrders">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 收入趋势 -->
+  <div class="card">
+    <div class="card-title">
+      <span>收入趋势（近7天）</span>
+    </div>
+    <div class="chart-container" id="revenueChart">
+      <div class="simple-chart">
+        <div class="chart-bars" id="chartBars">
+          <!-- 动态生成 -->
+        </div>
+        <div class="chart-labels" id="chartLabels">
+          <!-- 动态生成 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 热门服务 & 优秀技师 -->
+  <div class="dashboard-grid">
+    <div class="card">
+      <div class="card-title">热门服务 TOP5</div>
+      <div class="rank-list" id="hotServices">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">优秀技师 TOP5</div>
+      <div class="rank-list" id="topTechs">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.page-dashboard {
+  max-width: 1400px;
+}
+
+.today-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.today-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.today-stat-icon {
+  font-size: 28px;
+}
+
+.today-stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.today-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pending-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pending-item:hover {
+  background: var(--primary-light);
+}
+
+.pending-icon {
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+.pending-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.pending-count {
+  background: var(--error-color);
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.card-link {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.recent-orders {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-info {
+  flex: 1;
+}
+
+.order-no {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.order-service {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.order-amount {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-right: 16px;
+}
+
+.chart-container {
+  padding: 20px 0;
+}
+
+.simple-chart {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 0 20px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: var(--primary-color);
+  border-radius: 4px 4px 0 0;
+  min-height: 20px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.chart-bar:hover {
+  background: #0040b0;
+}
+
+.chart-bar-value {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.chart-labels {
+  display: flex;
+  gap: 24px;
+  padding: 12px 20px 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.chart-label {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.rank-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rank-item:last-child {
+  border-bottom: none;
+}
+
+.rank-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-right: 12px;
+}
+
+.rank-num.top1 { background: #ffd700; color: #fff; }
+.rank-num.top2 { background: #c0c0c0; color: #fff; }
+.rank-num.top3 { background: #cd7f32; color: #fff; }
+
+.rank-name {
+  flex: 1;
+  font-size: 14px;
+}
+
+.rank-value {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 1200px) {
+  .today-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+(function() {
+  // 模拟最近订单
+  const recentOrders = [
+    { no: 'QY20260111001', service: '中式推拿60分钟', amount: 298, status: 'completed' },
+    { no: 'QY20260111002', service: '肩颈舒缓45分钟', amount: 198, status: 'in_service' },
+    { no: 'QY20260111003', service: '足底按摩90分钟', amount: 358, status: 'accepted' },
+    { no: 'QY20260111004', service: '全身精油SPA', amount: 598, status: 'paid' },
+    { no: 'QY20260111005', service: '泰式按摩60分钟', amount: 328, status: 'completed' }
+  ];
+
+  // 模拟收入数据
+  const revenueData = [
+    { date: '1/5', value: 6800 },
+    { date: '1/6', value: 7200 },
+    { date: '1/7', value: 8500 },
+    { date: '1/8', value: 7800 },
+    { date: '1/9', value: 9200 },
+    { date: '1/10', value: 8600 },
+    { date: '1/11', value: 8960 }
+  ];
+
+  // 模拟热门服务
+  const hotServices = [
+    { name: '中式推拿60分钟', count: 256 },
+    { name: '肩颈舒缓45分钟', count: 198 },
+    { name: '足底按摩90分钟', count: 167 },
+    { name: '全身精油SPA', count: 145 },
+    { name: '泰式按摩60分钟', count: 132 }
+  ];
+
+  // 模拟优秀技师
+  const topTechs = [
+    { name: '李师傅', rating: 4.98, orders: 128 },
+    { name: '王师傅', rating: 4.95, orders: 115 },
+    { name: '张师傅', rating: 4.92, orders: 108 },
+    { name: '刘师傅', rating: 4.90, orders: 96 },
+    { name: '陈师傅', rating: 4.88, orders: 89 }
+  ];
+
+  const statusMap = {
+    'paid': { text: '待接单', class: 'info' },
+    'accepted': { text: '待服务', class: 'warning' },
+    'in_service': { text: '服务中', class: 'info' },
+    'completed': { text: '已完成', class: 'success' }
+  };
+
+  function init() {
+    renderRecentOrders();
+    renderRevenueChart();
+    renderHotServices();
+    renderTopTechs();
+  }
+
+  function renderRecentOrders() {
+    const container = document.getElementById('recentOrders');
+    container.innerHTML = recentOrders.map(order => {
+      const status = statusMap[order.status];
+      return `
+        <div class="order-item">
+          <div class="order-info">
+            <div class="order-no">${order.no}</div>
+            <div class="order-service">${order.service}</div>
+          </div>
+          <div class="order-amount">¥${order.amount}</div>
+          <span class="status-tag ${status.class}">${status.text}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderRevenueChart() {
+    const maxValue = Math.max(...revenueData.map(d => d.value));
+    
+    document.getElementById('chartBars').innerHTML = revenueData.map(d => {
+      const height = (d.value / maxValue * 100).toFixed(0);
+      return `
+        <div class="chart-bar" style="height: ${height}%">
+          <span class="chart-bar-value">¥${(d.value / 1000).toFixed(1)}k</span>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('chartLabels').innerHTML = revenueData.map(d => `
+      <div class="chart-label">${d.date}</div>
+    `).join('');
+  }
+
+  function renderHotServices() {
+    const container = document.getElementById('hotServices');
+    container.innerHTML = hotServices.map((item, index) => {
+      let rankClass = '';
+      if (index === 0) rankClass = 'top1';
+      else if (index === 1) rankClass = 'top2';
+      else if (index === 2) rankClass = 'top3';
+      
+      return `
+        <div class="rank-item">
+          <div class="rank-num ${rankClass}">${index + 1}</div>
+          <div class="rank-name">${item.name}</div>
+          <div class="rank-value">${item.count}单</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTopTechs() {
+    const container = document.getElementById('topTechs');
+    container.innerHTML = topTechs.map((item, index) => {
+      let rankClass = '';
+      if (index === 0) rankClass = 'top1';
+      else if (index === 1) rankClass = 'top2';
+      else if (index === 2) rankClass = 'top3';
+      
+      return `
+        <div class="rank-item">
+          <div class="rank-num ${rankClass}">${index + 1}</div>
+          <div class="rank-name">${item.name}</div>
+          <div class="rank-value">⭐${item.rating} · ${item.orders}单</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  init();
+})();
+</script>

@@ -1,0 +1,498 @@
+<div class="page-container tech-schedule">
+  <!-- 周选择器 -->
+  <div class="card week-selector">
+    <div class="week-nav">
+      <button class="week-nav-btn" onclick="prevWeek()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+        </svg>
+      </button>
+      <span class="week-title" id="weekTitle">2026年1月 第2周</span>
+      <button class="week-nav-btn" onclick="nextWeek()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="week-days" id="weekDays">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+
+  <!-- 时段设置 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>可用时段</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;">最少2小时</span>
+    </div>
+    <div class="time-slots" id="timeSlots">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+
+  <!-- 快捷设置 -->
+  <div class="card">
+    <div class="card-title">快捷设置</div>
+    <div class="quick-schedule">
+      <button class="btn btn-secondary" onclick="setAllDay()">全天可用</button>
+      <button class="btn btn-secondary" onclick="setMorning()">上午可用</button>
+      <button class="btn btn-secondary" onclick="setAfternoon()">下午可用</button>
+      <button class="btn btn-secondary" onclick="clearDay()">清空当天</button>
+    </div>
+  </div>
+
+  <!-- 本周统计 -->
+  <div class="card">
+    <div class="card-title">本周排班统计</div>
+    <div class="schedule-stats">
+      <div class="stat-item">
+        <div class="stat-value" id="totalHours">0</div>
+        <div class="stat-label">可用时长(h)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="totalDays">0</div>
+        <div class="stat-label">排班天数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="bookedHours">0</div>
+        <div class="stat-label">已预约(h)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 保存按钮 -->
+  <div class="save-btn-container">
+    <button class="btn btn-primary btn-block btn-lg" onclick="saveSchedule()">保存排班</button>
+  </div>
+</div>
+
+<style>
+.tech-schedule {
+  padding-bottom: 80px;
+}
+
+.week-selector {
+  padding: 12px;
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.week-nav-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.week-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day-item {
+  text-align: center;
+  padding: 8px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-item.selected {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.day-item.has-schedule {
+  position: relative;
+}
+
+.day-item.has-schedule::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--success-color);
+}
+
+.day-item.selected.has-schedule::after {
+  background: #fff;
+}
+
+.day-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.day-item.selected .day-name {
+  color: rgba(255,255,255,0.8);
+}
+
+.day-date {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.day-item.today .day-date {
+  color: var(--primary-color);
+}
+
+.day-item.selected .day-date {
+  color: #fff;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.time-slot {
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-slot.selected {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.time-slot.booked {
+  background: #ffebee;
+  border-color: #ffcdd2;
+  color: var(--danger-color);
+  cursor: not-allowed;
+}
+
+.quick-schedule {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.schedule-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.save-btn-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+}
+</style>
+
+<script>
+(function() {
+  const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+  
+  // 时段配置（每2小时一个时段）
+  const timeSlotConfig = [
+    { id: '08', label: '08:00', start: 8 },
+    { id: '10', label: '10:00', start: 10 },
+    { id: '12', label: '12:00', start: 12 },
+    { id: '14', label: '14:00', start: 14 },
+    { id: '16', label: '16:00', start: 16 },
+    { id: '18', label: '18:00', start: 18 },
+    { id: '20', label: '20:00', start: 20 },
+    { id: '22', label: '22:00', start: 22 }
+  ];
+
+  // 当前周的起始日期
+  let currentWeekStart = getWeekStart(new Date());
+  let selectedDate = new Date();
+  
+  // 排班数据 { 'YYYY-MM-DD': ['08', '10', '14', ...] }
+  let scheduleData = {};
+  
+  // 已预约时段 { 'YYYY-MM-DD': ['14', '16'] }
+  const bookedSlots = {
+    '2026-01-11': ['14'],
+    '2026-01-12': ['10', '14']
+  };
+
+  // 获取周一日期
+  function getWeekStart(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(d.setDate(diff));
+  }
+
+  // 格式化日期
+  function formatDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  // 获取周数
+  function getWeekNumber(date) {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  }
+
+  // 初始化
+  function init() {
+    // 模拟已有排班数据
+    scheduleData = {
+      '2026-01-11': ['08', '10', '14', '16'],
+      '2026-01-12': ['10', '12', '14', '16', '18'],
+      '2026-01-13': ['14', '16', '18', '20']
+    };
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+  }
+
+  // 渲染周视图
+  function renderWeek() {
+    const weekTitle = document.getElementById('weekTitle');
+    const weekDays = document.getElementById('weekDays');
+    
+    const weekNum = getWeekNumber(currentWeekStart);
+    weekTitle.textContent = `${currentWeekStart.getFullYear()}年${currentWeekStart.getMonth() + 1}月 第${weekNum}周`;
+    
+    const today = formatDate(new Date());
+    const selectedDateStr = formatDate(selectedDate);
+    
+    let html = '';
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentWeekStart);
+      date.setDate(date.getDate() + i);
+      const dateStr = formatDate(date);
+      
+      const isToday = dateStr === today;
+      const isSelected = dateStr === selectedDateStr;
+      const hasSchedule = scheduleData[dateStr] && scheduleData[dateStr].length > 0;
+      
+      let classes = 'day-item';
+      if (isToday) classes += ' today';
+      if (isSelected) classes += ' selected';
+      if (hasSchedule) classes += ' has-schedule';
+      
+      html += `
+        <div class="${classes}" onclick="selectDate('${dateStr}')">
+          <div class="day-name">周${dayNames[date.getDay()]}</div>
+          <div class="day-date">${date.getDate()}</div>
+        </div>
+      `;
+    }
+    
+    weekDays.innerHTML = html;
+  }
+
+  // 渲染时段选择
+  function renderTimeSlots() {
+    const container = document.getElementById('timeSlots');
+    const dateStr = formatDate(selectedDate);
+    const selectedSlots = scheduleData[dateStr] || [];
+    const booked = bookedSlots[dateStr] || [];
+    
+    container.innerHTML = timeSlotConfig.map(slot => {
+      const isSelected = selectedSlots.includes(slot.id);
+      const isBooked = booked.includes(slot.id);
+      
+      let classes = 'time-slot';
+      if (isBooked) {
+        classes += ' booked';
+      } else if (isSelected) {
+        classes += ' selected';
+      }
+      
+      return `
+        <div class="${classes}" onclick="toggleSlot('${slot.id}', ${isBooked})">
+          ${slot.label}
+          ${isBooked ? '<br><small>已约</small>' : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 更新统计
+  function updateStats() {
+    let totalHours = 0;
+    let totalDays = 0;
+    let bookedHours = 0;
+    
+    // 计算本周数据
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentWeekStart);
+      date.setDate(date.getDate() + i);
+      const dateStr = formatDate(date);
+      
+      const slots = scheduleData[dateStr] || [];
+      if (slots.length > 0) {
+        totalDays++;
+        totalHours += slots.length * 2; // 每个时段2小时
+      }
+      
+      const booked = bookedSlots[dateStr] || [];
+      bookedHours += booked.length * 2;
+    }
+    
+    document.getElementById('totalHours').textContent = totalHours;
+    document.getElementById('totalDays').textContent = totalDays;
+    document.getElementById('bookedHours').textContent = bookedHours;
+  }
+
+  // 选择日期
+  window.selectDate = function(dateStr) {
+    selectedDate = new Date(dateStr);
+    renderWeek();
+    renderTimeSlots();
+  };
+
+  // 切换时段
+  window.toggleSlot = function(slotId, isBooked) {
+    if (isBooked) {
+      TECH.showToast('该时段已有预约，无法修改');
+      return;
+    }
+    
+    const dateStr = formatDate(selectedDate);
+    if (!scheduleData[dateStr]) {
+      scheduleData[dateStr] = [];
+    }
+    
+    const index = scheduleData[dateStr].indexOf(slotId);
+    if (index > -1) {
+      scheduleData[dateStr].splice(index, 1);
+    } else {
+      scheduleData[dateStr].push(slotId);
+      scheduleData[dateStr].sort();
+    }
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+  };
+
+  // 上一周
+  window.prevWeek = function() {
+    currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+    renderWeek();
+    updateStats();
+  };
+
+  // 下一周
+  window.nextWeek = function() {
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+    renderWeek();
+    updateStats();
+  };
+
+  // 全天可用
+  window.setAllDay = function() {
+    const dateStr = formatDate(selectedDate);
+    const booked = bookedSlots[dateStr] || [];
+    scheduleData[dateStr] = timeSlotConfig
+      .filter(s => !booked.includes(s.id))
+      .map(s => s.id);
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+    TECH.showToast('已设置全天可用');
+  };
+
+  // 上午可用
+  window.setMorning = function() {
+    const dateStr = formatDate(selectedDate);
+    const booked = bookedSlots[dateStr] || [];
+    const morningSlots = ['08', '10', '12'];
+    
+    if (!scheduleData[dateStr]) scheduleData[dateStr] = [];
+    
+    morningSlots.forEach(id => {
+      if (!booked.includes(id) && !scheduleData[dateStr].includes(id)) {
+        scheduleData[dateStr].push(id);
+      }
+    });
+    scheduleData[dateStr].sort();
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+    TECH.showToast('已设置上午可用');
+  };
+
+  // 下午可用
+  window.setAfternoon = function() {
+    const dateStr = formatDate(selectedDate);
+    const booked = bookedSlots[dateStr] || [];
+    const afternoonSlots = ['14', '16', '18', '20'];
+    
+    if (!scheduleData[dateStr]) scheduleData[dateStr] = [];
+    
+    afternoonSlots.forEach(id => {
+      if (!booked.includes(id) && !scheduleData[dateStr].includes(id)) {
+        scheduleData[dateStr].push(id);
+      }
+    });
+    scheduleData[dateStr].sort();
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+    TECH.showToast('已设置下午可用');
+  };
+
+  // 清空当天
+  window.clearDay = function() {
+    const dateStr = formatDate(selectedDate);
+    const booked = bookedSlots[dateStr] || [];
+    
+    if (booked.length > 0) {
+      // 保留已预约的时段
+      scheduleData[dateStr] = booked;
+      TECH.showToast('已清空（保留已预约时段）');
+    } else {
+      scheduleData[dateStr] = [];
+      TECH.showToast('已清空当天排班');
+    }
+    
+    renderWeek();
+    renderTimeSlots();
+    updateStats();
+  };
+
+  // 保存排班
+  window.saveSchedule = function() {
+    // 实际应调用API保存
+    TECH.showToast('排班已保存');
+  };
+
+  init();
+})();
+</script>

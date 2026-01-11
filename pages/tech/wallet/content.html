@@ -1,0 +1,311 @@
+<div class="page-container tech-wallet">
+  <!-- 余额卡片 -->
+  <div class="card balance-card">
+    <div class="balance-header">
+      <span class="balance-label">可提现余额(元)</span>
+      <span class="balance-eye" onclick="toggleBalance()">👁️</span>
+    </div>
+    <div class="balance-amount" id="balanceAmount">1,280.50</div>
+    <div class="balance-actions">
+      <button class="btn btn-light" onclick="TECH.navigateTo('wallet/withdraw')">提现</button>
+      <button class="btn btn-light" onclick="TECH.navigateTo('wallet/records')">明细</button>
+    </div>
+  </div>
+
+  <!-- 其他余额 -->
+  <div class="card">
+    <div class="other-balance">
+      <div class="other-balance-item">
+        <div class="other-balance-label">待结算</div>
+        <div class="other-balance-value" id="pendingAmount">¥358.00</div>
+        <div class="other-balance-tip">完成服务后7天结算</div>
+      </div>
+      <div class="other-balance-divider"></div>
+      <div class="other-balance-item">
+        <div class="other-balance-label">累计收入</div>
+        <div class="other-balance-value" id="totalAmount">¥12,580.00</div>
+        <div class="other-balance-tip">入驻以来总收入</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本月收入统计 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>本月收入</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;">2026年1月</span>
+    </div>
+    <div class="month-stats">
+      <div class="month-stat-item">
+        <div class="month-stat-value">¥2,580</div>
+        <div class="month-stat-label">总收入</div>
+      </div>
+      <div class="month-stat-item">
+        <div class="month-stat-value">12</div>
+        <div class="month-stat-label">完成订单</div>
+      </div>
+      <div class="month-stat-item">
+        <div class="month-stat-value">¥215</div>
+        <div class="month-stat-label">平均单价</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近交易 -->
+  <div class="card">
+    <div class="card-title flex-between">
+      <span>最近交易</span>
+      <span class="text-secondary" style="font-size:12px;font-weight:normal;cursor:pointer;" onclick="TECH.navigateTo('wallet/records')">查看全部 ></span>
+    </div>
+    <div class="transaction-list" id="transactionList">
+      <!-- 动态生成 -->
+    </div>
+  </div>
+
+  <!-- 提现说明 -->
+  <div class="card">
+    <div class="card-title">提现说明</div>
+    <div class="withdraw-tips">
+      <div class="tip-item">💰 最低提现金额：50元</div>
+      <div class="tip-item">⏰ 提现到账时间：1-3个工作日</div>
+      <div class="tip-item">📅 结算周期：服务完成后7天</div>
+      <div class="tip-item">💳 提现方式：银行卡/支付宝</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.balance-card {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #1976d2 100%);
+  color: #fff;
+  padding: 20px;
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.balance-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.balance-eye {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.balance-amount {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.balance-amount.hidden {
+  letter-spacing: 4px;
+}
+
+.balance-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.balance-actions .btn-light {
+  flex: 1;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.other-balance {
+  display: flex;
+}
+
+.other-balance-item {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+}
+
+.other-balance-divider {
+  width: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+
+.other-balance-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.other-balance-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.other-balance-tip {
+  font-size: 10px;
+  color: var(--text-placeholder);
+  margin-top: 4px;
+}
+
+.month-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.month-stat-item {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--bg-color);
+  border-radius: 8px;
+}
+
+.month-stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.month-stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.transaction-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-title {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.transaction-time {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.transaction-amount {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.transaction-amount.income {
+  color: var(--success-color);
+}
+
+.transaction-amount.expense {
+  color: var(--text-primary);
+}
+
+.withdraw-tips {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 2;
+}
+
+.tip-item {
+  padding: 4px 0;
+}
+</style>
+
+<script>
+(function() {
+  // 模拟钱包数据
+  const walletData = {
+    availableBalance: 1280.50,
+    pendingBalance: 358.00,
+    totalEarnings: 12580.00,
+    monthlyStats: {
+      income: 2580,
+      orders: 12,
+      avgPrice: 215
+    }
+  };
+
+  // 模拟交易记录
+  const transactions = [
+    { id: 1, type: 'income', title: '订单收入 - 中式推拿60分钟', amount: 238.40, time: '2026-01-11 15:30' },
+    { id: 2, type: 'income', title: '订单收入 - 肩颈舒缓45分钟', amount: 158.40, time: '2026-01-10 18:00' },
+    { id: 3, type: 'expense', title: '提现到银行卡', amount: -500.00, time: '2026-01-09 10:00' },
+    { id: 4, type: 'income', title: '订单收入 - 足底按摩90分钟', amount: 286.40, time: '2026-01-08 20:30' },
+    { id: 5, type: 'income', title: '订单收入 - 全身精油SPA', amount: 478.40, time: '2026-01-07 16:00' }
+  ];
+
+  let balanceVisible = true;
+
+  // 初始化
+  function init() {
+    renderTransactions();
+  }
+
+  // 切换余额显示
+  window.toggleBalance = function() {
+    balanceVisible = !balanceVisible;
+    const balanceEl = document.getElementById('balanceAmount');
+    
+    if (balanceVisible) {
+      balanceEl.textContent = walletData.availableBalance.toLocaleString('zh-CN', { minimumFractionDigits: 2 });
+      balanceEl.classList.remove('hidden');
+    } else {
+      balanceEl.textContent = '****';
+      balanceEl.classList.add('hidden');
+    }
+  };
+
+  // 渲染交易记录
+  function renderTransactions() {
+    const container = document.getElementById('transactionList');
+    
+    if (transactions.length === 0) {
+      container.innerHTML = '<div class="empty"><div class="empty-text">暂无交易记录</div></div>';
+      return;
+    }
+
+    container.innerHTML = transactions.map(tx => {
+      const amountClass = tx.type === 'income' ? 'income' : 'expense';
+      const amountPrefix = tx.type === 'income' ? '+' : '';
+      
+      return `
+        <div class="transaction-item">
+          <div class="transaction-info">
+            <div class="transaction-title">${tx.title}</div>
+            <div class="transaction-time">${tx.time}</div>
+          </div>
+          <div class="transaction-amount ${amountClass}">
+            ${amountPrefix}¥${Math.abs(tx.amount).toFixed(2)}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  init();
+})();
+</script>

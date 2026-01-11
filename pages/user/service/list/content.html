@@ -1,0 +1,565 @@
+<div class="service-list-page">
+  <!-- 分类标签 -->
+  <div class="category-tabs" id="categoryTabs">
+    <div class="tab-item active" data-id="0">全部</div>
+    <!-- 动态加载 -->
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <div class="filter-item" id="filterPrice" onclick="toggleFilter('price')">
+      <span>价格</span>
+      <svg class="filter-arrow" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" fill="none" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="filter-item" id="filterDuration" onclick="toggleFilter('duration')">
+      <span>时长</span>
+      <svg class="filter-arrow" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" fill="none" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="filter-item" id="filterSort" onclick="toggleFilter('sort')">
+      <span>综合排序</span>
+      <svg class="filter-arrow" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" fill="none" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 筛选面板 -->
+  <div class="filter-panel" id="filterPanel" style="display: none;">
+    <div class="filter-panel-content" id="filterPanelContent">
+      <!-- 动态内容 -->
+    </div>
+    <div class="filter-panel-mask" onclick="closeFilter()"></div>
+  </div>
+
+  <!-- 服务列表 -->
+  <div class="service-list" id="serviceList">
+    <!-- 动态加载 -->
+  </div>
+
+  <!-- 空状态 -->
+  <div class="empty-state" id="emptyState" style="display: none;">
+    <div class="empty-icon">🔍</div>
+    <div class="empty-text">暂无符合条件的服务</div>
+    <button class="btn btn-secondary" onclick="resetFilters()">重置筛选</button>
+  </div>
+</div>
+
+<style>
+.service-list-page {
+  background: var(--bg-color);
+  min-height: 100%;
+}
+
+/* Category Tabs */
+.category-tabs {
+  display: flex;
+  background: var(--bg-white);
+  padding: 12px;
+  overflow-x: auto;
+  gap: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-item {
+  flex-shrink: 0;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-item.active {
+  color: var(--primary-color);
+  background: var(--primary-light);
+  font-weight: 500;
+}
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.filter-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.filter-item.active {
+  color: var(--primary-color);
+}
+
+.filter-item.active .filter-arrow {
+  transform: rotate(180deg);
+}
+
+.filter-arrow {
+  margin-left: 4px;
+  transition: transform 0.2s;
+}
+
+/* Filter Panel */
+.filter-panel {
+  position: fixed;
+  top: calc(var(--header-height) + 90px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+}
+
+.filter-panel-content {
+  background: var(--bg-white);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-panel-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-option {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-option.active {
+  color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.filter-actions .btn {
+  flex: 1;
+}
+
+/* Service List */
+.service-list {
+  padding: 12px;
+}
+
+.service-card {
+  display: flex;
+  background: var(--bg-white);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.service-card:active {
+  transform: scale(0.98);
+}
+
+.service-card-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e8f8ef 0%, #d1fae5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.service-card-info {
+  flex: 1;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-card-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.service-card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.service-card-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.service-tag {
+  padding: 2px 6px;
+  font-size: 10px;
+  border-radius: 2px;
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.service-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.service-card-duration {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.service-card-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.service-card-price::before {
+  content: '¥';
+  font-size: 12px;
+}
+
+.service-card-price-suffix {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-placeholder);
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: var(--text-placeholder);
+  margin-bottom: 20px;
+}
+</style>
+
+
+<script>
+(function() {
+  // Mock 数据 - 服务分类
+  const categories = [
+    { id: 0, name: '全部' },
+    { id: 1, name: '中式推拿' },
+    { id: 2, name: '泰式按摩' },
+    { id: 3, name: '足疗保健' },
+    { id: 4, name: '精油SPA' },
+    { id: 5, name: '肩颈调理' },
+    { id: 6, name: '艾灸理疗' },
+    { id: 7, name: '刮痧拔罐' }
+  ];
+
+  // Mock 数据 - 服务列表
+  const allServices = [
+    { id: 1, categoryId: 1, name: '全身中式推拿', desc: '传统手法，疏通经络，缓解疲劳，促进血液循环', duration: 60, price: 298, maxPrice: 398, icon: '💆', tags: ['热门', '推荐'] },
+    { id: 2, categoryId: 1, name: '背部推拿放松', desc: '针对背部肌肉紧张，深层放松', duration: 45, price: 198, maxPrice: 268, icon: '💆', tags: ['新品'] },
+    { id: 3, categoryId: 5, name: '肩颈深度调理', desc: '针对久坐人群，专业手法放松肩颈，缓解酸痛', duration: 45, price: 198, maxPrice: 298, icon: '💪', tags: ['热门'] },
+    { id: 4, categoryId: 3, name: '足底反射疗法', desc: '刺激足底穴位，促进血液循环，改善睡眠', duration: 60, price: 168, maxPrice: 238, icon: '🦶', tags: [] },
+    { id: 5, categoryId: 3, name: '足部精油按摩', desc: '精油配合按摩，滋润足部肌肤', duration: 45, price: 148, maxPrice: 198, icon: '🦶', tags: ['新品'] },
+    { id: 6, categoryId: 2, name: '泰式古法按摩', desc: '正宗泰式手法，拉伸放松全身', duration: 90, price: 398, maxPrice: 498, icon: '🧘', tags: ['推荐'] },
+    { id: 7, categoryId: 4, name: '精油香薰SPA', desc: '天然精油，舒缓身心，深度放松', duration: 90, price: 458, maxPrice: 598, icon: '🌸', tags: ['热门'] },
+    { id: 8, categoryId: 6, name: '艾灸温经调理', desc: '传统艾灸，温经散寒，调理体质', duration: 60, price: 268, maxPrice: 368, icon: '🔥', tags: [] },
+    { id: 9, categoryId: 7, name: '刮痧排毒', desc: '传统刮痧手法，疏通经络，排出毒素', duration: 45, price: 168, maxPrice: 228, icon: '🏺', tags: [] },
+    { id: 10, categoryId: 7, name: '拔罐理疗', desc: '传统拔罐，祛湿散寒，缓解疲劳', duration: 30, price: 128, maxPrice: 168, icon: '🏺', tags: [] }
+  ];
+
+  // 筛选配置
+  const filterConfigs = {
+    price: {
+      title: '价格区间',
+      options: [
+        { label: '不限', value: '' },
+        { label: '200以下', value: '0-200' },
+        { label: '200-300', value: '200-300' },
+        { label: '300-400', value: '300-400' },
+        { label: '400以上', value: '400-9999' }
+      ]
+    },
+    duration: {
+      title: '服务时长',
+      options: [
+        { label: '不限', value: '' },
+        { label: '30分钟', value: '30' },
+        { label: '45分钟', value: '45' },
+        { label: '60分钟', value: '60' },
+        { label: '90分钟', value: '90' }
+      ]
+    },
+    sort: {
+      title: '排序方式',
+      options: [
+        { label: '综合排序', value: '' },
+        { label: '价格从低到高', value: 'price_asc' },
+        { label: '价格从高到低', value: 'price_desc' },
+        { label: '时长从短到长', value: 'duration_asc' },
+        { label: '时长从长到短', value: 'duration_desc' }
+      ]
+    }
+  };
+
+  // 当前筛选状态
+  let currentFilters = {
+    categoryId: 0,
+    price: '',
+    duration: '',
+    sort: ''
+  };
+
+  let activeFilterType = null;
+
+  // 从 URL 参数获取初始分类
+  const params = QY.getParams();
+  if (params.categoryId) {
+    currentFilters.categoryId = parseInt(params.categoryId);
+  }
+
+  // 渲染分类标签
+  function renderCategoryTabs() {
+    const tabs = document.getElementById('categoryTabs');
+    tabs.innerHTML = categories.map(cat => `
+      <div class="tab-item ${cat.id === currentFilters.categoryId ? 'active' : ''}" 
+           data-id="${cat.id}" 
+           onclick="selectCategory(${cat.id})">
+        ${cat.name}
+      </div>
+    `).join('');
+  }
+
+  // 选择分类
+  window.selectCategory = function(id) {
+    currentFilters.categoryId = id;
+    renderCategoryTabs();
+    renderServiceList();
+  };
+
+  // 切换筛选面板
+  window.toggleFilter = function(type) {
+    const panel = document.getElementById('filterPanel');
+    const filterItems = document.querySelectorAll('.filter-item');
+    
+    if (activeFilterType === type) {
+      closeFilter();
+      return;
+    }
+
+    activeFilterType = type;
+    filterItems.forEach(item => {
+      item.classList.toggle('active', item.id === `filter${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    });
+
+    renderFilterPanel(type);
+    panel.style.display = 'block';
+  };
+
+  // 关闭筛选面板
+  window.closeFilter = function() {
+    const panel = document.getElementById('filterPanel');
+    const filterItems = document.querySelectorAll('.filter-item');
+    
+    activeFilterType = null;
+    filterItems.forEach(item => item.classList.remove('active'));
+    panel.style.display = 'none';
+  };
+
+  // 渲染筛选面板内容
+  function renderFilterPanel(type) {
+    const content = document.getElementById('filterPanelContent');
+    const config = filterConfigs[type];
+    
+    content.innerHTML = `
+      <div class="filter-title" style="font-size: 14px; font-weight: 500; margin-bottom: 12px;">${config.title}</div>
+      <div class="filter-options">
+        ${config.options.map(opt => `
+          <div class="filter-option ${currentFilters[type] === opt.value ? 'active' : ''}" 
+               onclick="selectFilter('${type}', '${opt.value}')">
+            ${opt.label}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 选择筛选项
+  window.selectFilter = function(type, value) {
+    currentFilters[type] = value;
+    updateFilterLabel(type, value);
+    closeFilter();
+    renderServiceList();
+  };
+
+  // 更新筛选按钮文字
+  function updateFilterLabel(type, value) {
+    const filterItem = document.getElementById(`filter${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    const config = filterConfigs[type];
+    const option = config.options.find(opt => opt.value === value);
+    
+    if (option && value) {
+      filterItem.querySelector('span').textContent = option.label;
+    } else {
+      filterItem.querySelector('span').textContent = config.title.replace('区间', '').replace('方式', '');
+    }
+  }
+
+  // 重置筛选
+  window.resetFilters = function() {
+    currentFilters = { categoryId: 0, price: '', duration: '', sort: '' };
+    renderCategoryTabs();
+    renderServiceList();
+    
+    // 重置筛选按钮文字
+    document.querySelector('#filterPrice span').textContent = '价格';
+    document.querySelector('#filterDuration span').textContent = '时长';
+    document.querySelector('#filterSort span').textContent = '综合排序';
+  };
+
+
+  // 筛选服务列表
+  function filterServices() {
+    let filtered = [...allServices];
+
+    // 分类筛选
+    if (currentFilters.categoryId > 0) {
+      filtered = filtered.filter(s => s.categoryId === currentFilters.categoryId);
+    }
+
+    // 价格筛选
+    if (currentFilters.price) {
+      const [min, max] = currentFilters.price.split('-').map(Number);
+      filtered = filtered.filter(s => s.price >= min && s.price <= max);
+    }
+
+    // 时长筛选
+    if (currentFilters.duration) {
+      const duration = parseInt(currentFilters.duration);
+      filtered = filtered.filter(s => s.duration === duration);
+    }
+
+    // 排序
+    if (currentFilters.sort) {
+      switch (currentFilters.sort) {
+        case 'price_asc':
+          filtered.sort((a, b) => a.price - b.price);
+          break;
+        case 'price_desc':
+          filtered.sort((a, b) => b.price - a.price);
+          break;
+        case 'duration_asc':
+          filtered.sort((a, b) => a.duration - b.duration);
+          break;
+        case 'duration_desc':
+          filtered.sort((a, b) => b.duration - a.duration);
+          break;
+      }
+    }
+
+    return filtered;
+  }
+
+  // 渲染服务列表
+  function renderServiceList() {
+    const list = document.getElementById('serviceList');
+    const emptyState = document.getElementById('emptyState');
+    const services = filterServices();
+
+    if (services.length === 0) {
+      list.style.display = 'none';
+      emptyState.style.display = 'flex';
+      return;
+    }
+
+    list.style.display = 'block';
+    emptyState.style.display = 'none';
+
+    list.innerHTML = services.map(service => `
+      <div class="service-card" onclick="QY.navigateTo('service/detail', { id: ${service.id} })">
+        <div class="service-card-image">${service.icon}</div>
+        <div class="service-card-info">
+          <div class="service-card-name">${service.name}</div>
+          <div class="service-card-desc">${service.desc}</div>
+          ${service.tags.length > 0 ? `
+            <div class="service-card-tags">
+              ${service.tags.map(tag => `<span class="service-tag">${tag}</span>`).join('')}
+            </div>
+          ` : ''}
+          <div class="service-card-footer">
+            <span class="service-card-duration">${service.duration}分钟</span>
+            <span class="service-card-price">
+              ${service.price}
+              <span class="service-card-price-suffix">起</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 初始化
+  renderCategoryTabs();
+  renderServiceList();
+
+})();
+</script>

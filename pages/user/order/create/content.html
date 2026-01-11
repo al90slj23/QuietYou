@@ -1,0 +1,714 @@
+<div class="order-create-page" id="orderCreatePage">
+  <!-- 服务信息 -->
+  <div class="section card">
+    <div class="section-title">服务信息</div>
+    <div class="service-info" id="serviceInfo">
+      <div class="service-icon" id="serviceIcon">💆</div>
+      <div class="service-detail">
+        <div class="service-name" id="serviceName">全身中式推拿</div>
+        <div class="service-duration" id="serviceDuration">60分钟</div>
+      </div>
+      <div class="service-price" id="servicePrice">¥298</div>
+    </div>
+  </div>
+
+  <!-- 技师信息 -->
+  <div class="section card">
+    <div class="section-title">技师信息</div>
+    <div class="tech-info" id="techInfo">
+      <div class="tech-avatar" id="techAvatar">👨</div>
+      <div class="tech-detail">
+        <div class="tech-name" id="techName">张师傅</div>
+        <div class="tech-rating">
+          <span class="rating-star">⭐</span>
+          <span id="techRating">4.9</span>
+          <span class="text-placeholder"> | </span>
+          <span id="techOrders">328</span>单
+        </div>
+      </div>
+      <div class="tech-status" id="techStatus">在线</div>
+    </div>
+  </div>
+
+  <!-- 预约时间 -->
+  <div class="section card">
+    <div class="section-title">预约时间</div>
+    <div class="date-picker">
+      <div class="date-tabs" id="dateTabs">
+        <!-- 动态生成日期选项 -->
+      </div>
+      <div class="time-slots" id="timeSlots">
+        <!-- 动态生成时间段 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 服务地址 -->
+  <div class="section card">
+    <div class="section-title">服务地址</div>
+    <div class="address-section">
+      <div class="address-actions">
+        <button class="btn btn-secondary btn-sm" onclick="getCurrentLocation()">
+          <span class="btn-icon">📍</span> GPS定位
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="selectFromAddressList()">
+          <span class="btn-icon">📋</span> 选择地址
+        </button>
+      </div>
+      <div class="address-form">
+        <div class="form-item">
+          <label class="form-label">联系人</label>
+          <input type="text" class="form-input" id="contactName" placeholder="请输入联系人姓名" maxlength="20">
+        </div>
+        <div class="form-item">
+          <label class="form-label">联系电话</label>
+          <input type="tel" class="form-input" id="contactPhone" placeholder="请输入联系电话" maxlength="11">
+        </div>
+        <div class="form-item">
+          <label class="form-label">详细地址</label>
+          <textarea class="form-textarea" id="addressDetail" placeholder="请输入详细地址（小区名称、楼栋、门牌号等）" rows="2" maxlength="100"></textarea>
+        </div>
+      </div>
+      <div class="location-info" id="locationInfo" style="display: none;">
+        <span class="location-icon">📍</span>
+        <span class="location-text" id="locationText">已定位</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 备注 -->
+  <div class="section card">
+    <div class="section-title">备注（选填）</div>
+    <textarea class="form-textarea" id="orderRemark" placeholder="如有特殊需求请在此说明" rows="2" maxlength="200"></textarea>
+  </div>
+
+  <!-- 底部操作栏 -->
+  <div class="bottom-bar">
+    <div class="price-summary">
+      <span class="price-label">合计</span>
+      <span class="price-value" id="totalPrice">¥298</span>
+    </div>
+    <button class="btn btn-primary btn-submit" onclick="submitOrder()">下一步</button>
+  </div>
+</div>
+
+<style>
+.order-create-page {
+  background: var(--bg-color);
+  min-height: 100%;
+  padding-bottom: 80px;
+}
+
+.section {
+  margin: 12px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+/* Service Info */
+.service-info {
+  display: flex;
+  align-items: center;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.service-detail {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.service-duration {
+  font-size: 12px;
+  color: var(--text-placeholder);
+}
+
+.service-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+/* Tech Info */
+.tech-info {
+  display: flex;
+  align-items: center;
+}
+
+.tech-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.tech-detail {
+  flex: 1;
+}
+
+.tech-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.tech-rating {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.rating-star {
+  color: var(--warning-color);
+}
+
+.tech-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.tech-status.busy {
+  background: #fff7e6;
+  color: var(--warning-color);
+}
+
+.tech-status.offline {
+  background: var(--bg-color);
+  color: var(--text-placeholder);
+}
+
+/* Date Picker */
+.date-picker {
+  margin-top: 8px;
+}
+
+.date-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.date-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.date-tab {
+  flex-shrink: 0;
+  min-width: 60px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--bg-color);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.date-tab.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.date-tab.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.date-tab-day {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.date-tab-date {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Time Slots */
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.time-slot {
+  padding: 10px 8px;
+  border-radius: 6px;
+  background: var(--bg-color);
+  text-align: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-slot.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.time-slot.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.time-slot.unavailable {
+  background: #f5f5f5;
+  color: var(--text-placeholder);
+  cursor: not-allowed;
+}
+
+/* Address Section */
+.address-section {
+  margin-top: 8px;
+}
+
+.address-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.btn-icon {
+  margin-right: 4px;
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+}
+
+.form-textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.form-textarea:focus {
+  border-color: var(--primary-color);
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: var(--primary-light);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--primary-color);
+}
+
+.location-icon {
+  margin-right: 6px;
+}
+
+/* Bottom Bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.price-summary {
+  flex: 1;
+}
+
+.price-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--danger-color);
+  margin-left: 8px;
+}
+
+.btn-submit {
+  padding: 12px 40px;
+  font-size: 16px;
+  border-radius: 24px;
+}
+
+/* Empty State */
+.empty-slots {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-placeholder);
+  font-size: 14px;
+}
+</style>
+
+
+<script>
+(function() {
+  // 获取参数
+  const params = QY.getParams();
+  const techId = parseInt(params.techId) || 1;
+  const serviceId = parseInt(params.serviceId) || 0;
+
+  // Mock 数据 - 技师信息
+  const techniciansData = {
+    1: {
+      id: 1, name: '张师傅', gender: 1, avatar: '👨', shopId: 1,
+      rating: 4.9, orderCount: 328, status: 1, statusText: '在线',
+      services: [
+        { id: 1, name: '全身中式推拿', duration: 60, price: 298, icon: '💆' },
+        { id: 2, name: '肩颈深度调理', duration: 45, price: 198, icon: '💪' },
+        { id: 3, name: '背部推拿放松', duration: 45, price: 218, icon: '🧘' }
+      ]
+    },
+    2: {
+      id: 2, name: '李师傅', gender: 2, avatar: '👩', shopId: 2,
+      rating: 4.8, orderCount: 256, status: 1, statusText: '在线',
+      services: [
+        { id: 4, name: '精油香薰SPA', duration: 90, price: 458, icon: '🌸' },
+        { id: 5, name: '泰式古法按摩', duration: 90, price: 398, icon: '🧘' },
+        { id: 6, name: '全身中式推拿', duration: 60, price: 288, icon: '💆' }
+      ]
+    }
+  };
+
+  // Mock 数据 - 技师排班（可用时段）
+  const scheduleData = {
+    1: generateSchedule(1),
+    2: generateSchedule(2)
+  };
+
+  // 生成排班数据
+  function generateSchedule(techId) {
+    const schedule = {};
+    const today = new Date();
+    
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const dateStr = formatDateKey(date);
+      
+      // 生成可用时段（模拟部分时段已被预约）
+      const slots = [];
+      const startHour = 9;
+      const endHour = 21;
+      
+      for (let hour = startHour; hour < endHour; hour++) {
+        for (let min = 0; min < 60; min += 30) {
+          const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+          
+          // 模拟部分时段不可用
+          const isAvailable = !(
+            (i === 0 && hour < new Date().getHours() + 2) || // 今天2小时内不可预约
+            (Math.random() < 0.2) // 20%概率已被预约
+          );
+          
+          slots.push({
+            time: timeStr,
+            available: isAvailable
+          });
+        }
+      }
+      
+      schedule[dateStr] = slots;
+    }
+    
+    return schedule;
+  }
+
+  function formatDateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  // 当前选择状态
+  let selectedTech = techniciansData[techId] || techniciansData[1];
+  let selectedService = selectedTech.services.find(s => s.id === serviceId) || selectedTech.services[0];
+  let selectedDate = null;
+  let selectedTime = null;
+  let currentLocation = null;
+
+  // 渲染服务信息
+  function renderServiceInfo() {
+    document.getElementById('serviceIcon').textContent = selectedService.icon;
+    document.getElementById('serviceName').textContent = selectedService.name;
+    document.getElementById('serviceDuration').textContent = selectedService.duration + '分钟';
+    document.getElementById('servicePrice').textContent = '¥' + selectedService.price;
+    document.getElementById('totalPrice').textContent = '¥' + selectedService.price;
+  }
+
+  // 渲染技师信息
+  function renderTechInfo() {
+    document.getElementById('techAvatar').textContent = selectedTech.avatar;
+    document.getElementById('techName').textContent = selectedTech.name;
+    document.getElementById('techRating').textContent = selectedTech.rating;
+    document.getElementById('techOrders').textContent = selectedTech.orderCount;
+    
+    const statusEl = document.getElementById('techStatus');
+    statusEl.textContent = selectedTech.statusText;
+    statusEl.className = 'tech-status';
+    if (selectedTech.status === 2) statusEl.classList.add('busy');
+    if (selectedTech.status === 0) statusEl.classList.add('offline');
+  }
+
+  // 渲染日期选择
+  function renderDateTabs() {
+    const container = document.getElementById('dateTabs');
+    const today = new Date();
+    const dayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    
+    let html = '';
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const dateStr = formatDateKey(date);
+      const dayName = i === 0 ? '今天' : (i === 1 ? '明天' : dayNames[date.getDay()]);
+      const dateNum = `${date.getMonth() + 1}/${date.getDate()}`;
+      
+      html += `
+        <div class="date-tab ${i === 0 ? 'active' : ''}" data-date="${dateStr}" onclick="selectDate('${dateStr}', this)">
+          <div class="date-tab-day">${dayName}</div>
+          <div class="date-tab-date">${dateNum}</div>
+        </div>
+      `;
+    }
+    
+    container.innerHTML = html;
+    
+    // 默认选择今天
+    selectedDate = formatDateKey(today);
+    renderTimeSlots();
+  }
+
+  // 选择日期
+  window.selectDate = function(dateStr, element) {
+    // 更新选中状态
+    document.querySelectorAll('.date-tab').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+    
+    selectedDate = dateStr;
+    selectedTime = null;
+    renderTimeSlots();
+  };
+
+  // 渲染时间段
+  function renderTimeSlots() {
+    const container = document.getElementById('timeSlots');
+    const schedule = scheduleData[selectedTech.id];
+    const slots = schedule[selectedDate] || [];
+    
+    if (slots.length === 0) {
+      container.innerHTML = '<div class="empty-slots">该日期暂无可预约时段</div>';
+      return;
+    }
+    
+    let html = '';
+    slots.forEach(slot => {
+      const statusClass = slot.available ? '' : 'unavailable';
+      html += `
+        <div class="time-slot ${statusClass}" 
+             data-time="${slot.time}" 
+             onclick="${slot.available ? `selectTime('${slot.time}', this)` : ''}">
+          ${slot.time}
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+  }
+
+  // 选择时间
+  window.selectTime = function(time, element) {
+    // 更新选中状态
+    document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('active'));
+    element.classList.add('active');
+    
+    selectedTime = time;
+  };
+
+  // GPS定位
+  window.getCurrentLocation = function() {
+    if (!navigator.geolocation) {
+      QY.showToast('您的浏览器不支持定位功能');
+      return;
+    }
+    
+    QY.showToast('正在获取位置...');
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        currentLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        
+        // 模拟逆地理编码
+        const mockAddress = '北京市朝阳区建国路88号SOHO现代城';
+        document.getElementById('addressDetail').value = mockAddress;
+        
+        document.getElementById('locationInfo').style.display = 'flex';
+        document.getElementById('locationText').textContent = `已定位 (${currentLocation.lat.toFixed(4)}, ${currentLocation.lng.toFixed(4)})`;
+        
+        QY.showToast('定位成功');
+      },
+      (error) => {
+        console.error('定位失败:', error);
+        QY.showToast('定位失败，请手动输入地址');
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+  // 从地址列表选择
+  window.selectFromAddressList = function() {
+    // 模拟选择地址
+    const mockAddresses = [
+      { name: '张三', phone: '13800138001', address: '北京市朝阳区建国路88号SOHO现代城A座1201' },
+      { name: '李四', phone: '13800138002', address: '北京市海淀区中关村大街1号' }
+    ];
+    
+    // 简单模拟：使用第一个地址
+    const addr = mockAddresses[0];
+    document.getElementById('contactName').value = addr.name;
+    document.getElementById('contactPhone').value = addr.phone;
+    document.getElementById('addressDetail').value = addr.address;
+    
+    QY.showToast('已选择常用地址');
+  };
+
+  // 提交订单
+  window.submitOrder = function() {
+    // 验证表单
+    if (!selectedDate || !selectedTime) {
+      QY.showToast('请选择预约时间');
+      return;
+    }
+    
+    const contactName = document.getElementById('contactName').value.trim();
+    const contactPhone = document.getElementById('contactPhone').value.trim();
+    const addressDetail = document.getElementById('addressDetail').value.trim();
+    
+    if (!contactName) {
+      QY.showToast('请输入联系人姓名');
+      return;
+    }
+    
+    if (!contactPhone || !/^1\d{10}$/.test(contactPhone)) {
+      QY.showToast('请输入正确的手机号');
+      return;
+    }
+    
+    if (!addressDetail) {
+      QY.showToast('请输入详细地址');
+      return;
+    }
+    
+    const remark = document.getElementById('orderRemark').value.trim();
+    
+    // 构建订单数据
+    const orderData = {
+      techId: selectedTech.id,
+      techName: selectedTech.name,
+      techAvatar: selectedTech.avatar,
+      serviceId: selectedService.id,
+      serviceName: selectedService.name,
+      serviceIcon: selectedService.icon,
+      duration: selectedService.duration,
+      price: selectedService.price,
+      date: selectedDate,
+      time: selectedTime,
+      contactName: contactName,
+      contactPhone: contactPhone,
+      address: addressDetail,
+      location: currentLocation,
+      remark: remark
+    };
+    
+    // 存储到 sessionStorage
+    sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+    
+    // 跳转到确认页
+    QY.navigateTo('order/confirm');
+  };
+
+  // 初始化
+  renderServiceInfo();
+  renderTechInfo();
+  renderDateTabs();
+
+})();
+</script>
