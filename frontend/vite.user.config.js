@@ -13,7 +13,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: '../../dist/user',
+    outDir: '../../pages/user',
     emptyOutDir: true
   },
   server: {

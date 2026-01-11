@@ -1,0 +1,1 @@
+import{c as a,b as t,u as c,j as _,i as o,k as p}from"./index-C4JFp0gR.js";const m={class:"order-confirm-page"},d={__name:"confirm",setup(i){const n=_();return(l,e)=>{const r=o("t-navbar"),s=o("t-empty");return p(),a("div",m,[t(r,{title:"确认订单","left-arrow":"",onLeftClick:e[0]||(e[0]=u=>c(n).back())}),t(s,{description:"确认订单页面"})])}}};export{d as default};

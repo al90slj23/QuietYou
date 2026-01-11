@@ -19,13 +19,35 @@ DEPLOY_USER="root"
 # 记录开始时间
 START_TIME=$(date +%s)
 
-# ========== 阶段1: 显示变更 ==========
+# ========== 阶段1: 前端构建 ==========
+log_info "📦 构建前端项目..."
+
+cd frontend
+
+# 安装依赖（如果需要）
+if [ ! -d "node_modules" ]; then
+    log_info "安装前端依赖..."
+    npm install
+fi
+
+# 构建用户端
+log_info "构建用户端 (Vue)..."
+npm run build:user
+if [ $? -ne 0 ]; then
+    log_error "用户端构建失败"
+    exit 1
+fi
+log_success "用户端构建完成"
+
+cd ..
+
+# ========== 阶段2: 显示变更 ==========
 echo ""
 log_info "📋 本次变更文件:"
 git status --short
 echo ""
 
-# ========== 阶段2: Git 提交 ==========
+# ========== 阶段3: Git 提交 ==========
 log_info "📤 Git 提交..."
 
 # Git add
@@ -49,7 +71,7 @@ else
     log_warning "无新变更需要提交"
 fi
 
-# ========== 阶段3: Git 推送 ==========
+# ========== 阶段4: Git 推送 ==========
 log_info "📤 推送到 GitHub..."
 
 if git push origin main 2>&1; then
@@ -58,16 +80,19 @@ else
     log_error "GitHub 推送失败"
 fi
 
-# ========== 阶段4: rsync 同步 ==========
+# ========== 阶段5: rsync 同步 ==========
 log_info "📦 rsync 同步到服务器..."
 
-rsync -avz --progress \
+rsync -avz --progress --delete \
     --exclude 'node_modules' \
     --exclude '.git' \
     --exclude '.env' \
     --exclude '.DS_Store' \
     --exclude 'frontend/node_modules' \
-    --exclude 'frontend/dist' \
+    --exclude 'frontend/src' \
+    --exclude '.kiro' \
+    --exclude '.vscode' \
+    --exclude 'tests' \
     ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
 
 if [ $? -eq 0 ]; then
@@ -77,7 +102,7 @@ else
     exit 1
 fi
 
-# ========== 阶段5: 服务器操作 ==========
+# ========== 阶段6: 服务器操作 ==========
 log_info "🔧 服务器操作..."
 
 ssh ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'

@@ -15,6 +15,7 @@
     "build:all": "npm run build:user && npm run build:tech && npm run build:shop && npm run build:admin"
   },
   "dependencies": {
+    "@iconify-json/mdi": "^1.2.3",
     "@iconify/vue": "^5.0.0",
     "axios": "^1.6.0",
     "pinia": "^2.1.0",
