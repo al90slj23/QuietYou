@@ -98,7 +98,7 @@
           @click="router.push(`/technician/detail/${tech.id}`)"
         >
           <div class="tech-avatar">
-            <t-icon name="user" size="24px" color="#ccc" />
+            <img :src="tech.avatar" :alt="tech.name" />
             <span class="status-dot" v-if="tech.online"></span>
           </div>
           <div class="tech-content">
@@ -163,9 +163,9 @@ const recommends = ref([
 ])
 
 const techs = ref([
-  { id: 1, name: '张师傅', rating: 4.9, orders: 328, exp: 5, online: true, badge: '金牌' },
-  { id: 2, name: '李师傅', rating: 4.8, orders: 256, exp: 3, online: true },
-  { id: 3, name: '王师傅', rating: 4.9, orders: 412, exp: 6, online: false, badge: '金牌' }
+  { id: 1, name: '张师傅', rating: 4.9, orders: 328, exp: 5, online: true, badge: '金牌', avatar: '/assets/images/avatar-tech-1.jpg' },
+  { id: 2, name: '李师傅', rating: 4.8, orders: 256, exp: 3, online: true, avatar: '/assets/images/avatar-tech-2.jpg' },
+  { id: 3, name: '王师傅', rating: 4.9, orders: 412, exp: 6, online: false, badge: '金牌', avatar: '/assets/images/avatar-tech-3.jpg' }
 ])
 
 const goToService = (id) => {
@@ -407,6 +407,13 @@ const goToService = (id) => {
   justify-content: center;
   position: relative;
   margin-right: 12px;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .status-dot {
