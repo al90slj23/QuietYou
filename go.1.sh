@@ -1,28 +1,93 @@
 #!/bin/bash
-# 轻养到家 - 本地开发环境
+# 轻养到家 - GitHub + 服务器部署（双通道）
 # ZERO 框架规范
 
 source "$(dirname "$0")/go.lib.sh"
 
-log_info "启动本地开发环境..."
-
-# 检查环境
-check_php || exit 1
+log_info "开始 GitHub + 服务器部署..."
 
 # 加载环境变量
 load_env
 
-# 默认端口
-PORT=${DEV_PORT:-8080}
+# 部署配置
+DEPLOY_HOST="8.133.195.39"
+DEPLOY_PATH="/www/wwwroot/qy.im.sh.cn"
+DEPLOY_USER="root"
 
-# 启动 PHP 内置服务器
-log_info "启动 PHP 开发服务器，端口: $PORT"
-log_info "访问地址:"
-log_info "  用户端: http://localhost:$PORT/pages/user/"
-log_info "  技师端: http://localhost:$PORT/pages/tech/"
-log_info "  商家端: http://localhost:$PORT/pages/shop/"
-log_info "  管理后台: http://localhost:$PORT/pages/admin/"
-log_info ""
-log_info "按 Ctrl+C 停止服务器"
+# 记录开始时间
+START_TIME=$(date +%s)
 
-php -S localhost:$PORT -t .
+# ========== 阶段1: 显示变更 ==========
+echo ""
+log_info "📋 本次变更文件:"
+git status --short
+echo ""
+
+# ========== 阶段2: Git 提交 ==========
+log_info "📤 Git 提交..."
+
+# Git add
+git add .
+
+# 获取提交信息
+read -p "请输入提交信息 (回车使用默认): " COMMIT_MSG
+if [ -z "$COMMIT_MSG" ]; then
+    COMMIT_MSG="chore: update $(date '+%Y-%m-%d %H:%M')"
+fi
+
+# Git commit
+if git commit -m "$COMMIT_MSG" 2>/dev/null; then
+    log_success "Git 提交成功"
+else
+    log_warning "无新变更需要提交"
+fi
+
+# ========== 阶段3: Git 推送 ==========
+log_info "📤 推送到 GitHub..."
+
+if git push origin main 2>&1; then
+    log_success "GitHub 推送成功"
+else
+    log_error "GitHub 推送失败"
+fi
+
+# ========== 阶段4: rsync 同步 ==========
+log_info "📦 rsync 同步到服务器..."
+
+rsync -avz --progress \
+    --exclude 'node_modules' \
+    --exclude '.git' \
+    --exclude '.env' \
+    --exclude '.DS_Store' \
+    --exclude 'frontend/node_modules' \
+    --exclude 'frontend/dist' \
+    ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+
+if [ $? -eq 0 ]; then
+    log_success "rsync 同步成功"
+else
+    log_error "rsync 同步失败"
+    exit 1
+fi
+
+# ========== 阶段5: 服务器操作 ==========
+log_info "🔧 服务器操作..."
+
+ssh ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+cd /www/wwwroot/qy.im.sh.cn
+# 设置权限
+chown -R www:www . 2>/dev/null || true
+chmod -R 755 . 2>/dev/null || true
+echo "服务器操作完成"
+EOF
+
+# ========== 完成 ==========
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+
+echo ""
+log_success "=========================================="
+log_success "✅ 部署完成！"
+log_success "📍 地址: http://qy.im.sh.cn"
+log_success "⏱️  耗时: ${ELAPSED}秒"
+log_success "=========================================="

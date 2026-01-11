@@ -41,6 +41,14 @@ check_php() {
     log_info "PHP 版本: $(php -v | head -n 1)"
 }
 
+# 检查 Node.js 环境
+check_node() {
+    check_command node || return 1
+    check_command npm || return 1
+    log_info "Node.js 版本: $(node -v)"
+    log_info "npm 版本: $(npm -v)"
+}
+
 # 检查 MySQL 环境
 check_mysql() {
     check_command mysql || return 1

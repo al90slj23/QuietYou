@@ -14,8 +14,9 @@ show_help() {
     echo "用法: ./go.sh <命令>"
     echo ""
     echo "命令:"
-    echo "  1, dev      启动本地开发环境"
-    echo "  2, deploy   部署到服务器"
+    echo "  0, local    启动本地开发环境（前端+后端）"
+    echo "  1, deploy   GitHub + 服务器部署（双通道）"
+    echo "  2, sync     仅 rsync 同步到服务器"
     echo "  3, test     运行测试"
     echo "  4, db       数据库操作"
     echo "  help        显示帮助信息"
@@ -24,10 +25,13 @@ show_help() {
 
 # 主入口
 case "${1:-help}" in
-    1|dev)
+    0|local)
+        source "$(dirname "$0")/go.0.sh"
+        ;;
+    1|deploy)
         source "$(dirname "$0")/go.1.sh"
         ;;
-    2|deploy)
+    2|sync)
         source "$(dirname "$0")/go.2.sh"
         ;;
     3|test)

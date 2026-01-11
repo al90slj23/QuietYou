@@ -1,0 +1,32 @@
+{
+  "name": "qingyang-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:user": "vite --config vite.user.config.js",
+    "dev:tech": "vite --config vite.tech.config.js",
+    "dev:shop": "vite --config vite.shop.config.js",
+    "dev:admin": "vite --config vite.admin.config.js",
+    "build:user": "vite build --config vite.user.config.js",
+    "build:tech": "vite build --config vite.tech.config.js",
+    "build:shop": "vite build --config vite.shop.config.js",
+    "build:admin": "vite build --config vite.admin.config.js",
+    "build:all": "npm run build:user && npm run build:tech && npm run build:shop && npm run build:admin"
+  },
+  "dependencies": {
+    "@iconify/vue": "^5.0.0",
+    "axios": "^1.6.0",
+    "pinia": "^2.1.0",
+    "tdesign-icons-vue-next": "^0.2.0",
+    "tdesign-mobile-vue": "^1.5.0",
+    "tdesign-vue-next": "^1.9.0",
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "sass": "^1.69.0",
+    "vite": "^5.0.0"
+  }
+}
