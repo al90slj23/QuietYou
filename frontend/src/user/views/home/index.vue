@@ -27,7 +27,8 @@
         :navigation="{ type: 'dots' }"
       >
         <t-swiper-item v-for="(item, i) in banners" :key="i">
-          <div class="banner-slide" :style="{ background: item.bg }">
+          <div class="banner-slide" :style="{ backgroundImage: `url(${item.img})` }">
+            <div class="banner-overlay"></div>
             <div class="banner-content">
               <p class="banner-label">{{ item.label }}</p>
               <h2 class="banner-title">{{ item.title }}</h2>
@@ -68,8 +69,8 @@
           :key="item.id"
           @click="router.push(`/service/detail/${item.id}`)"
         >
-          <div class="card-cover" :style="{ background: item.coverBg }">
-            <t-icon :name="item.icon" size="28px" color="rgba(255,255,255,0.85)" />
+          <div class="card-cover">
+            <img :src="item.img" :alt="item.name" />
           </div>
           <div class="card-info">
             <div class="card-name">{{ item.name }}</div>
@@ -141,8 +142,9 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const banners = ref([
-  { label: '品质生活', title: '轻养到家', desc: '专业技师 · 上门服务', bg: 'linear-gradient(135deg, #2d3436 0%, #000 100%)' },
-  { label: '限时特惠', title: '新客立减30', desc: '首单专享优惠', bg: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)' }
+  { label: '品质生活', title: '轻养到家', desc: '专业技师 · 上门服务', img: '/assets/images/banner-massage-1.jpg' },
+  { label: '限时特惠', title: '新客立减30', desc: '首单专享优惠', img: '/assets/images/banner-massage-2.jpg' },
+  { label: '身心放松', title: '专业SPA', desc: '让疲惫一扫而空', img: '/assets/images/banner-wellness.jpg' }
 ])
 
 const categories = ref([
@@ -154,10 +156,10 @@ const categories = ref([
 ])
 
 const recommends = ref([
-  { id: 1, name: '全身推拿', duration: 60, price: 298, sold: '2.3k', icon: 'gesture-press', coverBg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', icon: 'heart', coverBg: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
-  { id: 3, name: '足底按摩', duration: 60, price: 168, sold: '1.5k', icon: 'service', coverBg: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
-  { id: 4, name: '精油SPA', duration: 90, price: 458, sold: '986', icon: 'flower', coverBg: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }
+  { id: 1, name: '全身推拿', duration: 60, price: 298, sold: '2.3k', img: '/assets/images/service-massage.jpg' },
+  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', img: '/assets/images/service-relax.jpg' },
+  { id: 3, name: '足底按摩', duration: 60, price: 168, sold: '1.5k', img: '/assets/images/service-foot.jpg' },
+  { id: 4, name: '精油SPA', duration: 90, price: 458, sold: '986', img: '/assets/images/service-spa.jpg' }
 ])
 
 const techs = ref([
@@ -227,10 +229,24 @@ const goToService = (id) => {
   padding: 20px;
   display: flex;
   align-items: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
 }
 
 .banner-content {
   color: #fff;
+  position: relative;
+  z-index: 1;
 }
 
 .banner-label {
@@ -323,10 +339,14 @@ const goToService = (id) => {
 }
 
 .card-cover {
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 80px;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .card-info {
