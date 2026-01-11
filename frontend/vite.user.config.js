@@ -5,7 +5,7 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue()],
   root: 'src/user',
-  base: '/user/',
+  base: '/pages/user/',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src/user'),
@@ -13,7 +13,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: '../../pages/user',
+    outDir: '../../../pages/user',
     emptyOutDir: true
   },
   server: {

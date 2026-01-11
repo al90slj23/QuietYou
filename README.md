@@ -57,11 +57,19 @@ vim .env
 ./go.sh dev
 ```
 
-访问地址：
+### 本地开发地址
+
 - 用户端: http://localhost:8080/pages/user/
 - 技师端: http://localhost:8080/pages/tech/
 - 商家端: http://localhost:8080/pages/shop/
 - 管理后台: http://localhost:8080/pages/admin/
+
+### 线上地址
+
+- 用户端: https://qy.im.sh.cn/pages/user/
+- 技师端: https://qy.im.sh.cn/pages/tech/
+- 商家端: https://qy.im.sh.cn/pages/shop/
+- 管理后台: https://qy.im.sh.cn/pages/admin/
 
 ## 命令说明
 

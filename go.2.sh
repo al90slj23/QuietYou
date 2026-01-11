@@ -6,10 +6,15 @@ source "$(dirname "$0")/go.lib.sh"
 
 log_info "开始 rsync 同步..."
 
-# 部署配置
-DEPLOY_HOST="8.133.195.39"
-DEPLOY_PATH="/www/wwwroot/qy.im.sh.cn"
-DEPLOY_USER="root"
+# 部署配置（从环境变量读取）
+DEPLOY_HOST="${DEPLOY_HOST:-}"
+DEPLOY_PATH="${DEPLOY_PATH:-/www/wwwroot/qy.im.sh.cn}"
+DEPLOY_USER="${DEPLOY_USER:-root}"
+
+if [ -z "$DEPLOY_HOST" ]; then
+    log_error "请设置 DEPLOY_HOST 环境变量"
+    exit 1
+fi
 
 # 记录开始时间
 START_TIME=$(date +%s)
