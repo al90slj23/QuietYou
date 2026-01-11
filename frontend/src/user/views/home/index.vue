@@ -157,7 +157,7 @@ const categories = ref([
 
 const recommends = ref([
   { id: 1, name: '全身推拿', duration: 60, price: 298, sold: '2.3k', img: '/assets/images/service-massage.jpg' },
-  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', img: '/assets/images/service-relax.jpg' },
+  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', img: '/assets/images/service-neck.jpg' },
   { id: 3, name: '足底按摩', duration: 60, price: 168, sold: '1.5k', img: '/assets/images/service-foot.jpg' },
   { id: 4, name: '精油SPA', duration: 90, price: 458, sold: '986', img: '/assets/images/service-spa.jpg' }
 ])
