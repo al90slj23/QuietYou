@@ -293,7 +293,7 @@
     if (filtered.length === 0) {
       container.innerHTML = `
         <div class="empty">
-          <div class="empty-icon">👤</div>
+          <div class="empty-icon"><t-icon name="user" size="48px" /></div>
           <div class="empty-text">暂无技师</div>
         </div>
       `;
@@ -315,7 +315,7 @@
         </div>
         <div class="tech-card-stats">
           <div class="tech-stat">
-            <div class="tech-stat-value">⭐${tech.rating}</div>
+            <div class="tech-stat-value"><t-icon name="star-filled" size="14px" />${tech.rating}</div>
             <div class="tech-stat-label">评分</div>
           </div>
           <div class="tech-stat">

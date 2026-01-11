@@ -7,7 +7,7 @@
         <span class="value" id="orderNo">QY20260111143000ABCD</span>
       </div>
       <div class="order-service">
-        <div class="service-icon" id="serviceIcon">💆</div>
+        <div class="service-icon" id="serviceIcon"><t-icon name="gesture-press" size="24px" /></div>
         <div class="service-detail">
           <div class="service-name" id="serviceName">全身中式推拿</div>
           <div class="service-tech">技师：<span id="techName">张师傅</span></div>
@@ -30,19 +30,19 @@
     <div class="pay-methods">
       <label class="pay-method active" data-method="wechat">
         <input type="radio" name="payMethod" value="wechat" checked>
-        <span class="method-icon">💚</span>
+        <span class="method-icon" style="color: #07c160;"><t-icon name="logo-wechat" size="24px" /></span>
         <span class="method-name">微信支付</span>
         <span class="method-check">✓</span>
       </label>
       <label class="pay-method" data-method="alipay">
         <input type="radio" name="payMethod" value="alipay">
-        <span class="method-icon">💙</span>
+        <span class="method-icon" style="color: #1677ff;"><t-icon name="wallet" size="24px" /></span>
         <span class="method-name">支付宝</span>
         <span class="method-check">✓</span>
       </label>
       <label class="pay-method" data-method="balance">
         <input type="radio" name="payMethod" value="balance">
-        <span class="method-icon">💰</span>
+        <span class="method-icon"><t-icon name="wallet" size="24px" /></span>
         <span class="method-name">余额支付</span>
         <span class="method-sub">可用余额 ¥0.00</span>
         <span class="method-check">✓</span>
@@ -66,7 +66,7 @@
 <!-- 支付结果弹窗 -->
 <div class="pay-result-modal" id="payResultModal" style="display: none;">
   <div class="modal-content">
-    <div class="result-icon" id="resultIcon">✅</div>
+    <div class="result-icon" id="resultIcon"><t-icon name="check-circle-filled" size="64px" /></div>
     <div class="result-title" id="resultTitle">支付成功</div>
     <div class="result-desc" id="resultDesc">订单已提交，等待技师接单</div>
     <div class="result-actions">
@@ -407,7 +407,7 @@
   // 渲染订单信息
   function renderOrderInfo() {
     document.getElementById('orderNo').textContent = orderData.orderNo;
-    document.getElementById('serviceIcon').textContent = orderData.serviceIcon;
+    document.getElementById('serviceIcon').innerHTML = `<t-icon name="${orderData.serviceIcon}" size="24px" />`;
     document.getElementById('serviceName').textContent = orderData.serviceName;
     document.getElementById('techName').textContent = orderData.techName;
     
@@ -540,7 +540,7 @@
     const titleEl = document.getElementById('resultTitle');
     const descEl = document.getElementById('resultDesc');
     
-    icon.textContent = success ? '✅' : '❌';
+    icon.innerHTML = success ? '<t-icon name="check-circle-filled" size="64px" />' : '<t-icon name="close-circle-filled" size="64px" />';
     icon.className = 'result-icon ' + (success ? 'success' : 'fail');
     titleEl.textContent = title;
     descEl.textContent = desc;

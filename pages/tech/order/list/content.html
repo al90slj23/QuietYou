@@ -255,7 +255,7 @@
     if (filteredOrders.length === 0) {
       container.innerHTML = `
         <div class="empty">
-          <div class="empty-icon">📋</div>
+          <div class="empty-icon"><t-icon name="file-paste" size="48px" /></div>
           <div class="empty-text">暂无订单</div>
         </div>
       `;
@@ -302,15 +302,15 @@
           <div class="tech-order-body">
             <div class="tech-order-service">${order.service}</div>
             <div class="tech-order-info">
-              <span class="tech-order-info-icon">👤</span>
+              <span class="tech-order-info-icon"><t-icon name="user" size="14px" /></span>
               <span>${order.customerName} ${order.phone}</span>
             </div>
             <div class="tech-order-info">
-              <span class="tech-order-info-icon">📅</span>
+              <span class="tech-order-info-icon"><t-icon name="calendar" size="14px" /></span>
               <span>${order.time}</span>
             </div>
             <div class="tech-order-info">
-              <span class="tech-order-info-icon">📍</span>
+              <span class="tech-order-info-icon"><t-icon name="location" size="14px" /></span>
               <span>${order.address}</span>
             </div>
             <div class="tech-order-price">¥${order.price}</div>

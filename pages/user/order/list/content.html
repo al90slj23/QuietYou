@@ -16,7 +16,7 @@
 
   <!-- 空状态 -->
   <div class="empty-state" id="emptyState" style="display: none;">
-    <div class="empty-icon">📋</div>
+    <div class="empty-icon"><t-icon name="file-paste" size="64px" /></div>
     <div class="empty-text">暂无订单</div>
     <button class="btn btn-primary" onclick="QY.navigateTo('home')">去预约服务</button>
   </div>
@@ -245,7 +245,7 @@
       orderNo: 'QY20260111143000A1B2',
       status: 5,
       serviceName: '全身中式推拿',
-      serviceIcon: '💆',
+      serviceIcon: 'gesture-press',
       techName: '张师傅',
       price: 298,
       scheduleDate: '2026-01-10',
@@ -258,7 +258,7 @@
       orderNo: 'QY20260111150000C3D4',
       status: 4,
       serviceName: '肩颈深度调理',
-      serviceIcon: '💪',
+      serviceIcon: 'heart',
       techName: '李师傅',
       price: 198,
       scheduleDate: '2026-01-11',
@@ -271,7 +271,7 @@
       orderNo: 'QY20260111160000E5F6',
       status: 2,
       serviceName: '精油香薰SPA',
-      serviceIcon: '🌸',
+      serviceIcon: 'flower',
       techName: '王师傅',
       price: 458,
       scheduleDate: '2026-01-12',
@@ -284,7 +284,7 @@
       orderNo: 'QY20260111170000G7H8',
       status: 0,
       serviceName: '泰式古法按摩',
-      serviceIcon: '🧘',
+      serviceIcon: 'spa',
       techName: '赵师傅',
       price: 398,
       scheduleDate: '2026-01-13',
@@ -297,7 +297,7 @@
       orderNo: 'QY20260111180000I9J0',
       status: 6,
       serviceName: '背部推拿放松',
-      serviceIcon: '🧘',
+      serviceIcon: 'spa',
       techName: '孙师傅',
       price: 218,
       scheduleDate: '2026-01-09',
@@ -358,7 +358,7 @@
           </div>
           <div class="order-card-body">
             <div class="order-service">
-              <div class="service-icon">${order.serviceIcon}</div>
+              <div class="service-icon"><t-icon name="${order.serviceIcon}" size="24px" /></div>
               <div class="service-info">
                 <div class="service-name">${order.serviceName}</div>
                 <div class="service-tech">技师：${order.techName}</div>
@@ -366,11 +366,11 @@
               <div class="service-price">${order.price}</div>
             </div>
             <div class="order-detail-row">
-              <span class="detail-icon">📅</span>
+              <span class="detail-icon"><t-icon name="calendar" size="14px" /></span>
               <span class="detail-text">${formatDateTime(order.scheduleDate, order.scheduleTime)}</span>
             </div>
             <div class="order-detail-row">
-              <span class="detail-icon">📍</span>
+              <span class="detail-icon"><t-icon name="location" size="14px" /></span>
               <span class="detail-text">${order.address}</span>
             </div>
           </div>

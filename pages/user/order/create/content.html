@@ -3,7 +3,7 @@
   <div class="section card">
     <div class="section-title">服务信息</div>
     <div class="service-info" id="serviceInfo">
-      <div class="service-icon" id="serviceIcon">💆</div>
+      <div class="service-icon" id="serviceIcon"><t-icon name="gesture-press" size="24px" /></div>
       <div class="service-detail">
         <div class="service-name" id="serviceName">全身中式推拿</div>
         <div class="service-duration" id="serviceDuration">60分钟</div>
@@ -16,11 +16,11 @@
   <div class="section card">
     <div class="section-title">技师信息</div>
     <div class="tech-info" id="techInfo">
-      <div class="tech-avatar" id="techAvatar">👨</div>
+      <div class="tech-avatar" id="techAvatar"><t-icon name="user" size="24px" /></div>
       <div class="tech-detail">
         <div class="tech-name" id="techName">张师傅</div>
         <div class="tech-rating">
-          <span class="rating-star">⭐</span>
+          <span class="rating-star"><t-icon name="star-filled" size="12px" /></span>
           <span id="techRating">4.9</span>
           <span class="text-placeholder"> | </span>
           <span id="techOrders">328</span>单
@@ -49,10 +49,10 @@
     <div class="address-section">
       <div class="address-actions">
         <button class="btn btn-secondary btn-sm" onclick="getCurrentLocation()">
-          <span class="btn-icon">📍</span> GPS定位
+          <span class="btn-icon"><t-icon name="location" size="14px" /></span> GPS定位
         </button>
         <button class="btn btn-secondary btn-sm" onclick="selectFromAddressList()">
-          <span class="btn-icon">📋</span> 选择地址
+          <span class="btn-icon"><t-icon name="file-paste" size="14px" /></span> 选择地址
         </button>
       </div>
       <div class="address-form">
@@ -70,7 +70,7 @@
         </div>
       </div>
       <div class="location-info" id="locationInfo" style="display: none;">
-        <span class="location-icon">📍</span>
+        <span class="location-icon"><t-icon name="location" size="14px" /></span>
         <span class="location-text" id="locationText">已定位</span>
       </div>
     </div>
@@ -424,21 +424,21 @@
   // Mock 数据 - 技师信息
   const techniciansData = {
     1: {
-      id: 1, name: '张师傅', gender: 1, avatar: '👨', shopId: 1,
+      id: 1, name: '张师傅', gender: 1, avatar: 'user', shopId: 1,
       rating: 4.9, orderCount: 328, status: 1, statusText: '在线',
       services: [
-        { id: 1, name: '全身中式推拿', duration: 60, price: 298, icon: '💆' },
-        { id: 2, name: '肩颈深度调理', duration: 45, price: 198, icon: '💪' },
-        { id: 3, name: '背部推拿放松', duration: 45, price: 218, icon: '🧘' }
+        { id: 1, name: '全身中式推拿', duration: 60, price: 298, icon: 'gesture-press' },
+        { id: 2, name: '肩颈深度调理', duration: 45, price: 198, icon: 'heart' },
+        { id: 3, name: '背部推拿放松', duration: 45, price: 218, icon: 'spa' }
       ]
     },
     2: {
-      id: 2, name: '李师傅', gender: 2, avatar: '👩', shopId: 2,
+      id: 2, name: '李师傅', gender: 2, avatar: 'user', shopId: 2,
       rating: 4.8, orderCount: 256, status: 1, statusText: '在线',
       services: [
-        { id: 4, name: '精油香薰SPA', duration: 90, price: 458, icon: '🌸' },
-        { id: 5, name: '泰式古法按摩', duration: 90, price: 398, icon: '🧘' },
-        { id: 6, name: '全身中式推拿', duration: 60, price: 288, icon: '💆' }
+        { id: 4, name: '精油香薰SPA', duration: 90, price: 458, icon: 'flower' },
+        { id: 5, name: '泰式古法按摩', duration: 90, price: 398, icon: 'spa' },
+        { id: 6, name: '全身中式推拿', duration: 60, price: 288, icon: 'gesture-press' }
       ]
     }
   };
@@ -500,7 +500,7 @@
 
   // 渲染服务信息
   function renderServiceInfo() {
-    document.getElementById('serviceIcon').textContent = selectedService.icon;
+    document.getElementById('serviceIcon').innerHTML = `<t-icon name="${selectedService.icon}" size="24px" />`;
     document.getElementById('serviceName').textContent = selectedService.name;
     document.getElementById('serviceDuration').textContent = selectedService.duration + '分钟';
     document.getElementById('servicePrice').textContent = '¥' + selectedService.price;
@@ -509,7 +509,7 @@
 
   // 渲染技师信息
   function renderTechInfo() {
-    document.getElementById('techAvatar').textContent = selectedTech.avatar;
+    document.getElementById('techAvatar').innerHTML = `<t-icon name="${selectedTech.avatar}" size="24px" />`;
     document.getElementById('techName').textContent = selectedTech.name;
     document.getElementById('techRating').textContent = selectedTech.rating;
     document.getElementById('techOrders').textContent = selectedTech.orderCount;

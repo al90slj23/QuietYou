@@ -42,7 +42,7 @@
 
   <!-- 空状态 -->
   <div class="empty-state" id="emptyState" style="display: none;">
-    <div class="empty-icon">🔍</div>
+    <div class="empty-icon"><t-icon name="search" size="48px" /></div>
     <div class="empty-text">暂无符合条件的服务</div>
     <button class="btn btn-secondary" onclick="resetFilters()">重置筛选</button>
   </div>
@@ -315,16 +315,16 @@
 
   // Mock 数据 - 服务列表
   const allServices = [
-    { id: 1, categoryId: 1, name: '全身中式推拿', desc: '传统手法，疏通经络，缓解疲劳，促进血液循环', duration: 60, price: 298, maxPrice: 398, icon: '💆', tags: ['热门', '推荐'] },
-    { id: 2, categoryId: 1, name: '背部推拿放松', desc: '针对背部肌肉紧张，深层放松', duration: 45, price: 198, maxPrice: 268, icon: '💆', tags: ['新品'] },
-    { id: 3, categoryId: 5, name: '肩颈深度调理', desc: '针对久坐人群，专业手法放松肩颈，缓解酸痛', duration: 45, price: 198, maxPrice: 298, icon: '💪', tags: ['热门'] },
-    { id: 4, categoryId: 3, name: '足底反射疗法', desc: '刺激足底穴位，促进血液循环，改善睡眠', duration: 60, price: 168, maxPrice: 238, icon: '🦶', tags: [] },
-    { id: 5, categoryId: 3, name: '足部精油按摩', desc: '精油配合按摩，滋润足部肌肤', duration: 45, price: 148, maxPrice: 198, icon: '🦶', tags: ['新品'] },
-    { id: 6, categoryId: 2, name: '泰式古法按摩', desc: '正宗泰式手法，拉伸放松全身', duration: 90, price: 398, maxPrice: 498, icon: '🧘', tags: ['推荐'] },
-    { id: 7, categoryId: 4, name: '精油香薰SPA', desc: '天然精油，舒缓身心，深度放松', duration: 90, price: 458, maxPrice: 598, icon: '🌸', tags: ['热门'] },
-    { id: 8, categoryId: 6, name: '艾灸温经调理', desc: '传统艾灸，温经散寒，调理体质', duration: 60, price: 268, maxPrice: 368, icon: '🔥', tags: [] },
-    { id: 9, categoryId: 7, name: '刮痧排毒', desc: '传统刮痧手法，疏通经络，排出毒素', duration: 45, price: 168, maxPrice: 228, icon: '🏺', tags: [] },
-    { id: 10, categoryId: 7, name: '拔罐理疗', desc: '传统拔罐，祛湿散寒，缓解疲劳', duration: 30, price: 128, maxPrice: 168, icon: '🏺', tags: [] }
+    { id: 1, categoryId: 1, name: '全身中式推拿', desc: '传统手法，疏通经络，缓解疲劳，促进血液循环', duration: 60, price: 298, maxPrice: 398, icon: 'gesture-press', tags: ['热门', '推荐'] },
+    { id: 2, categoryId: 1, name: '背部推拿放松', desc: '针对背部肌肉紧张，深层放松', duration: 45, price: 198, maxPrice: 268, icon: 'gesture-press', tags: ['新品'] },
+    { id: 3, categoryId: 5, name: '肩颈深度调理', desc: '针对久坐人群，专业手法放松肩颈，缓解酸痛', duration: 45, price: 198, maxPrice: 298, icon: 'heart', tags: ['热门'] },
+    { id: 4, categoryId: 3, name: '足底反射疗法', desc: '刺激足底穴位，促进血液循环，改善睡眠', duration: 60, price: 168, maxPrice: 238, icon: 'service', tags: [] },
+    { id: 5, categoryId: 3, name: '足部精油按摩', desc: '精油配合按摩，滋润足部肌肤', duration: 45, price: 148, maxPrice: 198, icon: 'service', tags: ['新品'] },
+    { id: 6, categoryId: 2, name: '泰式古法按摩', desc: '正宗泰式手法，拉伸放松全身', duration: 90, price: 398, maxPrice: 498, icon: 'spa', tags: ['推荐'] },
+    { id: 7, categoryId: 4, name: '精油香薰SPA', desc: '天然精油，舒缓身心，深度放松', duration: 90, price: 458, maxPrice: 598, icon: 'flower', tags: ['热门'] },
+    { id: 8, categoryId: 6, name: '艾灸温经调理', desc: '传统艾灸，温经散寒，调理体质', duration: 60, price: 268, maxPrice: 368, icon: 'tips', tags: [] },
+    { id: 9, categoryId: 7, name: '刮痧排毒', desc: '传统刮痧手法，疏通经络，排出毒素', duration: 45, price: 168, maxPrice: 228, icon: 'service', tags: [] },
+    { id: 10, categoryId: 7, name: '拔罐理疗', desc: '传统拔罐，祛湿散寒，缓解疲劳', duration: 30, price: 128, maxPrice: 168, icon: 'service', tags: [] }
   ];
 
   // 筛选配置
@@ -536,7 +536,7 @@
 
     list.innerHTML = services.map(service => `
       <div class="service-card" onclick="QY.navigateTo('service/detail', { id: ${service.id} })">
-        <div class="service-card-image">${service.icon}</div>
+        <div class="service-card-image"><t-icon name="${service.icon}" size="40px" /></div>
         <div class="service-card-info">
           <div class="service-card-name">${service.name}</div>
           <div class="service-card-desc">${service.desc}</div>

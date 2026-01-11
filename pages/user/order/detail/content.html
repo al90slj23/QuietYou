@@ -22,7 +22,7 @@
   <div class="section card">
     <div class="section-title">服务信息</div>
     <div class="service-info">
-      <div class="service-icon" id="serviceIcon">💆</div>
+      <div class="service-icon" id="serviceIcon"><t-icon name="gesture-press" size="24px" /></div>
       <div class="service-detail">
         <div class="service-name" id="serviceName">全身中式推拿</div>
         <div class="service-duration" id="serviceDuration">60分钟</div>
@@ -35,11 +35,11 @@
   <div class="section card">
     <div class="section-title">技师信息</div>
     <div class="tech-info" onclick="viewTechDetail()">
-      <div class="tech-avatar" id="techAvatar">👨</div>
+      <div class="tech-avatar" id="techAvatar"><t-icon name="user" size="24px" /></div>
       <div class="tech-detail">
         <div class="tech-name" id="techName">张师傅</div>
         <div class="tech-rating">
-          <span class="rating-star">⭐</span>
+          <span class="rating-star"><t-icon name="star-filled" size="12px" /></span>
           <span id="techRating">4.9</span>
           <span class="text-placeholder"> | </span>
           <span id="techOrders">328</span>单
@@ -666,14 +666,14 @@
 
   // 订单状态映射
   const STATUS_CONFIG = {
-    0: { text: '待支付', desc: '请在15分钟内完成支付', icon: '⏳', class: 'pending' },
-    1: { text: '待接单', desc: '等待技师接单', icon: '📋', class: 'paid' },
-    2: { text: '待服务', desc: '技师已接单，请准时等候', icon: '✅', class: 'paid' },
-    3: { text: '技师出发中', desc: '技师正在前往您的位置', icon: '🚗', class: 'in-progress' },
-    4: { text: '服务中', desc: '服务进行中，请享受服务', icon: '💆', class: 'in-progress' },
-    5: { text: '已完成', desc: '服务已完成，感谢您的使用', icon: '🎉', class: 'completed' },
-    6: { text: '已取消', desc: '订单已取消', icon: '❌', class: 'cancelled' },
-    7: { text: '已退款', desc: '退款已处理', icon: '💰', class: 'cancelled' }
+    0: { text: '待支付', desc: '请在15分钟内完成支付', icon: 'time', class: 'pending' },
+    1: { text: '待接单', desc: '等待技师接单', icon: 'file-paste', class: 'paid' },
+    2: { text: '待服务', desc: '技师已接单，请准时等候', icon: 'check-circle', class: 'paid' },
+    3: { text: '技师出发中', desc: '技师正在前往您的位置', icon: 'car', class: 'in-progress' },
+    4: { text: '服务中', desc: '服务进行中，请享受服务', icon: 'gesture-press', class: 'in-progress' },
+    5: { text: '已完成', desc: '服务已完成，感谢您的使用', icon: 'check-circle-filled', class: 'completed' },
+    6: { text: '已取消', desc: '订单已取消', icon: 'close-circle', class: 'cancelled' },
+    7: { text: '已退款', desc: '退款已处理', icon: 'wallet', class: 'cancelled' }
   };
 
   // Mock 订单数据
@@ -681,11 +681,11 @@
     orderNo: orderNo || 'QY20260111143000A1B2',
     status: 2,
     serviceName: '全身中式推拿',
-    serviceIcon: '💆',
+    serviceIcon: 'gesture-press',
     duration: 60,
     techId: 1,
     techName: '张师傅',
-    techAvatar: '👨',
+    techAvatar: 'user',
     techRating: 4.9,
     techOrders: 328,
     price: 298,
@@ -714,7 +714,7 @@
     const header = document.getElementById('statusHeader');
     
     header.className = 'status-header ' + config.class;
-    document.getElementById('statusIcon').textContent = config.icon;
+    document.getElementById('statusIcon').innerHTML = `<t-icon name="${config.icon}" size="48px" />`;
     document.getElementById('statusText').textContent = config.text;
     document.getElementById('statusDesc').textContent = config.desc;
     
@@ -726,7 +726,7 @@
 
   // 渲染服务信息
   function renderServiceInfo() {
-    document.getElementById('serviceIcon').textContent = order.serviceIcon;
+    document.getElementById('serviceIcon').innerHTML = `<t-icon name="${order.serviceIcon}" size="24px" />`;
     document.getElementById('serviceName').textContent = order.serviceName;
     document.getElementById('serviceDuration').textContent = order.duration + '分钟';
     document.getElementById('servicePrice').textContent = '¥' + order.price;
@@ -734,7 +734,7 @@
 
   // 渲染技师信息
   function renderTechInfo() {
-    document.getElementById('techAvatar').textContent = order.techAvatar;
+    document.getElementById('techAvatar').innerHTML = `<t-icon name="${order.techAvatar}" size="24px" />`;
     document.getElementById('techName').textContent = order.techName;
     document.getElementById('techRating').textContent = order.techRating;
     document.getElementById('techOrders').textContent = order.techOrders;
@@ -931,7 +931,7 @@
     }
     
     // 模拟添加图片
-    reviewPhotos.push('📷');
+    reviewPhotos.push('image');
     renderPhotoList();
   };
 
@@ -946,7 +946,7 @@
     const container = document.getElementById('photoList');
     let html = reviewPhotos.map((photo, index) => `
       <div class="photo-item">
-        ${photo}
+        <t-icon name="${photo}" size="32px" />
         <span class="photo-remove" onclick="removePhoto(${index})">✕</span>
       </div>
     `).join('');

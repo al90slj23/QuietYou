@@ -52,19 +52,19 @@
     <div class="card-title">快捷操作</div>
     <div class="quick-actions">
       <div class="quick-action-item" onclick="TECH.navigateTo('schedule')">
-        <div class="quick-action-icon">📅</div>
+        <div class="quick-action-icon"><t-icon name="calendar" size="24px" /></div>
         <div class="quick-action-label">排班管理</div>
       </div>
       <div class="quick-action-item" onclick="TECH.navigateTo('wallet')">
-        <div class="quick-action-icon">💰</div>
+        <div class="quick-action-icon"><t-icon name="wallet" size="24px" /></div>
         <div class="quick-action-label">我的钱包</div>
       </div>
       <div class="quick-action-item" onclick="TECH.navigateTo('order/list')">
-        <div class="quick-action-icon">📋</div>
+        <div class="quick-action-icon"><t-icon name="file-paste" size="24px" /></div>
         <div class="quick-action-label">全部订单</div>
       </div>
       <div class="quick-action-item" onclick="TECH.navigateTo('profile')">
-        <div class="quick-action-icon">⚙️</div>
+        <div class="quick-action-icon"><t-icon name="setting" size="24px" /></div>
         <div class="quick-action-label">个人设置</div>
       </div>
     </div>
@@ -275,8 +275,8 @@
             <span class="pending-order-service">${order.service}</span>
             <span class="${statusClass}">${statusText}</span>
           </div>
-          <div class="pending-order-time">📅 ${order.time}</div>
-          <div class="pending-order-address">📍 ${order.address}</div>
+          <div class="pending-order-time"><t-icon name="calendar" size="14px" /> ${order.time}</div>
+          <div class="pending-order-address"><t-icon name="location" size="14px" /> ${order.address}</div>
           <div class="pending-order-actions">
             ${actionsHtml}
           </div>

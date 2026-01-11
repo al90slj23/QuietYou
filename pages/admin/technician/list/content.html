@@ -207,16 +207,16 @@
 (function() {
   // 模拟技师数据
   const mockTechs = [
-    { id: 20001, avatar: '👨', name: '李师傅', phone: '138****1234', shop: '轻松养生馆', shopId: 1, rating: 4.98, orders: 128, verify: 1, online: 1 },
-    { id: 20002, avatar: '👨', name: '王师傅', phone: '139****5678', shop: '康乐推拿店', shopId: 2, rating: 4.95, orders: 115, verify: 1, online: 1 },
-    { id: 20003, avatar: '👩', name: '张师傅', phone: '137****9012', shop: '悦享SPA', shopId: 3, rating: 4.92, orders: 108, verify: 1, online: 2 },
-    { id: 20004, avatar: '👨', name: '刘师傅', phone: '136****3456', shop: '轻松养生馆', shopId: 1, rating: 4.90, orders: 96, verify: 1, online: 0 },
-    { id: 20005, avatar: '👩', name: '陈师傅', phone: '135****7890', shop: '康乐推拿店', shopId: 2, rating: 4.88, orders: 89, verify: 1, online: 1 },
-    { id: 20006, avatar: '👨', name: '赵师傅', phone: '134****2345', shop: '悦享SPA', shopId: 3, rating: 4.85, orders: 76, verify: 1, online: 0 },
-    { id: 20007, avatar: '👨', name: '孙师傅', phone: '133****6789', shop: '轻松养生馆', shopId: 1, rating: 0, orders: 0, verify: 0, online: 0 },
-    { id: 20008, avatar: '👩', name: '周师傅', phone: '132****0123', shop: '康乐推拿店', shopId: 2, rating: 4.75, orders: 45, verify: 1, online: 1 },
-    { id: 20009, avatar: '👨', name: '吴师傅', phone: '131****4567', shop: '', shopId: 0, rating: 0, orders: 0, verify: 2, online: 0 },
-    { id: 20010, avatar: '👩', name: '郑师傅', phone: '130****8901', shop: '悦享SPA', shopId: 3, rating: 4.80, orders: 62, verify: 1, online: 1 }
+    { id: 20001, avatar: 'user', name: '李师傅', phone: '138****1234', shop: '轻松养生馆', shopId: 1, rating: 4.98, orders: 128, verify: 1, online: 1 },
+    { id: 20002, avatar: 'user', name: '王师傅', phone: '139****5678', shop: '康乐推拿店', shopId: 2, rating: 4.95, orders: 115, verify: 1, online: 1 },
+    { id: 20003, avatar: 'user', name: '张师傅', phone: '137****9012', shop: '悦享SPA', shopId: 3, rating: 4.92, orders: 108, verify: 1, online: 2 },
+    { id: 20004, avatar: 'user', name: '刘师傅', phone: '136****3456', shop: '轻松养生馆', shopId: 1, rating: 4.90, orders: 96, verify: 1, online: 0 },
+    { id: 20005, avatar: 'user', name: '陈师傅', phone: '135****7890', shop: '康乐推拿店', shopId: 2, rating: 4.88, orders: 89, verify: 1, online: 1 },
+    { id: 20006, avatar: 'user', name: '赵师傅', phone: '134****2345', shop: '悦享SPA', shopId: 3, rating: 4.85, orders: 76, verify: 1, online: 0 },
+    { id: 20007, avatar: 'user', name: '孙师傅', phone: '133****6789', shop: '轻松养生馆', shopId: 1, rating: 0, orders: 0, verify: 0, online: 0 },
+    { id: 20008, avatar: 'user', name: '周师傅', phone: '132****0123', shop: '康乐推拿店', shopId: 2, rating: 4.75, orders: 45, verify: 1, online: 1 },
+    { id: 20009, avatar: 'user', name: '吴师傅', phone: '131****4567', shop: '', shopId: 0, rating: 0, orders: 0, verify: 2, online: 0 },
+    { id: 20010, avatar: 'user', name: '郑师傅', phone: '130****8901', shop: '悦享SPA', shopId: 3, rating: 4.80, orders: 62, verify: 1, online: 1 }
   ];
 
   const verifyMap = {
@@ -252,11 +252,11 @@
       return `
         <tr>
           <td>${tech.id}</td>
-          <td><div class="tech-avatar">${tech.avatar}</div></td>
+          <td><div class="tech-avatar"><t-icon name="${tech.avatar}" size="20px" /></div></td>
           <td>${tech.name}</td>
           <td>${tech.phone}</td>
           <td>${tech.shop || '-'}</td>
-          <td><span class="rating-stars">⭐</span> ${tech.rating || '-'}</td>
+          <td><span class="rating-stars"><t-icon name="star-filled" size="14px" /></span> ${tech.rating || '-'}</td>
           <td>${tech.orders}</td>
           <td><span class="status-tag ${verify.class}">${verify.text}</span></td>
           <td>
@@ -380,7 +380,7 @@
         <div class="detail-grid">
           <div class="detail-item">
             <span class="detail-label">评分</span>
-            <span class="detail-value"><span class="rating-stars">⭐</span> ${tech.rating || '-'}</span>
+            <span class="detail-value"><span class="rating-stars"><t-icon name="star-filled" size="14px" /></span> ${tech.rating || '-'}</span>
           </div>
           <div class="detail-item">
             <span class="detail-label">完成订单</span>

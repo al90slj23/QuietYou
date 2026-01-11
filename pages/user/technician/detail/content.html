@@ -2,7 +2,7 @@
   <!-- 技师头部信息 -->
   <div class="tech-header">
     <div class="tech-avatar-section">
-      <div class="tech-avatar" id="techAvatar">👨</div>
+      <div class="tech-avatar" id="techAvatar"><t-icon name="user" size="40px" /></div>
       <div class="tech-status" id="techStatus">在线</div>
     </div>
     <div class="tech-basic-info">
@@ -412,11 +412,11 @@
   // Mock 数据 - 技师详情
   const technicianData = {
     1: {
-      id: 1, name: '张师傅', gender: 1, avatar: '👨', shopName: '康乐养生馆',
+      id: 1, name: '张师傅', gender: 1, avatar: 'user', shopName: '康乐养生馆',
       rating: 4.9, ratingCount: 156, orderCount: 328, years: 5, price: 198,
       status: 1, statusText: '在线',
       intro: '从事按摩推拿行业5年，擅长中式推拿、肩颈调理。曾在多家知名养生馆工作，积累了丰富的实践经验。手法专业，力度适中，深受顾客好评。',
-      photos: ['💆', '🧘', '💪'],
+      photos: ['gesture-press', 'spa', 'heart'],
       services: [
         { id: 1, name: '全身中式推拿', duration: 60, price: 298 },
         { id: 2, name: '肩颈深度调理', duration: 45, price: 198 },
@@ -424,11 +424,11 @@
       ]
     },
     2: {
-      id: 2, name: '李师傅', gender: 2, avatar: '👩', shopName: '悦享SPA会所',
+      id: 2, name: '李师傅', gender: 2, avatar: 'user', shopName: '悦享SPA会所',
       rating: 4.8, ratingCount: 98, orderCount: 256, years: 3, price: 228,
       status: 1, statusText: '在线',
       intro: '专业SPA理疗师，擅长精油按摩、泰式按摩。温柔细致，注重客户体验，让您在放松中享受专业服务。',
-      photos: ['🌸', '🧘', '💆'],
+      photos: ['flower', 'spa', 'gesture-press'],
       services: [
         { id: 4, name: '精油香薰SPA', duration: 90, price: 458 },
         { id: 5, name: '泰式古法按摩', duration: 90, price: 398 },
@@ -439,12 +439,12 @@
 
   // Mock 数据 - 评价列表（按时间降序排列）
   const reviewsData = [
-    { id: 1, techId: 1, userId: 101, userName: '用户***8', avatar: '😊', rating: 5, content: '张师傅手法很专业，力度刚刚好，做完整个人都轻松了很多。下次还会预约！', photos: ['📷'], serviceName: '全身中式推拿', createdAt: '2026-01-10 18:30' },
-    { id: 2, techId: 1, userId: 102, userName: '用户***2', avatar: '😄', rating: 5, content: '肩颈调理效果很好，困扰我很久的肩膀酸痛缓解了不少。', photos: [], serviceName: '肩颈深度调理', createdAt: '2026-01-09 20:15' },
-    { id: 3, techId: 1, userId: 103, userName: '用户***5', avatar: '🙂', rating: 4, content: '服务态度很好，准时到达，整体体验不错。', photos: [], serviceName: '背部推拿放松', createdAt: '2026-01-08 14:20' },
-    { id: 4, techId: 1, userId: 104, userName: '用户***9', avatar: '😊', rating: 5, content: '非常满意！师傅很专业，会根据身体情况调整手法。强烈推荐！', photos: ['📷', '📷'], serviceName: '全身中式推拿', createdAt: '2026-01-07 16:45' },
-    { id: 5, techId: 2, userId: 105, userName: '用户***1', avatar: '😄', rating: 5, content: '精油SPA太舒服了，整个人都放松下来了。李师傅手法很温柔。', photos: ['📷'], serviceName: '精油香薰SPA', createdAt: '2026-01-10 15:00' },
-    { id: 6, techId: 2, userId: 106, userName: '用户***7', avatar: '🙂', rating: 4, content: '泰式按摩很正宗，拉伸到位，就是有点疼，不过效果很好。', photos: [], serviceName: '泰式古法按摩', createdAt: '2026-01-09 19:30' }
+    { id: 1, techId: 1, userId: 101, userName: '用户***8', avatar: 'user', rating: 5, content: '张师傅手法很专业，力度刚刚好，做完整个人都轻松了很多。下次还会预约！', photos: ['image'], serviceName: '全身中式推拿', createdAt: '2026-01-10 18:30' },
+    { id: 2, techId: 1, userId: 102, userName: '用户***2', avatar: 'user', rating: 5, content: '肩颈调理效果很好，困扰我很久的肩膀酸痛缓解了不少。', photos: [], serviceName: '肩颈深度调理', createdAt: '2026-01-09 20:15' },
+    { id: 3, techId: 1, userId: 103, userName: '用户***5', avatar: 'user', rating: 4, content: '服务态度很好，准时到达，整体体验不错。', photos: [], serviceName: '背部推拿放松', createdAt: '2026-01-08 14:20' },
+    { id: 4, techId: 1, userId: 104, userName: '用户***9', avatar: 'user', rating: 5, content: '非常满意！师傅很专业，会根据身体情况调整手法。强烈推荐！', photos: ['image', 'image'], serviceName: '全身中式推拿', createdAt: '2026-01-07 16:45' },
+    { id: 5, techId: 2, userId: 105, userName: '用户***1', avatar: 'user', rating: 5, content: '精油SPA太舒服了，整个人都放松下来了。李师傅手法很温柔。', photos: ['image'], serviceName: '精油香薰SPA', createdAt: '2026-01-10 15:00' },
+    { id: 6, techId: 2, userId: 106, userName: '用户***7', avatar: 'user', rating: 4, content: '泰式按摩很正宗，拉伸到位，就是有点疼，不过效果很好。', photos: [], serviceName: '泰式古法按摩', createdAt: '2026-01-09 19:30' }
   ];
 
   // 获取技师数据
@@ -457,7 +457,7 @@
 
   // 渲染技师基本信息
   function renderBasicInfo() {
-    document.getElementById('techAvatar').textContent = tech.avatar;
+    document.getElementById('techAvatar').innerHTML = `<t-icon name="${tech.avatar}" size="40px" />`;
     document.getElementById('techName').textContent = tech.name;
     document.getElementById('techGender').textContent = tech.gender === 1 ? '♂' : '♀';
     document.getElementById('techGender').className = `tech-gender ${tech.gender === 1 ? 'male' : 'female'}`;
@@ -477,7 +477,7 @@
   function renderPhotos() {
     const gallery = document.getElementById('photoGallery');
     gallery.innerHTML = tech.photos.map(photo => `
-      <div class="photo-item">${photo}</div>
+      <div class="photo-item"><t-icon name="${photo}" size="48px" /></div>
     `).join('');
   }
 
@@ -519,17 +519,17 @@
     container.innerHTML = reviews.map(review => `
       <div class="review-item">
         <div class="review-header">
-          <div class="review-avatar">${review.avatar}</div>
+          <div class="review-avatar"><t-icon name="${review.avatar}" size="18px" /></div>
           <div class="review-user-info">
             <div class="review-user-name">${review.userName}</div>
             <div class="review-time">${review.createdAt}</div>
           </div>
-          <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+          <div class="review-rating">${Array(review.rating).fill('<t-icon name="star-filled" size="12px" />').join('')}</div>
         </div>
         <div class="review-content">${review.content}</div>
         ${review.photos.length > 0 ? `
           <div class="review-photos">
-            ${review.photos.map(p => `<div class="review-photo">${p}</div>`).join('')}
+            ${review.photos.map(p => `<div class="review-photo"><t-icon name="${p}" size="24px" /></div>`).join('')}
           </div>
         ` : ''}
         <div class="review-service">服务项目：${review.serviceName}</div>

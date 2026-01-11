@@ -5,7 +5,7 @@
     
     <!-- 服务信息 -->
     <div class="summary-item">
-      <div class="summary-icon" id="serviceIcon">💆</div>
+      <div class="summary-icon" id="serviceIcon"><t-icon name="gesture-press" size="20px" /></div>
       <div class="summary-content">
         <div class="summary-label">服务项目</div>
         <div class="summary-value" id="serviceName">全身中式推拿</div>
@@ -15,12 +15,12 @@
 
     <!-- 技师信息 -->
     <div class="summary-item">
-      <div class="summary-icon" id="techAvatar">👨</div>
+      <div class="summary-icon" id="techAvatar"><t-icon name="user" size="20px" /></div>
       <div class="summary-content">
         <div class="summary-label">服务技师</div>
         <div class="summary-value" id="techName">张师傅</div>
         <div class="summary-sub">
-          <span class="rating-star">⭐</span>
+          <span class="rating-star"><t-icon name="star-filled" size="12px" /></span>
           <span id="techRating">4.9</span>
         </div>
       </div>
@@ -28,7 +28,7 @@
 
     <!-- 预约时间 -->
     <div class="summary-item">
-      <div class="summary-icon">📅</div>
+      <div class="summary-icon"><t-icon name="calendar" size="20px" /></div>
       <div class="summary-content">
         <div class="summary-label">预约时间</div>
         <div class="summary-value" id="scheduleDateTime">2026-01-12 14:00</div>
@@ -37,7 +37,7 @@
 
     <!-- 服务地址 -->
     <div class="summary-item">
-      <div class="summary-icon">📍</div>
+      <div class="summary-icon"><t-icon name="location" size="20px" /></div>
       <div class="summary-content">
         <div class="summary-label">服务地址</div>
         <div class="summary-value" id="contactInfo">张三 13800138001</div>
@@ -365,12 +365,12 @@
   // 渲染订单摘要
   function renderOrderSummary() {
     // 服务信息
-    document.getElementById('serviceIcon').textContent = orderData.serviceIcon;
+    document.getElementById('serviceIcon').innerHTML = `<t-icon name="${orderData.serviceIcon}" size="20px" />`;
     document.getElementById('serviceName').textContent = orderData.serviceName;
     document.getElementById('serviceDuration').textContent = orderData.duration + '分钟';
     
     // 技师信息
-    document.getElementById('techAvatar').textContent = orderData.techAvatar;
+    document.getElementById('techAvatar').innerHTML = `<t-icon name="${orderData.techAvatar}" size="20px" />`;
     document.getElementById('techName').textContent = orderData.techName;
     
     // 预约时间

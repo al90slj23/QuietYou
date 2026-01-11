@@ -304,14 +304,14 @@
 (function() {
   // Mock 数据 - 服务分类
   const categories = [
-    { id: 1, name: '中式推拿', icon: '💆', color: '#e8f8ef' },
-    { id: 2, name: '泰式按摩', icon: '🧘', color: '#fef3c7' },
-    { id: 3, name: '足疗保健', icon: '🦶', color: '#dbeafe' },
-    { id: 4, name: '精油SPA', icon: '🌸', color: '#fce7f3' },
-    { id: 5, name: '肩颈调理', icon: '💪', color: '#e0e7ff' },
-    { id: 6, name: '艾灸理疗', icon: '🔥', color: '#fee2e2' },
-    { id: 7, name: '刮痧拔罐', icon: '🏺', color: '#d1fae5' },
-    { id: 8, name: '更多服务', icon: '➕', color: '#f3f4f6' }
+    { id: 1, name: '中式推拿', icon: 'gesture-press', color: '#e8f8ef' },
+    { id: 2, name: '泰式按摩', icon: 'spa', color: '#fef3c7' },
+    { id: 3, name: '足疗保健', icon: 'service', color: '#dbeafe' },
+    { id: 4, name: '精油SPA', icon: 'flower', color: '#fce7f3' },
+    { id: 5, name: '肩颈调理', icon: 'heart', color: '#e0e7ff' },
+    { id: 6, name: '艾灸理疗', icon: 'tips', color: '#fee2e2' },
+    { id: 7, name: '刮痧拔罐', icon: 'service', color: '#d1fae5' },
+    { id: 8, name: '更多服务', icon: 'add', color: '#f3f4f6' }
   ];
 
   // Mock 数据 - 热门服务
@@ -322,7 +322,7 @@
       desc: '传统手法，疏通经络，缓解疲劳',
       duration: 60,
       price: 298,
-      icon: '💆'
+      icon: 'gesture-press'
     },
     { 
       id: 2, 
@@ -330,7 +330,7 @@
       desc: '针对久坐人群，专业手法放松肩颈',
       duration: 45,
       price: 198,
-      icon: '💪'
+      icon: 'heart'
     },
     { 
       id: 3, 
@@ -338,17 +338,17 @@
       desc: '刺激足底穴位，促进血液循环',
       duration: 60,
       price: 168,
-      icon: '🦶'
+      icon: 'service'
     }
   ];
 
   // Mock 数据 - 推荐技师
   const recommendTechs = [
-    { id: 1, name: '张师傅', rating: 4.9, orders: 328, avatar: '👨' },
-    { id: 2, name: '李师傅', rating: 4.8, orders: 256, avatar: '👩' },
-    { id: 3, name: '王师傅', rating: 4.9, orders: 412, avatar: '👨' },
-    { id: 4, name: '陈师傅', rating: 4.7, orders: 189, avatar: '👩' },
-    { id: 5, name: '刘师傅', rating: 4.8, orders: 275, avatar: '👨' }
+    { id: 1, name: '张师傅', rating: 4.9, orders: 328, avatar: 'user' },
+    { id: 2, name: '李师傅', rating: 4.8, orders: 256, avatar: 'user' },
+    { id: 3, name: '王师傅', rating: 4.9, orders: 412, avatar: 'user' },
+    { id: 4, name: '陈师傅', rating: 4.7, orders: 189, avatar: 'user' },
+    { id: 5, name: '刘师傅', rating: 4.8, orders: 275, avatar: 'user' }
   ];
 
   // 渲染分类
@@ -357,7 +357,7 @@
     grid.innerHTML = categories.map(cat => `
       <div class="category-item" onclick="QY.navigateTo('service/list', { categoryId: ${cat.id} })">
         <div class="category-icon" style="background: ${cat.color}">
-          ${cat.icon}
+          <t-icon name="${cat.icon}" size="24px" />
         </div>
         <span class="category-name">${cat.name}</span>
       </div>
@@ -369,7 +369,7 @@
     const list = document.getElementById('hotServiceList');
     list.innerHTML = hotServices.map(service => `
       <div class="service-item" onclick="QY.navigateTo('service/detail', { id: ${service.id} })">
-        <div class="service-image">${service.icon}</div>
+        <div class="service-image"><t-icon name="${service.icon}" size="32px" /></div>
         <div class="service-info">
           <div>
             <div class="service-name">${service.name}</div>
@@ -389,9 +389,9 @@
     const list = document.getElementById('recommendTechList');
     list.innerHTML = recommendTechs.map(tech => `
       <div class="tech-card" onclick="QY.navigateTo('technician/detail', { id: ${tech.id} })">
-        <div class="tech-avatar">${tech.avatar}</div>
+        <div class="tech-avatar"><t-icon name="${tech.avatar}" size="28px" /></div>
         <div class="tech-name">${tech.name}</div>
-        <div class="tech-rating">⭐ ${tech.rating}</div>
+        <div class="tech-rating"><t-icon name="star-filled" size="12px" /> ${tech.rating}</div>
         <div class="tech-orders">已服务${tech.orders}单</div>
       </div>
     `).join('');

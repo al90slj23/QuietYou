@@ -28,42 +28,42 @@
     <div class="card-title">今日数据</div>
     <div class="today-stats">
       <div class="today-stat-item">
-        <div class="today-stat-icon">📦</div>
+        <div class="today-stat-icon"><t-icon name="package" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">68</div>
           <div class="today-stat-label">新订单</div>
         </div>
       </div>
       <div class="today-stat-item">
-        <div class="today-stat-icon">✅</div>
+        <div class="today-stat-icon"><t-icon name="check-circle" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">52</div>
           <div class="today-stat-label">已完成</div>
         </div>
       </div>
       <div class="today-stat-item">
-        <div class="today-stat-icon">💰</div>
+        <div class="today-stat-icon"><t-icon name="wallet" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">¥8,960</div>
           <div class="today-stat-label">交易额</div>
         </div>
       </div>
       <div class="today-stat-item">
-        <div class="today-stat-icon">👤</div>
+        <div class="today-stat-icon"><t-icon name="user" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">156</div>
           <div class="today-stat-label">活跃用户</div>
         </div>
       </div>
       <div class="today-stat-item">
-        <div class="today-stat-icon">💆</div>
+        <div class="today-stat-icon"><t-icon name="gesture-press" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">89</div>
           <div class="today-stat-label">在线技师</div>
         </div>
       </div>
       <div class="today-stat-item">
-        <div class="today-stat-icon">⭐</div>
+        <div class="today-stat-icon"><t-icon name="star-filled" size="28px" /></div>
         <div class="today-stat-info">
           <div class="today-stat-value">4.8</div>
           <div class="today-stat-label">平均评分</div>
@@ -78,22 +78,22 @@
       <div class="card-title">待处理事项</div>
       <div class="pending-list" id="pendingList">
         <div class="pending-item" onclick="ADMIN.navigateTo('technician/pending')">
-          <span class="pending-icon">💆</span>
+          <span class="pending-icon"><t-icon name="gesture-press" size="20px" /></span>
           <span class="pending-text">技师审核</span>
           <span class="pending-count">5</span>
         </div>
         <div class="pending-item" onclick="ADMIN.navigateTo('shop/pending')">
-          <span class="pending-icon">🏪</span>
+          <span class="pending-icon"><t-icon name="shop" size="20px" /></span>
           <span class="pending-text">商家审核</span>
           <span class="pending-count">2</span>
         </div>
         <div class="pending-item" onclick="ADMIN.navigateTo('finance/withdraw')">
-          <span class="pending-icon">💳</span>
+          <span class="pending-icon"><t-icon name="wallet" size="20px" /></span>
           <span class="pending-text">提现申请</span>
           <span class="pending-count">8</span>
         </div>
         <div class="pending-item" onclick="ADMIN.navigateTo('order/list', {status: 'refund'})">
-          <span class="pending-icon">↩️</span>
+          <span class="pending-icon"><t-icon name="rollback" size="20px" /></span>
           <span class="pending-text">退款处理</span>
           <span class="pending-count">3</span>
         </div>
@@ -500,7 +500,7 @@
         <div class="rank-item">
           <div class="rank-num ${rankClass}">${index + 1}</div>
           <div class="rank-name">${item.name}</div>
-          <div class="rank-value">⭐${item.rating} · ${item.orders}单</div>
+          <div class="rank-value"><t-icon name="star-filled" size="12px" />${item.rating} · ${item.orders}单</div>
         </div>
       `;
     }).join('');

@@ -149,24 +149,24 @@
 (function() {
   // 模拟服务数据
   let services = [
-    { id: 1, icon: '💆', name: '中式推拿60分钟', categoryId: 1, category: '中式推拿', price: 198, priceMax: 298, duration: 60, sort: 1, status: 1 },
-    { id: 2, icon: '💆', name: '中式推拿90分钟', categoryId: 1, category: '中式推拿', price: 268, priceMax: 398, duration: 90, sort: 2, status: 1 },
-    { id: 3, icon: '💆', name: '肩颈舒缓45分钟', categoryId: 1, category: '中式推拿', price: 158, priceMax: 238, duration: 45, sort: 3, status: 1 },
-    { id: 4, icon: '🧘', name: '泰式按摩60分钟', categoryId: 2, category: '泰式按摩', price: 228, priceMax: 328, duration: 60, sort: 1, status: 1 },
-    { id: 5, icon: '🧘', name: '泰式按摩90分钟', categoryId: 2, category: '泰式按摩', price: 298, priceMax: 428, duration: 90, sort: 2, status: 1 },
-    { id: 6, icon: '🦶', name: '足底按摩60分钟', categoryId: 3, category: '足疗保健', price: 168, priceMax: 258, duration: 60, sort: 1, status: 1 },
-    { id: 7, icon: '🦶', name: '足底按摩90分钟', categoryId: 3, category: '足疗保健', price: 238, priceMax: 358, duration: 90, sort: 2, status: 1 },
-    { id: 8, icon: '🌿', name: '全身精油SPA', categoryId: 4, category: '精油SPA', price: 398, priceMax: 598, duration: 90, sort: 1, status: 1 },
-    { id: 9, icon: '🌿', name: '香薰精油护理', categoryId: 4, category: '精油SPA', price: 298, priceMax: 458, duration: 60, sort: 2, status: 1 },
-    { id: 10, icon: '🔥', name: '艾灸理疗60分钟', categoryId: 5, category: '艾灸理疗', price: 188, priceMax: 288, duration: 60, sort: 1, status: 0 }
+    { id: 1, icon: 'gesture-press', name: '中式推拿60分钟', categoryId: 1, category: '中式推拿', price: 198, priceMax: 298, duration: 60, sort: 1, status: 1 },
+    { id: 2, icon: 'gesture-press', name: '中式推拿90分钟', categoryId: 1, category: '中式推拿', price: 268, priceMax: 398, duration: 90, sort: 2, status: 1 },
+    { id: 3, icon: 'gesture-press', name: '肩颈舒缓45分钟', categoryId: 1, category: '中式推拿', price: 158, priceMax: 238, duration: 45, sort: 3, status: 1 },
+    { id: 4, icon: 'gesture-press', name: '泰式按摩60分钟', categoryId: 2, category: '泰式按摩', price: 228, priceMax: 328, duration: 60, sort: 1, status: 1 },
+    { id: 5, icon: 'gesture-press', name: '泰式按摩90分钟', categoryId: 2, category: '泰式按摩', price: 298, priceMax: 428, duration: 90, sort: 2, status: 1 },
+    { id: 6, icon: 'gesture-press', name: '足底按摩60分钟', categoryId: 3, category: '足疗保健', price: 168, priceMax: 258, duration: 60, sort: 1, status: 1 },
+    { id: 7, icon: 'gesture-press', name: '足底按摩90分钟', categoryId: 3, category: '足疗保健', price: 238, priceMax: 358, duration: 90, sort: 2, status: 1 },
+    { id: 8, icon: 'spa', name: '全身精油SPA', categoryId: 4, category: '精油SPA', price: 398, priceMax: 598, duration: 90, sort: 1, status: 1 },
+    { id: 9, icon: 'spa', name: '香薰精油护理', categoryId: 4, category: '精油SPA', price: 298, priceMax: 458, duration: 60, sort: 2, status: 1 },
+    { id: 10, icon: 'heart', name: '艾灸理疗60分钟', categoryId: 5, category: '艾灸理疗', price: 188, priceMax: 288, duration: 60, sort: 1, status: 0 }
   ];
 
   const categoryIcons = {
-    1: '💆',
-    2: '🧘',
-    3: '🦶',
-    4: '🌿',
-    5: '🔥'
+    1: 'gesture-press',
+    2: 'gesture-press',
+    3: 'gesture-press',
+    4: 'spa',
+    5: 'heart'
   };
 
   let currentPage = 1;

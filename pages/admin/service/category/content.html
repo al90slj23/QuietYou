@@ -44,14 +44,14 @@
       <div class="form-group">
         <label class="form-label required">图标</label>
         <div class="icon-picker" id="iconPicker">
-          <span class="icon-option selected" data-icon="💆">💆</span>
-          <span class="icon-option" data-icon="🧘">🧘</span>
-          <span class="icon-option" data-icon="🦶">🦶</span>
-          <span class="icon-option" data-icon="💪">💪</span>
-          <span class="icon-option" data-icon="🌿">🌿</span>
-          <span class="icon-option" data-icon="🔥">🔥</span>
-          <span class="icon-option" data-icon="💎">💎</span>
-          <span class="icon-option" data-icon="🌸">🌸</span>
+          <span class="icon-option selected" data-icon="gesture-press"><t-icon name="gesture-press" size="24px" /></span>
+          <span class="icon-option" data-icon="spa"><t-icon name="spa" size="24px" /></span>
+          <span class="icon-option" data-icon="service"><t-icon name="service" size="24px" /></span>
+          <span class="icon-option" data-icon="heart"><t-icon name="heart" size="24px" /></span>
+          <span class="icon-option" data-icon="flower"><t-icon name="flower" size="24px" /></span>
+          <span class="icon-option" data-icon="tips"><t-icon name="tips" size="24px" /></span>
+          <span class="icon-option" data-icon="star"><t-icon name="star" size="24px" /></span>
+          <span class="icon-option" data-icon="gift"><t-icon name="gift" size="24px" /></span>
         </div>
       </div>
       <div class="form-group">
@@ -153,16 +153,16 @@
 (function() {
   // 模拟分类数据
   let categories = [
-    { id: 1, icon: '💆', name: '中式推拿', desc: '传统中医推拿手法，疏通经络', items: 8, sort: 1, status: 1 },
-    { id: 2, icon: '🧘', name: '泰式按摩', desc: '正宗泰式按摩，舒展筋骨', items: 5, sort: 2, status: 1 },
-    { id: 3, icon: '🦶', name: '足疗保健', desc: '足底穴位按摩，促进血液循环', items: 6, sort: 3, status: 1 },
-    { id: 4, icon: '🌿', name: '精油SPA', desc: '芳香精油护理，放松身心', items: 4, sort: 4, status: 1 },
-    { id: 5, icon: '🔥', name: '艾灸理疗', desc: '传统艾灸疗法，温经散寒', items: 3, sort: 5, status: 1 },
-    { id: 6, icon: '💎', name: '刮痧拔罐', desc: '中医刮痧拔罐，祛湿排毒', items: 4, sort: 6, status: 0 }
+    { id: 1, icon: 'gesture-press', name: '中式推拿', desc: '传统中医推拿手法，疏通经络', items: 8, sort: 1, status: 1 },
+    { id: 2, icon: 'spa', name: '泰式按摩', desc: '正宗泰式按摩，舒展筋骨', items: 5, sort: 2, status: 1 },
+    { id: 3, icon: 'service', name: '足疗保健', desc: '足底穴位按摩，促进血液循环', items: 6, sort: 3, status: 1 },
+    { id: 4, icon: 'flower', name: '精油SPA', desc: '芳香精油护理，放松身心', items: 4, sort: 4, status: 1 },
+    { id: 5, icon: 'tips', name: '艾灸理疗', desc: '传统艾灸疗法，温经散寒', items: 3, sort: 5, status: 1 },
+    { id: 6, icon: 'star', name: '刮痧拔罐', desc: '中医刮痧拔罐，祛湿排毒', items: 4, sort: 6, status: 0 }
   ];
 
   let editingId = null;
-  let selectedIcon = '💆';
+  let selectedIcon = 'gesture-press';
 
   function init() {
     renderTable();
@@ -183,7 +183,7 @@
             <button class="sort-btn" onclick="moveDown(${cat.id})" ${index === sorted.length - 1 ? 'disabled' : ''}>▼</button>
           </div>
         </td>
-        <td><span class="category-icon">${cat.icon}</span></td>
+        <td><span class="category-icon"><t-icon name="${cat.icon}" size="24px" /></span></td>
         <td>${cat.name}</td>
         <td>${cat.desc}</td>
         <td>${cat.items}</td>
@@ -226,8 +226,8 @@
     // 重置图标选择
     const picker = document.getElementById('iconPicker');
     picker.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-    picker.querySelector('[data-icon="💆"]').classList.add('selected');
-    selectedIcon = '💆';
+    picker.querySelector('[data-icon="gesture-press"]').classList.add('selected');
+    selectedIcon = 'gesture-press';
     
     document.getElementById('categoryModal').style.display = 'flex';
   };
