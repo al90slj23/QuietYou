@@ -3,6 +3,8 @@
 # ZERO 框架规范
 
 source "$(dirname "$0")/go.lib.sh"
+source "$(dirname "$0")/go.ai.sh"
+source "$(dirname "$0")/go.git.sh"
 
 log_info "开始 GitHub + 服务器部署..."
 
@@ -29,11 +31,16 @@ log_info "📤 Git 提交..."
 # Git add
 git add .
 
-# 获取提交信息
-read -p "请输入提交信息 (回车使用默认): " COMMIT_MSG
-if [ -z "$COMMIT_MSG" ]; then
-    COMMIT_MSG="chore: update $(date '+%Y-%m-%d %H:%M')"
-fi
+# 生成 AI 提交摘要
+log_info "🤖 正在生成 AI 提交摘要..."
+AI_COMMIT_MSG=$(get_ai_commit_message)
+
+# 交互式确认
+COMMIT_MSG=$(confirm_commit_message "$AI_COMMIT_MSG")
+
+echo ""
+log_info "📌 最终提交信息: $COMMIT_MSG"
+echo ""
 
 # Git commit
 if git commit -m "$COMMIT_MSG" 2>/dev/null; then
