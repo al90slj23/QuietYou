@@ -79,7 +79,7 @@
     </div>
 
     <!-- 入驻选择弹窗 -->
-    <t-popup v-model="showJoinPopup" placement="bottom">
+    <t-popup :visible="showJoinPopup" placement="bottom" :close-on-overlay-click="true" @visible-change="showJoinPopup = $event">
       <div class="join-popup">
         <div class="popup-header">
           <div class="popup-title">
@@ -119,6 +119,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { Popup as TPopup } from 'tdesign-mobile-vue'
 import { UserIcon, AddCircleIcon, InfoCircleIcon, ToolsIcon, ShopIcon, ChevronRightIcon, CloseIcon } from 'tdesign-icons-vue-next'
 
 const showJoinPopup = ref(false)

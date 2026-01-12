@@ -1,9 +1,9 @@
 <template>
-  <t-popup v-model="visible" placement="bottom" :close-on-overlay-click="true">
+  <t-popup :visible="visible" placement="bottom" :close-on-overlay-click="true" @visible-change="onVisibleChange">
     <div class="login-dialog">
       <div class="dialog-header">
         <h3>{{ title }}</h3>
-        <CloseIcon size="24px" class="close-btn" @click="visible = false" />
+        <CloseIcon size="24px" class="close-btn" @click="emit('update:modelValue', false)" />
       </div>
       
       <div class="dialog-body">
@@ -86,6 +86,10 @@ const visible = computed({
   set: (v) => emit('update:modelValue', v)
 })
 
+const onVisibleChange = (v) => {
+  emit('update:modelValue', v)
+}
+
 const title = computed(() => {
   const titles = {
     user: '用户登录',
@@ -133,7 +137,7 @@ const handleLogin = () => {
     type: props.type
   })
   
-  visible.value = false
+  emit('update:modelValue', false)
 }
 
 // 清理定时器
