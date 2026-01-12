@@ -108,6 +108,7 @@ $mobile: 768px;
   color: #fff;
   text-align: center;
   padding: 100px 0 60px;
+  background: linear-gradient(135deg, $primary-color 0%, #10b981 50%, #059669 100%);
   
   @media (max-width: $mobile) {
     min-height: auto;
@@ -121,8 +122,7 @@ $mobile: 768px;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, $primary-color 0%, #10b981 50%, #059669 100%);
-  z-index: -1;
+  z-index: 0;
   
   &::after {
     content: '';
@@ -136,6 +136,8 @@ $mobile: 768px;
 }
 
 .hero-content {
+  position: relative;
+  z-index: 1;
   max-width: 700px;
   margin: 0 auto;
   padding: 0 20px;
@@ -195,6 +197,8 @@ $mobile: 768px;
 }
 
 .hero-download {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 40px;
   margin-top: 60px;
