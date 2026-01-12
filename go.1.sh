@@ -39,35 +39,18 @@ fi
 # ============================================================
 # 阶段1: 前端构建
 # ============================================================
-step "📦 构建前端项目..."
-
-# 构建官网首页
-info "构建官网首页 (home)..."
-cd "$SCRIPT_DIR/apps/home"
-if [ ! -d "node_modules" ]; then
-    npm install
-fi
-npm run build
-if [ $? -ne 0 ]; then
-    error "官网首页构建失败"
-    exit 1
-fi
-success "官网首页构建完成"
-
-# 构建用户端
-info "构建用户端 (user)..."
-cd "$SCRIPT_DIR/apps/user"
-if [ ! -d "node_modules" ]; then
-    npm install
-fi
-npm run build
-if [ $? -ne 0 ]; then
-    error "用户端构建失败"
-    exit 1
-fi
-success "用户端构建完成"
+step "构建前端项目..."
 
 cd "$SCRIPT_DIR"
+if [ ! -d "node_modules" ]; then
+    npm install
+fi
+npm run build
+if [ $? -ne 0 ]; then
+    error "前端构建失败"
+    exit 1
+fi
+success "前端构建完成"
 
 # ============================================================
 # 阶段2: 显示变更

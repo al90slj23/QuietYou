@@ -10,8 +10,7 @@
 #
 # 【启动服务】
 # - PHP 后端 API: http://localhost:8080/api/
-# - Vue 官网: http://localhost:3000
-# - Vue 用户端: http://localhost:3001
+# - Vue 前端: http://localhost:3000
 #
 # ================================================================
 
@@ -24,32 +23,44 @@ check_php || exit 1
 # 加载环境变量
 load_env
 
-# 应用目录
-APPS_DIR="$SCRIPT_DIR/apps"
-
-# 检查 home 应用依赖
-if [ ! -d "$APPS_DIR/home/node_modules" ]; then
-    step "安装官网依赖..."
-    npm install --prefix "$APPS_DIR/home"
-fi
-
-# 检查 user 应用依赖
-if [ ! -d "$APPS_DIR/user/node_modules" ]; then
-    step "安装用户端依赖..."
-    npm install --prefix "$APPS_DIR/user"
-fi
-
-# PHP 后端端口
+# 端口配置
+VUE_PORT=3000
 PHP_PORT=${DEV_PORT:-8080}
+
+# 清理占用端口的进程
+kill_port() {
+    local port=$1
+    local pid=$(lsof -ti:$port 2>/dev/null)
+    if [ -n "$pid" ]; then
+        warn "端口 $port 被占用 (PID: $pid)，正在清理..."
+        kill -9 $pid 2>/dev/null
+        sleep 1
+        success "端口 $port 已释放"
+    fi
+}
+
+# 清理 Vue 和 PHP 端口
+kill_port $VUE_PORT
+kill_port $PHP_PORT
+
+# 检查根目录依赖
+if [ ! -d "$SCRIPT_DIR/node_modules" ]; then
+    step "安装前端依赖..."
+    npm install
+fi
 
 step "启动所有开发服务器..."
 echo ""
 info "后端 API:    http://localhost:$PHP_PORT/api/"
-info "官网:        http://localhost:3000"
-info "用户端:      http://localhost:3001"
-info "技师端:      http://localhost:3002 (待创建)"
-info "商家端:      http://localhost:3003 (待创建)"
-info "管理后台:    http://localhost:3004 (待创建)"
+info "前端:        http://localhost:$VUE_PORT"
+echo ""
+info "访问路径:"
+info "  /           官网首页"
+info "  /home/      官网"
+info "  /user/      用户端"
+info "  /admin/     管理后台"
+info "  /merchant/  商户端"
+info "  /tech/      技师端"
 echo ""
 info "按 Ctrl+C 停止所有服务器"
 echo ""
@@ -59,14 +70,8 @@ php -S localhost:$PHP_PORT -t . > /dev/null 2>&1 &
 PHP_PID=$!
 success "PHP 后端已启动 (PID: $PHP_PID)"
 
-# 后台启动官网
-npm run dev --prefix "$APPS_DIR/home" > /dev/null 2>&1 &
-HOME_PID=$!
-success "官网已启动 (PID: $HOME_PID)"
-
-# 启动用户端（前台运行）
-npm run dev --prefix "$APPS_DIR/user"
+# 启动 Vue 开发服务器（前台运行）
+npm run dev
 
 # 清理：当前台进程结束时，杀掉后台进程
 kill $PHP_PID 2>/dev/null
-kill $HOME_PID 2>/dev/null
