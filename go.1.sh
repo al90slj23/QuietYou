@@ -49,8 +49,17 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
+# 构建官网首页
+info "构建官网首页 (home)..."
+npm run build:home
+if [ $? -ne 0 ]; then
+    error "官网首页构建失败"
+    exit 1
+fi
+success "官网首页构建完成"
+
 # 构建用户端
-info "构建用户端 (Vue)..."
+info "构建用户端 (user)..."
 npm run build:user
 if [ $? -ne 0 ]; then
     error "用户端构建失败"

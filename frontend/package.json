@@ -4,15 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev:home": "vite --config vite.home.config.js",
     "dev:user": "vite --config vite.user.config.js",
     "dev:tech": "vite --config vite.tech.config.js",
-    "dev:shop": "vite --config vite.shop.config.js",
+    "dev:merchant": "vite --config vite.merchant.config.js",
     "dev:admin": "vite --config vite.admin.config.js",
+    "build:home": "vite build --config vite.home.config.js",
     "build:user": "vite build --config vite.user.config.js",
     "build:tech": "vite build --config vite.tech.config.js",
-    "build:shop": "vite build --config vite.shop.config.js",
+    "build:merchant": "vite build --config vite.merchant.config.js",
     "build:admin": "vite build --config vite.admin.config.js",
-    "build:all": "npm run build:user && npm run build:tech && npm run build:shop && npm run build:admin"
+    "build:all": "npm run build:home && npm run build:user && npm run build:tech && npm run build:merchant && npm run build:admin"
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
