@@ -4,16 +4,16 @@
   "lastUpdate": "2026-01-13",
   "chapters": [
     {
-      "id": "overview",
-      "title": "项目概述",
-      "file": "00.overview.md",
-      "icon": "info-circle"
-    },
-    {
       "id": "summary",
       "title": "一页看懂",
-      "file": "01.summary.md",
+      "file": "00.summary.md",
       "icon": "file-paste"
+    },
+    {
+      "id": "overview",
+      "title": "项目概述",
+      "file": "01.overview.md",
+      "icon": "info-circle"
     },
     {
       "id": "market",
