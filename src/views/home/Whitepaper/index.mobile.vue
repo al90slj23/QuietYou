@@ -142,7 +142,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import './Whitepaper.style.scss';
+@use './Whitepaper.style.scss' as *;
 
 .whitepaper-mobile {
   min-height: 100vh;

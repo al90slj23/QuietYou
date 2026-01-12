@@ -150,7 +150,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import './Whitepaper.style.scss';
+@use './Whitepaper.style.scss' as *;
 
 $sidebar-width: 280px;
 $toc-width: 200px;
