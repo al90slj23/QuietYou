@@ -109,13 +109,22 @@ fi
 # ============================================================
 step "📦 rsync 同步到服务器..."
 
-eval rsync -avz --progress --delete $RSYNC_EXCLUDES \
-    ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+# 构建 rsync 命令
+RSYNC_OPTS="-avz --progress --delete"
+if [ -n "$DEPLOY_IGNORE_FILE" ]; then
+    RSYNC_OPTS="$RSYNC_OPTS --exclude-from=$DEPLOY_IGNORE_FILE"
+fi
 
-if [ $? -eq 0 ]; then
+info "执行: rsync $RSYNC_OPTS ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
+rsync $RSYNC_OPTS ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+RSYNC_EXIT=$?
+
+if [ $RSYNC_EXIT -eq 0 ]; then
     success "rsync 同步成功"
+elif [ $RSYNC_EXIT -eq 23 ]; then
+    warn "rsync 部分文件传输警告 (code 23)，通常是权限问题，继续执行..."
 else
-    error "rsync 同步失败"
+    error "rsync 同步失败 (exit code: $RSYNC_EXIT)"
     exit 1
 fi
 
