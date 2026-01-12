@@ -1,58 +1,81 @@
 <template>
   <div class="party">
-    <section class="page-banner party-banner">
-      <div class="container">
-        <h1>党建动态</h1>
-        <p class="subtitle">PARTY BUILDING</p>
+    <!-- Hero Banner -->
+    <section class="hero">
+      <div class="hero-content">
+        <p class="hero-subtitle">PARTY BUILDING</p>
+        <h1 class="hero-title">党建动态</h1>
+        <p class="hero-desc">坚持党的领导，践行社会责任</p>
+      </div>
+      <div class="hero-wave">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path d="M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z" fill="#fff"/>
+        </svg>
       </div>
     </section>
 
-    <section class="intro section">
+    <!-- 党建引领 -->
+    <section class="section intro">
       <div class="container">
-        <div class="section-title">
-          <h2>党建引领</h2>
-          <p class="subtitle">PARTY LEADERSHIP</p>
+        <div class="section-header">
+          <p class="section-subtitle">PARTY LEADERSHIP</p>
+          <h2 class="section-title">党建引领</h2>
         </div>
         <div class="intro-content">
-          <p>轻养到家始终坚持党的领导，以习近平新时代中国特色社会主义思想为指导，将党建工作与企业发展深度融合，充分发挥党组织的战斗堡垒作用和党员的先锋模范作用。</p>
-          <p>我们积极响应国家号召，践行社会责任，在促进灵活就业、服务民生健康等方面贡献企业力量，努力实现经济效益与社会效益的统一。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="news-section section" style="background: #f9fafb;">
-      <div class="container">
-        <div class="section-title">
-          <h2>党建新闻</h2>
-          <p class="subtitle">PARTY NEWS</p>
-        </div>
-        <div class="news-list">
-          <div class="news-item" v-for="item in newsList" :key="item.id">
-            <div class="news-cover"><FlagIcon size="32px" /></div>
-            <div class="news-content">
-              <h3 class="news-title">{{ item.title }}</h3>
-              <p class="news-desc">{{ item.desc }}</p>
-              <div class="news-meta">
-                <span class="news-date">{{ item.date }}</span>
-              </div>
-            </div>
+          <div class="intro-card">
+            <p>轻养到家始终坚持党的领导，以习近平新时代中国特色社会主义思想为指导，将党建工作与企业发展深度融合，充分发挥党组织的战斗堡垒作用和党员的先锋模范作用。</p>
+            <p>我们积极响应国家号召，践行社会责任，在促进灵活就业、服务民生健康等方面贡献企业力量，努力实现经济效益与社会效益的统一。</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="activities section">
+    <!-- 主题活动 -->
+    <section class="section activities">
       <div class="container">
-        <div class="section-title">
-          <h2>主题活动</h2>
-          <p class="subtitle">THEMED ACTIVITIES</p>
+        <div class="section-header">
+          <p class="section-subtitle">THEMED ACTIVITIES</p>
+          <h2 class="section-title">主题活动</h2>
         </div>
         <div class="activities-grid">
-          <div class="activity-card" v-for="activity in activities" :key="activity.title">
-            <div class="activity-icon"><component :is="activity.icon" size="40px" /></div>
+          <div class="activity-card" v-for="(activity, index) in activities" :key="index">
+            <div class="activity-icon">
+              <component :is="activity.icon" size="32px" />
+            </div>
             <h3>{{ activity.title }}</h3>
             <p>{{ activity.desc }}</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 党建新闻 -->
+    <section class="section news">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-subtitle">PARTY NEWS</p>
+          <h2 class="section-title">党建新闻</h2>
+        </div>
+        <div class="news-grid">
+          <article class="news-card" v-for="item in newsList" :key="item.id">
+            <div class="news-cover">
+              <FlagIcon size="36px" />
+            </div>
+            <div class="news-body">
+              <h3 class="news-title">{{ item.title }}</h3>
+              <p class="news-desc">{{ item.desc }}</p>
+              <div class="news-footer">
+                <span class="news-date">
+                  <TimeIcon size="14px" />
+                  {{ item.date }}
+                </span>
+                <span class="news-link">
+                  阅读详情
+                  <ChevronRightIcon size="16px" />
+                </span>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -60,40 +83,225 @@
 </template>
 
 <script setup>
-import { FlagIcon, HeartIcon, UsergroupIcon, BookIcon } from 'tdesign-icons-vue-next'
-
-const newsList = [
-  { id: 1, title: '轻养到家党支部成立大会顺利召开', desc: '轻养到家党支部正式成立，标志着公司党建工作迈入新阶段...', date: '2026-01-12' },
-  { id: 2, title: '学习贯彻党的二十大精神专题会议', desc: '公司组织全体党员深入学习党的二十大报告精神...', date: '2026-01-08' },
-  { id: 3, title: '党员志愿服务进社区活动', desc: '公司党员积极参与社区志愿服务，为社区居民提供健康咨询...', date: '2026-01-05' }
-]
+import { FlagIcon, HeartIcon, UsergroupIcon, BookIcon, TimeIcon, ChevronRightIcon } from 'tdesign-icons-vue-next'
 
 const activities = [
-  { icon: BookIcon, title: '理论学习', desc: '定期组织党员学习党的理论知识和方针政策' },
-  { icon: HeartIcon, title: '志愿服务', desc: '开展社区服务、公益活动，践行社会责任' },
-  { icon: UsergroupIcon, title: '组织生活', desc: '规范开展"三会一课"等组织生活' },
-  { icon: FlagIcon, title: '主题党日', desc: '每月开展主题党日活动，增强党性修养' }
+  { icon: BookIcon, title: '理论学习', desc: '定期组织党员学习党的理论知识和方针政策，提升政治素养' },
+  { icon: HeartIcon, title: '志愿服务', desc: '开展社区服务、公益活动，用实际行动践行社会责任' },
+  { icon: UsergroupIcon, title: '组织生活', desc: '规范开展"三会一课"等组织生活，增强组织凝聚力' },
+  { icon: FlagIcon, title: '主题党日', desc: '每月开展主题党日活动，增强党性修养和使命担当' }
+]
+
+const newsList = [
+  { id: 1, title: '轻养到家党支部成立大会顺利召开', desc: '轻养到家党支部正式成立，标志着公司党建工作迈入新阶段，将进一步加强党对企业的领导。', date: '2026-01-12' },
+  { id: 2, title: '学习贯彻党的二十大精神专题会议', desc: '公司组织全体党员深入学习党的二十大报告精神，深刻领会新时代党的使命任务。', date: '2026-01-08' },
+  { id: 3, title: '党员志愿服务进社区活动', desc: '公司党员积极参与社区志愿服务，为社区居民提供健康咨询和免费推拿服务。', date: '2026-01-05' }
 ]
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #07c160;
-$party-color: #d32f2f;
+$party-color: #c62828;
+$party-light: #ffebee;
+$text-primary: #1a1a1a;
+$text-secondary: #666666;
+$background-light: #f8f9fa;
 
-.party-banner { background: linear-gradient(135deg, $party-color 0%, #c62828 100%) !important; }
-.page-banner { color: #fff; text-align: center; padding: 140px 0 80px; h1 { font-size: 42px; font-weight: 700; margin-bottom: 10px; } .subtitle { font-size: 14px; opacity: 0.8; letter-spacing: 3px; } }
+.hero {
+  position: relative;
+  min-height: 60vh;
+  background: linear-gradient(135deg, $party-color 0%, #b71c1c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  padding: 120px 40px 160px;
+  
+  &-content { position: relative; z-index: 1; }
+  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
+  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
+  &-desc { font-size: 20px; opacity: 0.9; }
+  
+  &-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    svg { display: block; width: 100%; height: 80px; }
+  }
+}
 
-.intro-content { max-width: 900px; margin: 0 auto; p { font-size: 16px; line-height: 2; color: #555; margin-bottom: 20px; text-align: justify; &:last-child { margin-bottom: 0; } } }
+.section {
+  padding: 100px 0;
+  
+  &:nth-child(odd) { background: #fff; }
+  &:nth-child(even) { background: $background-light; }
+}
 
-.news-list { display: flex; flex-direction: column; gap: 20px; }
-.news-item { display: flex; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; transition: all 0.3s; cursor: pointer; &:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); } }
-.news-cover { width: 80px; height: 80px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: $party-color; flex-shrink: 0; }
-.news-content { flex: 1; margin-left: 20px; display: flex; flex-direction: column; }
-.news-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 8px; }
-.news-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.news-meta { margin-top: auto; }
-.news-date { font-size: 13px; color: #999; }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
 
-.activities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
-.activity-card { background: #fff; border: 1px solid #eee; padding: 30px; border-radius: 12px; text-align: center; transition: all 0.3s; &:hover { box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); transform: translateY(-5px); } .activity-icon { color: $party-color; margin-bottom: 15px; } h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #333; } p { font-size: 14px; color: #666; line-height: 1.6; } }
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: $party-color;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 40px;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.intro-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: $party-light;
+  border-radius: 20px;
+  padding: 48px;
+  border-left: 4px solid $party-color;
+  
+  p {
+    font-size: 17px;
+    line-height: 2;
+    color: $text-secondary;
+    margin-bottom: 20px;
+    
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.activity-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 28px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.activity-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  background: $party-light;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $party-color;
+}
+
+.activity-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 12px;
+}
+
+.activity-card p {
+  font-size: 14px;
+  color: $text-secondary;
+  line-height: 1.7;
+}
+
+.news-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.news-card {
+  display: flex;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    
+    .news-link { color: $party-color; }
+  }
+}
+
+.news-cover {
+  width: 160px;
+  min-height: 160px;
+  background: linear-gradient(135deg, $party-light 0%, #ffcdd2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $party-color;
+  flex-shrink: 0;
+}
+
+.news-body {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.news-desc {
+  font-size: 15px;
+  color: $text-secondary;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.news-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.news-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #999;
+}
+
+.news-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: $text-secondary;
+  transition: color 0.3s;
+}
 </style>

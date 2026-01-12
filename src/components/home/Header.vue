@@ -80,7 +80,11 @@ $mobile: 768px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     
     .logo-text { color: $primary-color; }
-    .nav-link { color: #333; &:hover, &.router-link-active { color: $primary-color; } }
+    .nav-link { 
+      color: #333; 
+      &::after { background: $primary-color; }
+      &:hover, &.router-link-active { color: $primary-color; } 
+    }
     .menu-icon, &::before, &::after { background: #333; }
   }
 }
@@ -124,13 +128,16 @@ $mobile: 768px;
       left: 0;
       width: 0;
       height: 2px;
-      background: $primary-color;
+      background: #fff;
       transition: width 0.3s;
     }
     
     &:hover, &.router-link-active {
-      color: $primary-color;
       &::after { width: 100%; }
+    }
+    
+    &.router-link-active {
+      font-weight: 600;
     }
   }
 }
