@@ -21,11 +21,15 @@
       <!-- 下载入口 -->
       <div class="hero-download" id="download">
         <div class="download-item">
-          <div class="download-icon">📱</div>
+          <div class="download-icon">
+            <MobileIcon size="28px" />
+          </div>
           <span>微信小程序</span>
         </div>
         <div class="download-item">
-          <div class="download-icon">💬</div>
+          <div class="download-icon">
+            <LogoWechatStrokeIcon size="28px" />
+          </div>
           <span>微信公众号</span>
         </div>
       </div>
@@ -41,7 +45,9 @@
         
         <div class="features-grid">
           <div class="feature-card" v-for="feature in features" :key="feature.title">
-            <div class="feature-icon">{{ feature.icon }}</div>
+            <div class="feature-icon">
+              <component :is="feature.icon" size="48px" />
+            </div>
             <h3>{{ feature.title }}</h3>
             <p>{{ feature.desc }}</p>
           </div>
@@ -64,11 +70,20 @@
 </template>
 
 <script setup>
+import { 
+  CertificateIcon, 
+  SecuredIcon, 
+  TimeIcon, 
+  StarIcon,
+  MobileIcon,
+  LogoWechatStrokeIcon
+} from 'tdesign-icons-vue-next'
+
 const features = [
-  { icon: '🏆', title: '专业认证', desc: '所有技师均经过严格培训和资质认证，持证上岗' },
-  { icon: '🔒', title: '安全保障', desc: '全程服务可追溯，平台担保交易，让您放心享受' },
-  { icon: '⏰', title: '随叫随到', desc: '24小时在线预约，快速响应，服务上门' },
-  { icon: '💯', title: '品质服务', desc: '标准化服务流程，专业手法，效果显著' }
+  { icon: CertificateIcon, title: '专业认证', desc: '所有技师均经过严格培训和资质认证，持证上岗' },
+  { icon: SecuredIcon, title: '安全保障', desc: '全程服务可追溯，平台担保交易，让您放心享受' },
+  { icon: TimeIcon, title: '随叫随到', desc: '24小时在线预约，快速响应，服务上门' },
+  { icon: StarIcon, title: '品质服务', desc: '标准化服务流程，专业手法，效果显著' }
 ]
 
 const stats = [
@@ -210,12 +225,10 @@ $mobile: 768px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
     
     @media (max-width: $mobile) {
       width: 50px;
       height: 50px;
-      font-size: 24px;
     }
   }
   
@@ -259,7 +272,7 @@ $mobile: 768px;
   }
   
   .feature-icon {
-    font-size: 48px;
+    color: $primary-color;
     margin-bottom: 20px;
   }
   

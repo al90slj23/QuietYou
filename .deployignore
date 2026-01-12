@@ -5,10 +5,10 @@
 
 # 开发依赖
 node_modules/
-frontend/node_modules/
+apps/*/node_modules/
 
 # 源代码（只部署构建产物）
-frontend/src/
+apps/*/src/
 
 # 版本控制
 .git/
@@ -34,3 +34,9 @@ ZERO/
 
 # 部署脚本本身
 .deployignore
+
+# 宝塔面板配置文件（不要删除）
+.user.ini
+
+# 旧的 frontend 目录
+frontend/

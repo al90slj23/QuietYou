@@ -41,17 +41,13 @@ fi
 # ============================================================
 step "📦 构建前端项目..."
 
-cd "$SCRIPT_DIR/frontend"
-
-# 安装依赖（如果需要）
-if [ ! -d "node_modules" ]; then
-    info "安装前端依赖..."
-    npm install
-fi
-
 # 构建官网首页
 info "构建官网首页 (home)..."
-npm run build:home
+cd "$SCRIPT_DIR/apps/home"
+if [ ! -d "node_modules" ]; then
+    npm install
+fi
+npm run build
 if [ $? -ne 0 ]; then
     error "官网首页构建失败"
     exit 1
@@ -60,7 +56,11 @@ success "官网首页构建完成"
 
 # 构建用户端
 info "构建用户端 (user)..."
-npm run build:user
+cd "$SCRIPT_DIR/apps/user"
+if [ ! -d "node_modules" ]; then
+    npm install
+fi
+npm run build
 if [ $? -ne 0 ]; then
     error "用户端构建失败"
     exit 1
@@ -142,7 +142,7 @@ fi
 # ============================================================
 step "🔧 服务器操作..."
 
-ssh ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+ssh -T ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
 cd /www/wwwroot/qy.im.sh.cn
 chown -R www:www . 2>/dev/null || true
 chmod -R 755 . 2>/dev/null || true

@@ -14,7 +14,9 @@
         <div class="channels-grid">
           <!-- 微信小程序 -->
           <div class="channel-card">
-            <div class="channel-icon">📱</div>
+            <div class="channel-icon">
+              <MobileIcon size="48px" />
+            </div>
             <h3>轻养到家小程序</h3>
             <p class="channel-desc">轻养到家官方出品</p>
             <div class="qrcode-placeholder">
@@ -25,7 +27,9 @@
 
           <!-- 微信公众号 -->
           <div class="channel-card">
-            <div class="channel-icon">💬</div>
+            <div class="channel-icon">
+              <LogoWechatStrokeIcon size="48px" />
+            </div>
             <h3>轻养到家公众号</h3>
             <p class="channel-desc">轻养到家官方出品</p>
             <div class="qrcode-placeholder">
@@ -36,11 +40,13 @@
 
           <!-- H5网页版 -->
           <div class="channel-card">
-            <div class="channel-icon">🌐</div>
+            <div class="channel-icon">
+              <InternetIcon size="48px" />
+            </div>
             <h3>轻养到家网页版</h3>
             <p class="channel-desc">轻养到家官方出品</p>
             <div class="channel-actions">
-              <a href="/pages/user/" class="btn btn-primary">立即访问</a>
+              <a href="/user/" class="btn btn-primary">立即访问</a>
             </div>
             <p class="channel-tip">无需下载，浏览器直接访问</p>
           </div>
@@ -60,6 +66,10 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { MobileIcon, LogoWechatStrokeIcon, InternetIcon } from 'tdesign-icons-vue-next'
+</script>
 
 <style lang="scss" scoped>
 $primary-color: #07c160;
@@ -121,7 +131,7 @@ $mobile: 768px;
   }
   
   .channel-icon {
-    font-size: 48px;
+    color: $primary-color;
     margin-bottom: 20px;
   }
   

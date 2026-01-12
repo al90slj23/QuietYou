@@ -54,7 +54,7 @@ fi
 # ============================================================
 step "🔧 服务器操作..."
 
-ssh ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+ssh -T ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
 cd /www/wwwroot/qy.im.sh.cn
 chown -R www:www . 2>/dev/null || true
 chmod -R 755 . 2>/dev/null || true

@@ -4,17 +4,16 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  root: 'src/user',
   base: '/user/',
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src/user'),
-      '@common': resolve(__dirname, 'src/common')
+      '@': resolve(__dirname, 'src'),
+      '@shared': resolve(__dirname, '../../packages/shared'),
+      '@common': resolve(__dirname, '../../packages/shared/common')
     }
   },
-  publicDir: 'public',
   build: {
-    outDir: '../../../pages/user',
+    outDir: '../../pages/user',
     emptyOutDir: true
   },
   server: {

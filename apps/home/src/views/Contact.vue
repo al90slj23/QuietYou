@@ -14,7 +14,9 @@
         <div class="contact-grid">
           <!-- 客服热线 -->
           <div class="contact-card">
-            <div class="contact-icon">📞</div>
+            <div class="contact-icon">
+              <CallIcon size="48px" />
+            </div>
             <h3>客服热线</h3>
             <p class="contact-value">400-888-8888</p>
             <p class="contact-desc">如您遇到服务过程中的问题想要咨询或投诉，可拨打客服服务热线</p>
@@ -22,7 +24,9 @@
 
           <!-- 电子邮箱 -->
           <div class="contact-card">
-            <div class="contact-icon">📧</div>
+            <div class="contact-icon">
+              <MailIcon size="48px" />
+            </div>
             <h3>电子邮箱</h3>
             <p class="contact-value">service@qingyang.com</p>
             <p class="contact-desc">商务合作、意见反馈请发送邮件至此邮箱</p>
@@ -30,7 +34,9 @@
 
           <!-- 公众号 -->
           <div class="contact-card">
-            <div class="contact-icon">💬</div>
+            <div class="contact-icon">
+              <LogoWechatStrokeIcon size="48px" />
+            </div>
             <h3>官方公众号</h3>
             <div class="qrcode-placeholder">
               <span>公众号二维码</span>
@@ -52,6 +58,10 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { CallIcon, MailIcon, LogoWechatStrokeIcon } from 'tdesign-icons-vue-next'
+</script>
 
 <style lang="scss" scoped>
 $primary-color: #07c160;
@@ -112,7 +122,7 @@ $mobile: 768px;
   }
   
   .contact-icon {
-    font-size: 48px;
+    color: $primary-color;
     margin-bottom: 20px;
   }
   
