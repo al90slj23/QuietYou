@@ -82,6 +82,9 @@
               轻养到家自上线以来，已服务数十万用户，覆盖全国多个城市，
               获得用户的一致好评与信赖。
             </p>
+            <div class="stats-image">
+              <img src="https://images.pexels.com/photos/6187650/pexels-photo-6187650.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop" alt="专业按摩服务" loading="lazy" />
+            </div>
           </div>
           <div class="stats-grid">
             <div 
@@ -485,6 +488,24 @@ $background-light: #f8f9fa;
   color: $text-secondary;
   line-height: 1.9;
   margin-top: 24px;
+}
+
+.stats-image {
+  margin-top: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
 }
 
 .stats-grid {

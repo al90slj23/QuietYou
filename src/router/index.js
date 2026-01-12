@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+// 导航门户
+const portalRoutes = [
+  { path: '/', component: () => import('../views/Portal/index.vue'), meta: { title: '轻养到家' } }
+]
+
 // 官网路由
 const homeRoutes = [
-  { path: '/', redirect: '/home' },
   { 
     path: '/home', 
     component: () => import('../layouts/HomeLayout.vue'),
@@ -79,6 +83,7 @@ const techRoutes = [
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    ...portalRoutes,
     ...homeRoutes,
     ...userRoutes,
     ...adminRoutes,

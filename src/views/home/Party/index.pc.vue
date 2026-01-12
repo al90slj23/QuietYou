@@ -74,7 +74,7 @@
             :class="`animate-delay-${index + 1}`"
           >
             <div class="news-cover">
-              <FlagIcon size="36px" />
+              <img :src="item.image" :alt="item.title" loading="lazy" />
             </div>
             <div class="news-body">
               <h3 class="news-title">{{ item.title }}</h3>
@@ -112,9 +112,9 @@ const activities = [
 ]
 
 const newsList = [
-  { id: 1, title: '轻养到家党支部成立大会顺利召开', desc: '轻养到家党支部正式成立，标志着公司党建工作迈入新阶段，将进一步加强党对企业的领导。', date: '2026-01-12' },
-  { id: 2, title: '学习贯彻党的二十大精神专题会议', desc: '公司组织全体党员深入学习党的二十大报告精神，深刻领会新时代党的使命任务。', date: '2026-01-08' },
-  { id: 3, title: '党员志愿服务进社区活动', desc: '公司党员积极参与社区志愿服务，为社区居民提供健康咨询和免费推拿服务。', date: '2026-01-05' }
+  { id: 1, title: '轻养到家党支部成立大会顺利召开', desc: '轻养到家党支部正式成立，标志着公司党建工作迈入新阶段，将进一步加强党对企业的领导。', date: '2026-01-12', image: 'https://images.pexels.com/photos/7651937/pexels-photo-7651937.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+  { id: 2, title: '学习贯彻党的二十大精神专题会议', desc: '公司组织全体党员深入学习党的二十大报告精神，深刻领会新时代党的使命任务。', date: '2026-01-08', image: 'https://images.pexels.com/photos/7652178/pexels-photo-7652178.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' },
+  { id: 3, title: '党员志愿服务进社区活动', desc: '公司党员积极参与社区志愿服务，为社区居民提供健康咨询和免费推拿服务。', date: '2026-01-05', image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop' }
 ]
 </script>
 
@@ -315,20 +315,22 @@ $background-light: #f8f9fa;
 }
 
 .news-cover {
-  width: 180px;
-  min-height: 180px;
-  background: linear-gradient(135deg, $party-light 0%, #ffcdd2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $party-color;
+  width: 200px;
+  min-height: 160px;
+  position: relative;
   flex-shrink: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
-.news-card:hover .news-cover {
-  background: linear-gradient(135deg, $party-color 0%, #b71c1c 100%);
-  color: #fff;
+.news-card:hover .news-cover img {
+  transform: scale(1.1);
 }
 
 .news-body {

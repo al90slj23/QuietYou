@@ -26,6 +26,9 @@
           <h2 class="section-title">公司简介</h2>
         </div>
         <div class="intro-content">
+          <div class="intro-image animate-on-scroll">
+            <img src="https://images.pexels.com/photos/5473184/pexels-photo-5473184.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop" alt="专业养生服务" loading="lazy" />
+          </div>
           <div class="intro-text animate-on-scroll animate-delay-1">
             <p>轻养到家是一家专注于上门养生推拿服务的O2O平台，致力于"让专业养生服务触手可及，为用户带来更健康、更舒适的生活体验"。</p>
             <p>我们秉承"用科技传递健康"的战略愿景，通过不断迭代的互联网系统、严格的服务培训及可追溯的服务品质，与众多专业技师一同为消费者提供便捷、安全、高效的健康服务。</p>
@@ -243,8 +246,29 @@ $background-light: #f8f9fa;
 }
 
 .intro-content {
-  max-width: 900px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1100px;
   margin: 0 auto;
+}
+
+.intro-image {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
 }
 
 .intro-text {

@@ -130,6 +130,9 @@
               <p>咨询热线</p>
               <a href="tel:400-888-8888" class="contact-phone">400-888-8888</a>
             </div>
+            <div class="form-image animate-on-scroll animate-delay-3">
+              <img src="https://images.pexels.com/photos/8312824/pexels-photo-8312824.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="专业养生服务" loading="lazy" />
+            </div>
           </div>
           <div class="form-card animate-on-scroll animate-slide-right animate-delay-2">
             <div class="form-group">
@@ -524,6 +527,24 @@ $background-light: #f8f9fa;
 .form-intro {
   .section-subtitle { text-align: left; }
   .section-title { text-align: left; font-size: 40px; margin-bottom: 20px; }
+}
+
+.form-image {
+  margin-top: 32px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
 }
 
 .form-desc {

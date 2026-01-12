@@ -21,6 +21,16 @@
     <!-- 时间线 -->
     <section class="section timeline-section">
       <div class="container">
+        <div class="timeline-header">
+          <div class="timeline-intro animate-on-scroll">
+            <p class="section-subtitle">OUR JOURNEY</p>
+            <h2 class="section-title">发展历程</h2>
+            <p class="timeline-desc">从创立到成长，每一步都凝聚着我们对健康服务的执着追求</p>
+          </div>
+          <div class="timeline-image animate-on-scroll animate-delay-1">
+            <img src="https://images.pexels.com/photos/6187650/pexels-photo-6187650.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="专业养生服务" loading="lazy" />
+          </div>
+        </div>
         <div class="timeline">
           <div 
             class="timeline-item animate-on-scroll" 
@@ -234,6 +244,42 @@ $background-light: #f8f9fa;
   font-size: 44px;
   font-weight: 600;
   color: $text-primary;
+}
+
+.timeline-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.timeline-intro {
+  .section-subtitle { text-align: left; }
+  .section-title { text-align: left; margin-bottom: 20px; }
+}
+
+.timeline-desc {
+  font-size: 17px;
+  color: $text-secondary;
+  line-height: 1.8;
+}
+
+.timeline-image {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
 }
 
 .timeline {
