@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // 导航门户
 const portalRoutes = [
-  { path: '/', component: () => import('../views/Portal/index.vue'), meta: { title: '轻养到家' } }
+  { path: '/', component: () => import('../views/index.vue'), meta: { title: '轻养到家' } }
 ]
 
 // 官网路由

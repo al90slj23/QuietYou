@@ -25,7 +25,7 @@
       <p class="slogan">专业上门养生推拿服务平台</p>
     </div>
 
-    <!-- 导航卡片 - 统一左图标右文字布局 -->
+    <!-- 导航卡片 -->
     <div class="portal-cards">
       <!-- 预约技师（主卡片） -->
       <router-link to="/user" class="portal-card card-primary" :class="{ 'animate-in': isLoaded }" style="--delay: 0.1s">
@@ -150,7 +150,6 @@ $text-tertiary: #999999;
   overflow: hidden;
 }
 
-// 背景
 .portal-bg {
   position: absolute;
   inset: 0;
@@ -167,7 +166,6 @@ $text-tertiary: #999999;
   background: radial-gradient(circle, rgba(7, 193, 96, 0.15) 0%, transparent 70%);
 }
 
-// Logo
 .portal-header {
   text-align: center;
   margin-bottom: 48px;
@@ -210,7 +208,6 @@ h1 {
   letter-spacing: 1px;
 }
 
-// 卡片
 .portal-cards {
   display: flex;
   flex-direction: column;
@@ -290,7 +287,6 @@ h1 {
   margin-left: 8px;
 }
 
-// 主卡片
 .card-primary {
   .card-icon {
     width: 56px;
@@ -302,7 +298,6 @@ h1 {
   }
 }
 
-// 次要卡片
 .card-secondary {
   flex: 1.2;
   padding: 20px 16px;
@@ -319,7 +314,6 @@ h1 {
   }
 }
 
-// 第三卡片
 .card-tertiary {
   flex: 1;
   padding: 20px 16px;
@@ -336,7 +330,6 @@ h1 {
   }
 }
 
-// 底部
 .portal-footer {
   text-align: center;
   margin-top: 32px;
@@ -349,7 +342,6 @@ h1 {
   }
 }
 
-// 入场动画
 .portal-header,
 .portal-card,
 .portal-footer {
@@ -365,7 +357,6 @@ h1 {
   }
 }
 
-// 弹窗
 .join-popup {
   background: #fff;
   border-radius: 24px 24px 0 0;

@@ -35,7 +35,7 @@
         <p class="portal-slogan">专业上门养生推拿服务平台</p>
       </div>
 
-      <!-- 导航卡片 - 统一垂直布局 -->
+      <!-- 导航卡片 -->
       <div class="portal-cards">
         <!-- 第一行：预约技师（整行） -->
         <router-link to="/user" class="portal-card card-primary" :class="{ 'animate-in': isLoaded }" style="--delay: 0.15s">
@@ -103,7 +103,6 @@
       :footer="false"
       :close-on-overlay-click="true"
       width="480px"
-      class="join-dialog"
     >
       <div class="join-modal">
         <div class="modal-header">
@@ -145,7 +144,6 @@ const showJoinDialog = ref(false)
 const isLoaded = ref(false)
 
 onMounted(() => {
-  // 延迟触发动画，确保 DOM 渲染完成
   setTimeout(() => {
     isLoaded.value = true
   }, 100)
@@ -172,7 +170,6 @@ $text-tertiary: #999999;
   padding: 60px 24px;
 }
 
-// 背景装饰
 .portal-bg {
   position: absolute;
   inset: 0;
@@ -224,7 +221,6 @@ $text-tertiary: #999999;
   50% { transform: translateY(-40px) scale(1.02); }
 }
 
-// 主内容
 .portal-content {
   position: relative;
   z-index: 1;
@@ -232,7 +228,6 @@ $text-tertiary: #999999;
   width: 100%;
 }
 
-// Logo 区域
 .portal-header {
   text-align: center;
   margin-bottom: 64px;
@@ -298,7 +293,6 @@ $text-tertiary: #999999;
   letter-spacing: 2px;
 }
 
-// 导航卡片
 .portal-cards {
   display: flex;
   flex-direction: column;
@@ -402,7 +396,6 @@ $text-tertiary: #999999;
   transition: all 0.5s ease;
 }
 
-// 主卡片样式
 .card-primary {
   .card-icon {
     width: 80px;
@@ -415,7 +408,6 @@ $text-tertiary: #999999;
   }
 }
 
-// 次要卡片
 .card-secondary {
   flex: 2;
   
@@ -429,7 +421,6 @@ $text-tertiary: #999999;
   }
 }
 
-// 第三卡片
 .card-tertiary {
   flex: 1;
   
@@ -451,7 +442,6 @@ $text-tertiary: #999999;
   }
 }
 
-// 底部
 .portal-footer {
   text-align: center;
   
@@ -462,7 +452,6 @@ $text-tertiary: #999999;
   }
 }
 
-// 入场动画
 .portal-header,
 .portal-card,
 .portal-footer {
@@ -478,7 +467,6 @@ $text-tertiary: #999999;
   }
 }
 
-// 弹窗样式
 .join-modal {
   padding: 16px 8px;
 }
