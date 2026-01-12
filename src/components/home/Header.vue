@@ -52,6 +52,7 @@ const navItems = [
   { name: '党建动态', path: '/home/party' },
   { name: '发展历程', path: '/home/history' },
   { name: '预约渠道', path: '/home/download' },
+  { name: '商业计划', path: '/home/whitepaper' },
   { name: '关于我们', path: '/home/about' },
   { name: '联系我们', path: '/home/contact' }
 ]
