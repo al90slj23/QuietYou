@@ -2,7 +2,33 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const MOBILE_BREAKPOINT = 768
 
-export function useMediaQuery(query) {
+// 主要导出：检测是否为移动端
+export function useMediaQuery() {
+  const getIsMobile = () => {
+    if (typeof window === 'undefined') return true // SSR 默认移动端
+    return window.innerWidth < MOBILE_BREAKPOINT
+  }
+  
+  const isMobile = ref(getIsMobile())
+  
+  const updateIsMobile = () => {
+    isMobile.value = getIsMobile()
+  }
+
+  onMounted(() => {
+    updateIsMobile()
+    window.addEventListener('resize', updateIsMobile)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', updateIsMobile)
+  })
+
+  return { isMobile }
+}
+
+// 自定义媒体查询
+export function useCustomMediaQuery(query) {
   const matches = ref(false)
   let mediaQuery = null
 
@@ -23,27 +49,5 @@ export function useMediaQuery(query) {
   return matches
 }
 
-// 便捷方法：检测是否为移动端（SSR 安全）
-export function useMobileDetect() {
-  const getIsMobile = () => {
-    if (typeof window === 'undefined') return false
-    return window.innerWidth < MOBILE_BREAKPOINT
-  }
-  
-  const isMobile = ref(getIsMobile())
-  
-  const updateIsMobile = () => {
-    isMobile.value = getIsMobile()
-  }
-
-  onMounted(() => {
-    updateIsMobile() // 确保挂载后更新
-    window.addEventListener('resize', updateIsMobile)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('resize', updateIsMobile)
-  })
-
-  return { isMobile }
-}
+// 别名，保持兼容
+export const useMobileDetect = useMediaQuery

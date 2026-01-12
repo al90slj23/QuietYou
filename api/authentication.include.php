@@ -434,3 +434,117 @@ function auth_user() {
 function auth_require($types = null) {
     return Auth::requireAuth($types);
 }
+
+/**
+ * 快捷函数：验证技师登录
+ */
+function auth_technician() {
+    // 从请求头获取 token
+    $headers = getallheaders();
+    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+    
+    $token = null;
+    if (preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
+    
+    if (!$token) {
+        Response::unauthorized('请先登录');
+    }
+    
+    // 查询技师
+    $tech = db()->fetch(
+        "SELECT * FROM qy_technician_list WHERE base_auth_token = ? AND is_deleted = 0",
+        [$token]
+    );
+    
+    if (!$tech) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    // 检查 token 是否过期
+    if ($tech['base_auth_expire_at'] && strtotime($tech['base_auth_expire_at']) < time()) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    // 检查技师状态
+    if ($tech['base_status'] === 'disabled') {
+        Response::forbidden('账号已被禁用');
+    }
+    
+    return $tech;
+}
+
+/**
+ * 快捷函数：验证商户登录
+ */
+function auth_merchant() {
+    $headers = getallheaders();
+    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+    
+    $token = null;
+    if (preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
+    
+    if (!$token) {
+        Response::unauthorized('请先登录');
+    }
+    
+    // 查询商户
+    $merchant = db()->fetch(
+        "SELECT * FROM qy_shop_list WHERE base_auth_token = ? AND is_deleted = 0",
+        [$token]
+    );
+    
+    if (!$merchant) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    if ($merchant['base_auth_expire_at'] && strtotime($merchant['base_auth_expire_at']) < time()) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    if ($merchant['base_status'] === 'disabled') {
+        Response::forbidden('店铺已被禁用');
+    }
+    
+    return $merchant;
+}
+
+/**
+ * 快捷函数：验证用户登录
+ */
+function auth_customer() {
+    $headers = getallheaders();
+    $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+    
+    $token = null;
+    if (preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
+        $token = $matches[1];
+    }
+    
+    if (!$token) {
+        Response::unauthorized('请先登录');
+    }
+    
+    // 查询用户
+    $user = db()->fetch(
+        "SELECT * FROM qy_user_list WHERE base_auth_token = ? AND is_deleted = 0",
+        [$token]
+    );
+    
+    if (!$user) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    if ($user['base_auth_expire_at'] && strtotime($user['base_auth_expire_at']) < time()) {
+        Response::unauthorized('登录已过期，请重新登录');
+    }
+    
+    if ($user['base_status'] === 'disabled') {
+        Response::forbidden('账号已被禁用');
+    }
+    
+    return $user;
+}
