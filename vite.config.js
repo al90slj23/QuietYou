@@ -10,6 +10,13 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern'
+      }
+    }
+  },
   build: {
     outDir: 'pages',
     emptyOutDir: true
