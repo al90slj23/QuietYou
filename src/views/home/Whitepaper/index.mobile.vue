@@ -172,7 +172,9 @@ const loadContent = async () => {
     const loadedChapters = []
     for (const chapter of config.value.chapters) {
       const response = await fetch(`/whitepaper/${chapter.file}`)
-      const markdown = await response.text()
+      let markdown = await response.text()
+      // 移除原有的提示文案（现在提示在脑图窗口内部）
+      markdown = markdown.replace(/💡 下方思维导图支持拖拽、缩放，可自由探索\n?/g, '')
       const content = marked(markdown)
       loadedChapters.push({
         ...chapter,
@@ -223,17 +225,17 @@ const calculateMindmapHeight = (markdown) => {
   const lines = markdown.split('\n').filter(line => line.trim())
   const nodeCount = lines.length
   
-  // 移动端高度稍小
-  // 简单脑图（少于10个节点）：220px
-  // 中等脑图（10-20个节点）：280px
-  // 复杂脑图（20-35个节点）：350px
-  // 超大脑图（35+节点）：420px
+  // 移动端高度，为底部提示和按钮留出空间（+50px）
+  // 简单脑图（少于10个节点）：280px
+  // 中等脑图（10-20个节点）：350px
+  // 复杂脑图（20-35个节点）：420px
+  // 超大脑图（35+节点）：500px
   
-  if (nodeCount <= 8) return 220
-  if (nodeCount <= 15) return 280
-  if (nodeCount <= 25) return 340
-  if (nodeCount <= 35) return 400
-  return 450
+  if (nodeCount <= 8) return 280
+  if (nodeCount <= 15) return 350
+  if (nodeCount <= 25) return 420
+  if (nodeCount <= 35) return 480
+  return 520
 }
 
 // 渲染思维导图
@@ -252,22 +254,35 @@ const renderMindmaps = async () => {
       const wrapper = document.createElement('div')
       wrapper.className = 'mindmap-wrapper'
       
-      // 创建 SVG 容器
+      // 创建 SVG 容器（预留底部 45px 给提示和按钮）
       const container = document.createElement('div')
       container.className = 'mindmap-container'
       container.style.cssText = `width: 100%; height: ${height}px; background: #fafafa; border-radius: 8px; overflow: hidden; position: relative;`
       
+      // SVG 高度减去底部预留空间
+      const svgHeight = height - 45
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-      svg.style.cssText = 'width: 100%; height: 100%;'
+      svg.style.cssText = `width: 100%; height: ${svgHeight}px;`
       container.appendChild(svg)
+      
+      // 创建左下角提示
+      const tip = document.createElement('div')
+      tip.className = 'mindmap-tip'
+      tip.innerHTML = '👆 拖动移动 · 双指缩放 · 点击展开'
+      container.appendChild(tip)
       
       // 创建工具栏
       const toolbar = document.createElement('div')
       toolbar.className = 'mindmap-toolbar'
       toolbar.innerHTML = `
-        <button class="mindmap-btn" data-action="fit" title="显示全部">
+        <button class="mindmap-btn" data-action="expandAll" title="展开所有">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            <path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6"/>
+          </svg>
+        </button>
+        <button class="mindmap-btn" data-action="collapseAll" title="收缩所有">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 14h6v6M20 14h-6v6M4 10h6V4M20 10h-6V4"/>
           </svg>
         </button>
         <button class="mindmap-btn" data-action="zoomIn" title="放大">
@@ -301,7 +316,8 @@ const renderMindmaps = async () => {
         spacingVertical: 6,
         duration: 500,
         zoom: true,
-        pan: true
+        pan: true,
+        scrollForPan: false  // 禁用滚轮平移
       }, root)
       
       // 绑定工具栏事件
@@ -310,14 +326,43 @@ const renderMindmaps = async () => {
         if (!btn) return
         
         const action = btn.dataset.action
-        if (action === 'fit') {
-          mm.fit()
-        } else if (action === 'zoomIn') {
+        if (action === 'zoomIn') {
           mm.rescale(1.25)
         } else if (action === 'zoomOut') {
           mm.rescale(0.8)
+        } else if (action === 'expandAll') {
+          // 展开所有节点
+          const expandNode = (node) => {
+            if (node.payload) node.payload.fold = 0
+            if (node.children) node.children.forEach(expandNode)
+          }
+          expandNode(root)
+          mm.setData(root)
+          setTimeout(() => mm.fit(), 100)
+        } else if (action === 'collapseAll') {
+          // 收缩所有节点（只保留第一层展开）
+          const collapseNode = (node, depth = 0) => {
+            if (depth >= 1 && node.children && node.children.length > 0) {
+              if (!node.payload) node.payload = {}
+              node.payload.fold = 1
+            }
+            if (node.children) node.children.forEach(child => collapseNode(child, depth + 1))
+          }
+          collapseNode(root)
+          mm.setData(root)
+          setTimeout(() => mm.fit(), 100)
         }
       })
+      
+      // 自定义滚轮事件：滚轮控制缩放
+      svg.addEventListener('wheel', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        
+        // 根据滚轮方向缩放
+        const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1
+        mm.rescale(scaleFactor)
+      }, { passive: false, capture: true })
       
     } catch (e) {
       console.error('思维导图渲染失败:', e)
@@ -607,6 +652,19 @@ $primary: #07c160;
     &:active {
       cursor: grabbing;
     }
+  }
+  
+  :deep(.mindmap-tip) {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    font-size: 11px;
+    color: #999;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+    pointer-events: none;
   }
   
   :deep(.mindmap-toolbar) {
