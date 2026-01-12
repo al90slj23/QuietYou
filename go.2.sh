@@ -1,10 +1,19 @@
 #!/bin/bash
-# 轻养到家 - 仅 rsync 同步到服务器
-# ZERO 框架规范
+# ================================================================
+# 文件名: go.2.sh
+# 中文名: 选项 2 - 仅 rsync 同步
+# 创建时间: 2025-01-12
+# ================================================================
+#
+# 【文件职责】
+# 仅执行 rsync 同步到服务器，不构建、不提交 Git
+#
+# ================================================================
 
-source "$(dirname "$0")/go.lib.sh"
+step "开始 rsync 同步..."
 
-log_info "开始 rsync 同步..."
+# 加载环境变量
+load_env
 
 # 部署配置（从环境变量读取）
 DEPLOY_HOST="${DEPLOY_HOST:-}"
@@ -12,34 +21,29 @@ DEPLOY_PATH="${DEPLOY_PATH:-/www/wwwroot/qy.im.sh.cn}"
 DEPLOY_USER="${DEPLOY_USER:-root}"
 
 if [ -z "$DEPLOY_HOST" ]; then
-    log_error "请设置 DEPLOY_HOST 环境变量"
+    error "请设置 DEPLOY_HOST 环境变量"
     exit 1
 fi
 
-# 记录开始时间
-START_TIME=$(date +%s)
-
+# ============================================================
 # rsync 同步
-log_info "📦 同步文件到服务器..."
+# ============================================================
+step "📦 同步文件到服务器..."
 
-rsync -avz --progress \
-    --exclude 'node_modules' \
-    --exclude '.git' \
-    --exclude '.env' \
-    --exclude '.DS_Store' \
-    --exclude 'frontend/node_modules' \
-    --exclude 'frontend/dist' \
+eval rsync -avz --progress $RSYNC_EXCLUDES \
     ./ ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
 
 if [ $? -eq 0 ]; then
-    log_success "rsync 同步成功"
+    success "rsync 同步成功"
 else
-    log_error "rsync 同步失败"
+    error "rsync 同步失败"
     exit 1
 fi
 
+# ============================================================
 # 服务器操作
-log_info "🔧 服务器操作..."
+# ============================================================
+step "🔧 服务器操作..."
 
 ssh ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
 cd /www/wwwroot/qy.im.sh.cn
@@ -48,10 +52,9 @@ chmod -R 755 . 2>/dev/null || true
 echo "完成"
 EOF
 
+# ============================================================
 # 完成
-END_TIME=$(date +%s)
-ELAPSED=$((END_TIME - START_TIME))
-
+# ============================================================
 echo ""
-log_success "✅ 同步完成！耗时: ${ELAPSED}秒"
-log_success "📍 地址: http://qy.im.sh.cn"
+success "✅ 同步完成！"
+success "📍 地址: http://qy.im.sh.cn"

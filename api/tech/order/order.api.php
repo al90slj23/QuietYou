@@ -13,7 +13,7 @@
  * POST /api/tech/order:123:complete 完成服务
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.inc.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? '';

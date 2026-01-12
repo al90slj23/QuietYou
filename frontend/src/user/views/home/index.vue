@@ -49,7 +49,7 @@
           @click="goToService(cat.id)"
         >
           <div class="category-icon" :style="{ background: cat.bg }">
-            <t-icon :name="cat.icon" size="20px" :color="cat.color" />
+            <Icon :icon="cat.icon" width="20" :style="{ color: cat.color }" />
           </div>
           <span class="category-name">{{ cat.name }}</span>
         </div>
@@ -142,30 +142,30 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const banners = ref([
-  { label: '品质生活', title: '轻养到家', desc: '专业技师 · 上门服务', img: '/assets/images/banner-massage-1.jpg' },
-  { label: '限时特惠', title: '新客立减30', desc: '首单专享优惠', img: '/assets/images/banner-massage-2.jpg' },
-  { label: '身心放松', title: '专业SPA', desc: '让疲惫一扫而空', img: '/assets/images/banner-wellness.jpg' }
+  { label: '品质生活', title: '轻养到家', desc: '专业技师 · 上门服务', img: './images/banner-massage-1.jpg' },
+  { label: '限时特惠', title: '新客立减30', desc: '首单专享优惠', img: './images/banner-massage-2.jpg' },
+  { label: '身心放松', title: '专业SPA', desc: '让疲惫一扫而空', img: './images/banner-wellness.jpg' }
 ])
 
 const categories = ref([
-  { id: 1, name: '推拿', icon: 'gesture-press', bg: '#f0f5ff', color: '#4f6ef7' },
-  { id: 2, name: '足疗', icon: 'service', bg: '#fff0f6', color: '#eb4d9c' },
-  { id: 3, name: 'SPA', icon: 'flower', bg: '#e6fffb', color: '#13c2c2' },
-  { id: 4, name: '理疗', icon: 'heart', bg: '#fff7e6', color: '#fa8c16' },
-  { id: 5, name: '更多', icon: 'ellipsis', bg: '#f5f5f5', color: '#999' }
+  { id: 1, name: '推拿', icon: 'mdi:hand-back-right', bg: '#f0f5ff', color: '#4f6ef7' },
+  { id: 2, name: '足疗', icon: 'mdi:foot-print', bg: '#fff0f6', color: '#eb4d9c' },
+  { id: 3, name: 'SPA', icon: 'mdi:spa', bg: '#e6fffb', color: '#13c2c2' },
+  { id: 4, name: '理疗', icon: 'mdi:heart-pulse', bg: '#fff7e6', color: '#fa8c16' },
+  { id: 5, name: '更多', icon: 'mdi:dots-horizontal', bg: '#f5f5f5', color: '#999' }
 ])
 
 const recommends = ref([
-  { id: 1, name: '全身推拿', duration: 60, price: 298, sold: '2.3k', img: '/assets/images/service-massage.jpg' },
-  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', img: '/assets/images/service-neck.jpg' },
-  { id: 3, name: '足底按摩', duration: 60, price: 168, sold: '1.5k', img: '/assets/images/service-foot.jpg' },
-  { id: 4, name: '精油SPA', duration: 90, price: 458, sold: '986', img: '/assets/images/service-spa.jpg' }
+  { id: 1, name: '全身推拿', duration: 60, price: 298, sold: '2.3k', img: './images/service-massage.jpg' },
+  { id: 2, name: '肩颈舒缓', duration: 45, price: 198, sold: '1.8k', img: './images/service-neck.jpg' },
+  { id: 3, name: '足底按摩', duration: 60, price: 168, sold: '1.5k', img: './images/service-foot.jpg' },
+  { id: 4, name: '精油SPA', duration: 90, price: 458, sold: '986', img: './images/service-spa.jpg' }
 ])
 
 const techs = ref([
-  { id: 1, name: '张师傅', rating: 4.9, orders: 328, exp: 5, online: true, badge: '金牌', avatar: '/assets/images/avatar-tech-1.jpg' },
-  { id: 2, name: '李师傅', rating: 4.8, orders: 256, exp: 3, online: true, avatar: '/assets/images/avatar-tech-2.jpg' },
-  { id: 3, name: '王师傅', rating: 4.9, orders: 412, exp: 6, online: false, badge: '金牌', avatar: '/assets/images/avatar-tech-3.jpg' }
+  { id: 1, name: '张师傅', rating: 4.9, orders: 328, exp: 5, online: true, badge: '金牌', avatar: './images/avatar-tech-1.jpg' },
+  { id: 2, name: '李师傅', rating: 4.8, orders: 256, exp: 3, online: true, avatar: './images/avatar-tech-2.jpg' },
+  { id: 3, name: '王师傅', rating: 4.9, orders: 412, exp: 6, online: false, badge: '金牌', avatar: './images/avatar-tech-3.jpg' }
 ])
 
 const goToService = (id) => {

@@ -12,6 +12,7 @@ export default defineConfig({
       '@common': resolve(__dirname, 'src/common')
     }
   },
+  publicDir: 'public',
   build: {
     outDir: '../../../pages/user',
     emptyOutDir: true

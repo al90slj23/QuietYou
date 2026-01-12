@@ -9,7 +9,7 @@
  * DELETE /api/user/address:123       删除地址
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.inc.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $id = $_GET['id'] ?? null;

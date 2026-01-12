@@ -6,7 +6,7 @@
  * POST /api/admin/auth              管理员登录
  */
 
-require_once dirname(dirname(__FILE__)) . '/bootstrap.inc.php';
+require_once dirname(dirname(__FILE__)) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 

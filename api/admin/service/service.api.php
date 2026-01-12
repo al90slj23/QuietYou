@@ -13,7 +13,7 @@
  * DELETE /api/admin/service/item:123       删除项目
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.inc.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = $_GET['path'] ?? '';

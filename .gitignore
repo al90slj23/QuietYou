@@ -14,11 +14,11 @@ node_modules/
 # Kiro
 .kiro/
 
-# 部署脚本
-deploy.sh
-
 # 日志
 *.log
 
 # 构建产物（部署到服务器，不提交到 git）
 pages/
+
+# ZERO 框架（仅本地参考）
+ZERO/

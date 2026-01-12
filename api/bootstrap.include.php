@@ -35,9 +35,9 @@ if (file_exists($envFile)) {
 }
 
 // 加载核心文件
-require_once API_ROOT . '/db.inc.php';
-require_once API_ROOT . '/auth.inc.php';
-require_once API_ROOT . '/response.inc.php';
+require_once API_ROOT . '/database.include.php';
+require_once API_ROOT . '/authentication.include.php';
+require_once API_ROOT . '/response.include.php';
 
 // CORS 处理
 header('Access-Control-Allow-Origin: *');

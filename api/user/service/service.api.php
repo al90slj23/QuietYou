@@ -8,7 +8,7 @@
  * GET /api/user/service/item:123       服务详情
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.inc.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = $_GET['path'] ?? '';

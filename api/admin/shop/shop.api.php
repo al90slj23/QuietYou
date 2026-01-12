@@ -11,7 +11,7 @@
  * PUT /api/admin/shop:123:commission 设置佣金
  */
 
-require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.inc.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/bootstrap.include.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? '';
