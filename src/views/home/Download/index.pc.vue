@@ -278,7 +278,7 @@ $background-light: #f8f9fa;
   transition: all 0.3s ease;
   
   &:hover {
-    background: darken($primary-color, 5%);
+    background: #06a050;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3);
   }
