@@ -22,6 +22,13 @@ const homeRoutes = [
       { path: 'privacy', name: 'home-privacy', component: () => import('../views/home/Privacy/index.vue'), meta: { title: '隐私政策' } },
       { path: 'terms', name: 'home-terms', component: () => import('../views/home/Terms/index.vue'), meta: { title: '服务条款' } }
     ]
+  },
+  // 白皮书独立路由（不使用 HomeLayout，有自己的布局）
+  { 
+    path: '/home/whitepaper', 
+    name: 'home-whitepaper', 
+    component: () => import('../views/home/Whitepaper/index.vue'), 
+    meta: { title: '商业计划白皮书' } 
   }
 ]
 

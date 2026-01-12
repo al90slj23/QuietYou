@@ -1,0 +1,67 @@
+{
+  "title": "轻养到家 - 商业计划白皮书",
+  "version": "1.0.0",
+  "lastUpdate": "2026-01-13",
+  "chapters": [
+    {
+      "id": "overview",
+      "title": "项目概述",
+      "file": "00.overview.md",
+      "icon": "info-circle"
+    },
+    {
+      "id": "summary",
+      "title": "一页看懂",
+      "file": "01.summary.md",
+      "icon": "file-paste"
+    },
+    {
+      "id": "market",
+      "title": "市场机会",
+      "file": "02.market.md",
+      "icon": "chart-line"
+    },
+    {
+      "id": "business",
+      "title": "商业模式",
+      "file": "03.business.md",
+      "icon": "wallet"
+    },
+    {
+      "id": "advantages",
+      "title": "核心优势",
+      "file": "04.advantages.md",
+      "icon": "star"
+    },
+    {
+      "id": "product",
+      "title": "产品架构",
+      "file": "05.product.md",
+      "icon": "app"
+    },
+    {
+      "id": "technology",
+      "title": "技术方案",
+      "file": "06.technology.md",
+      "icon": "code"
+    },
+    {
+      "id": "roadmap",
+      "title": "发展规划",
+      "file": "07.roadmap.md",
+      "icon": "map-route"
+    },
+    {
+      "id": "team",
+      "title": "团队与资源",
+      "file": "08.team.md",
+      "icon": "usergroup"
+    },
+    {
+      "id": "cooperation",
+      "title": "合作方式",
+      "file": "09.cooperation.md",
+      "icon": "link"
+    }
+  ]
+}
