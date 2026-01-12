@@ -13,13 +13,11 @@
     
     <!-- 主内容区 -->
     <main class="main-content">
-      <!-- 加载状态 -->
       <div v-if="loading" class="loading">
         <div class="loading-spinner"></div>
         <p>加载中...</p>
       </div>
       
-      <!-- 文档内容 -->
       <template v-else>
         <article 
           v-for="chapter in chapters" 
@@ -61,7 +59,7 @@
             @click.prevent="goToChapter(chapter.id)"
           >
             <component :is="getIcon(chapter.icon)" size="20px" />
-            <span>{{ chapter.title }}</span>
+            <span>{{ chapter.order }}. {{ chapter.title }}</span>
           </a>
         </nav>
       </div>
@@ -76,76 +74,19 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
-import { marked } from 'marked'
-import mermaid from 'mermaid'
-import { Transformer } from 'markmap-lib'
-import { Markmap } from 'markmap-view'
 import { Popup as TPopup } from 'tdesign-mobile-vue'
-
-// 初始化 Mermaid
-mermaid.initialize({
-  startOnLoad: false,
-  theme: 'default',
-  securityLevel: 'loose',
-  flowchart: {
-    useMaxWidth: true,
-    htmlLabels: true,
-    curve: 'basis'
-  }
-})
-
-// 初始化 markmap transformer
-const markmapTransformer = new Transformer()
-
-// 自定义 marked renderer 处理 mermaid 和 mindmap 代码块
-const renderer = new marked.Renderer()
-const originalCodeRenderer = renderer.code.bind(renderer)
-renderer.code = function(code, language) {
-  // 兼容新旧版本 marked API
-  const codeText = typeof code === 'object' ? code.text : code
-  const lang = typeof code === 'object' ? code.lang : language
-  
-  if (lang === 'mermaid') {
-    return `<div class="mermaid-placeholder" data-mermaid="${encodeURIComponent(codeText)}">${codeText}</div>`
-  }
-  
-  if (lang === 'mindmap') {
-    return `<div class="mindmap-placeholder" data-mindmap="${encodeURIComponent(codeText)}"><div class="mindmap-loading">思维导图加载中...</div></div>`
-  }
-  
-  return originalCodeRenderer(code, language)
-}
-marked.setOptions({ renderer })
+import { useWhitepaper, renderMindmaps } from './Whitepaper.logic'
 import { 
-  ChevronLeftIcon, 
-  ViewListIcon, 
-  CloseIcon,
-  InfoCircleIcon, 
-  ChartIcon, 
-  WalletIcon, 
-  StarIcon, 
-  AppIcon, 
-  CodeIcon, 
-  MapIcon, 
-  UsergroupIcon, 
-  LinkIcon,
-  FilePasteIcon
+  ChevronLeftIcon, ViewListIcon, CloseIcon,
+  InfoCircleIcon, ChartIcon, WalletIcon, StarIcon, 
+  AppIcon, CodeIcon, MapIcon, UsergroupIcon, LinkIcon, FilePasteIcon
 } from 'tdesign-icons-vue-next'
 
-const config = ref({
-  title: '',
-  version: '1.0.0',
-  lastUpdate: '',
-  chapters: []
-})
+const { config, chapters, loading, activeChapter, loadContent, markmapTransformer } = useWhitepaper()
 
-const chapters = ref([])
-const loading = ref(true)
 const showMenu = ref(false)
-const activeChapter = ref('')
 const scrolled = ref(false)
 
-// 图标映射
 const iconMap = {
   'file-paste': FilePasteIcon,
   'info-circle': InfoCircleIcon,
@@ -161,217 +102,6 @@ const iconMap = {
 
 const getIcon = (name) => iconMap[name] || InfoCircleIcon
 
-// 加载配置和内容
-const loadContent = async () => {
-  try {
-    // 加载配置
-    const configResponse = await fetch('/whitepaper/config.json')
-    config.value = await configResponse.json()
-    
-    // 加载所有章节内容
-    const loadedChapters = []
-    for (const chapter of config.value.chapters) {
-      const response = await fetch(`/whitepaper/${chapter.file}`)
-      let markdown = await response.text()
-      // 移除原有的提示文案（现在提示在脑图窗口内部）
-      markdown = markdown.replace(/💡 下方思维导图支持拖拽、缩放，可自由探索\n?/g, '')
-      const content = marked(markdown)
-      loadedChapters.push({
-        ...chapter,
-        content
-      })
-    }
-    chapters.value = loadedChapters
-    
-    // 设置默认激活章节
-    if (chapters.value.length > 0) {
-      activeChapter.value = chapters.value[0].id
-    }
-  } catch (error) {
-    console.error('加载白皮书内容失败:', error)
-  } finally {
-    loading.value = false
-    // 等待 DOM 更新后再渲染图表
-    await nextTick()
-    renderMermaid()
-    renderMindmaps()
-  }
-}
-
-// 渲染 Mermaid 图表
-const renderMermaid = async () => {
-  const mermaidBlocks = document.querySelectorAll('.mermaid-placeholder')
-  for (let i = 0; i < mermaidBlocks.length; i++) {
-    const block = mermaidBlocks[i]
-    const code = decodeURIComponent(block.getAttribute('data-mermaid'))
-    
-    try {
-      const { svg } = await mermaid.render(`mermaid-mobile-${Date.now()}-${i}`, code)
-      const div = document.createElement('div')
-      div.className = 'mermaid-diagram'
-      div.innerHTML = svg
-      block.replaceWith(div)
-    } catch (e) {
-      console.error('Mermaid 渲染失败:', e, code)
-      // 渲染失败时显示原始代码
-      block.className = 'mermaid-error'
-      block.innerHTML = `<pre><code>${code}</code></pre><p class="error-tip">图表渲染失败</p>`
-    }
-  }
-}
-
-// 计算思维导图高度（根据内容复杂度）- 移动端
-const calculateMindmapHeight = (markdown) => {
-  const lines = markdown.split('\n').filter(line => line.trim())
-  const nodeCount = lines.length
-  
-  // 移动端高度，为底部提示和按钮留出空间（+50px）
-  // 简单脑图（少于10个节点）：280px
-  // 中等脑图（10-20个节点）：350px
-  // 复杂脑图（20-35个节点）：420px
-  // 超大脑图（35+节点）：500px
-  
-  if (nodeCount <= 8) return 280
-  if (nodeCount <= 15) return 350
-  if (nodeCount <= 25) return 420
-  if (nodeCount <= 35) return 480
-  return 520
-}
-
-// 渲染思维导图
-const renderMindmaps = async () => {
-  const mindmapBlocks = document.querySelectorAll('.mindmap-placeholder')
-  
-  for (let i = 0; i < mindmapBlocks.length; i++) {
-    const block = mindmapBlocks[i]
-    const markdown = decodeURIComponent(block.getAttribute('data-mindmap'))
-    
-    try {
-      // 计算动态高度
-      const height = calculateMindmapHeight(markdown)
-      
-      // 创建外层包装
-      const wrapper = document.createElement('div')
-      wrapper.className = 'mindmap-wrapper'
-      
-      // 创建 SVG 容器（预留底部 45px 给提示和按钮）
-      const container = document.createElement('div')
-      container.className = 'mindmap-container'
-      container.style.cssText = `width: 100%; height: ${height}px; background: #fafafa; border-radius: 8px; overflow: hidden; position: relative;`
-      
-      // SVG 高度减去底部预留空间
-      const svgHeight = height - 45
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-      svg.style.cssText = `width: 100%; height: ${svgHeight}px;`
-      container.appendChild(svg)
-      
-      // 创建左下角提示
-      const tip = document.createElement('div')
-      tip.className = 'mindmap-tip'
-      tip.innerHTML = '👆 拖动移动 · 双指缩放 · 点击展开'
-      container.appendChild(tip)
-      
-      // 创建工具栏
-      const toolbar = document.createElement('div')
-      toolbar.className = 'mindmap-toolbar'
-      toolbar.innerHTML = `
-        <button class="mindmap-btn" data-action="expandAll" title="展开所有">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6"/>
-          </svg>
-        </button>
-        <button class="mindmap-btn" data-action="collapseAll" title="收缩所有">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 14h6v6M20 14h-6v6M4 10h6V4M20 10h-6V4"/>
-          </svg>
-        </button>
-        <button class="mindmap-btn" data-action="zoomIn" title="放大">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/>
-          </svg>
-        </button>
-        <button class="mindmap-btn" data-action="zoomOut" title="缩小">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M8 11h6"/>
-          </svg>
-        </button>
-      `
-      container.appendChild(toolbar)
-      
-      wrapper.appendChild(container)
-      block.replaceWith(wrapper)
-      
-      // 转换 markdown 为 markmap 数据
-      const { root } = markmapTransformer.transform(markdown)
-      
-      // 渲染思维导图
-      const mm = Markmap.create(svg, {
-        autoFit: true,
-        color: (node) => {
-          const colors = ['#07c160', '#1890ff', '#722ed1', '#fa8c16', '#eb2f96']
-          return colors[node.state.depth % colors.length]
-        },
-        paddingX: 12,
-        spacingHorizontal: 60,
-        spacingVertical: 6,
-        duration: 500,
-        zoom: true,
-        pan: true,
-        scrollForPan: false  // 禁用滚轮平移
-      }, root)
-      
-      // 绑定工具栏事件
-      toolbar.addEventListener('click', (e) => {
-        const btn = e.target.closest('.mindmap-btn')
-        if (!btn) return
-        
-        const action = btn.dataset.action
-        if (action === 'zoomIn') {
-          mm.rescale(1.25)
-        } else if (action === 'zoomOut') {
-          mm.rescale(0.8)
-        } else if (action === 'expandAll') {
-          // 展开所有节点
-          const expandNode = (node) => {
-            if (node.payload) node.payload.fold = 0
-            if (node.children) node.children.forEach(expandNode)
-          }
-          expandNode(root)
-          mm.setData(root)
-          setTimeout(() => mm.fit(), 100)
-        } else if (action === 'collapseAll') {
-          // 收缩所有节点（只保留第一层展开）
-          const collapseNode = (node, depth = 0) => {
-            if (depth >= 1 && node.children && node.children.length > 0) {
-              if (!node.payload) node.payload = {}
-              node.payload.fold = 1
-            }
-            if (node.children) node.children.forEach(child => collapseNode(child, depth + 1))
-          }
-          collapseNode(root)
-          mm.setData(root)
-          setTimeout(() => mm.fit(), 100)
-        }
-      })
-      
-      // 自定义滚轮事件：滚轮控制缩放
-      svg.addEventListener('wheel', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        
-        // 根据滚轮方向缩放
-        const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1
-        mm.rescale(scaleFactor)
-      }, { passive: false, capture: true })
-      
-    } catch (e) {
-      console.error('思维导图渲染失败:', e)
-      block.innerHTML = `<div class="mindmap-error"><pre>${markdown}</pre><p>思维导图渲染失败</p></div>`
-    }
-  }
-}
-
-// 跳转到章节
 const goToChapter = (id) => {
   showMenu.value = false
   setTimeout(() => {
@@ -383,12 +113,10 @@ const goToChapter = (id) => {
   }, 300)
 }
 
-// 监听滚动
 const handleScroll = () => {
   const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
   scrolled.value = scrollTop > 200
   
-  // 更新激活章节
   for (const chapter of chapters.value) {
     const element = document.getElementById(chapter.id)
     if (element) {
@@ -401,8 +129,10 @@ const handleScroll = () => {
   }
 }
 
-onMounted(() => {
-  loadContent()
+onMounted(async () => {
+  await loadContent()
+  await nextTick()
+  renderMindmaps(markmapTransformer, true, '👆 拖动移动 · 双指缩放 · 点击展开')
   window.addEventListener('scroll', handleScroll)
 })
 
@@ -412,7 +142,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$primary: #07c160;
+@import './Whitepaper.style.scss';
 
 .whitepaper-mobile {
   min-height: 100vh;
@@ -474,10 +204,7 @@ $primary: #07c160;
     animation: spin 1s linear infinite;
   }
   
-  p {
-    margin-top: 12px;
-    font-size: 14px;
-  }
+  p { margin-top: 12px; font-size: 14px; }
 }
 
 @keyframes spin {
@@ -489,248 +216,44 @@ $primary: #07c160;
 }
 
 .markdown-body {
-  font-size: 15px;
-  line-height: 1.8;
-  color: #1a1a1a;
+  @include markdown-body(15px);
   
-  :deep(h1) {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid $primary;
-  }
-  
-  :deep(h2) {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 32px 0 16px;
-  }
-  
-  :deep(h3) {
-    font-size: 17px;
-    font-weight: 600;
-    margin: 24px 0 12px;
-  }
-  
-  :deep(p) {
-    margin-bottom: 12px;
-  }
-  
-  :deep(ul), :deep(ol) {
-    margin-bottom: 12px;
-    padding-left: 20px;
-  }
-  
-  :deep(li) {
-    margin-bottom: 6px;
-  }
-  
-  :deep(table) {
+  :deep(h1) { font-size: 24px; margin-bottom: 16px; padding-bottom: 12px; }
+  :deep(h2) { font-size: 20px; margin: 32px 0 16px; }
+  :deep(h3) { font-size: 17px; margin: 24px 0 12px; }
+  :deep(p) { margin-bottom: 12px; }
+  :deep(ul), :deep(ol) { margin-bottom: 12px; padding-left: 20px; }
+  :deep(li) { margin-bottom: 6px; }
+  :deep(table) { 
     width: 100%;
     border-collapse: collapse;
-    margin: 16px 0;
-    font-size: 13px;
-    display: block;
-    overflow-x: auto;
+    margin: 16px 0; 
+    font-size: 13px; 
+    display: block; 
+    overflow-x: auto; 
   }
-  
-  :deep(th), :deep(td) {
-    padding: 10px 12px;
+  :deep(th), :deep(td) { 
     border: 1px solid #e0e0e0;
     text-align: left;
-    white-space: nowrap;
+    padding: 10px 12px; 
+    white-space: nowrap; 
   }
-  
   :deep(th) {
     background: #f8f9fa;
     font-weight: 600;
   }
-  
-  :deep(code) {
-    background: #f5f5f5;
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 13px;
-  }
-  
-  :deep(pre) {
-    background: #1a1a1a;
-    color: #f0f0f0;
-    padding: 16px;
-    border-radius: 8px;
-    overflow-x: auto;
-    margin: 16px 0;
-    font-size: 12px;
-    
-    code {
-      background: none;
-      padding: 0;
-      color: inherit;
-    }
-  }
-  
-  :deep(blockquote) {
-    border-left: 3px solid $primary;
-    padding: 12px 16px;
-    margin: 16px 0;
-    background: rgba($primary, 0.05);
-    color: #666;
-    font-size: 14px;
-    
-    p {
-      margin: 0;
-    }
-  }
-  
-  :deep(strong) {
-    font-weight: 600;
-  }
-  
-  :deep(a) {
-    color: $primary;
-    text-decoration: none;
-  }
-  
-  :deep(.mermaid-diagram) {
-    margin: 16px 0;
-    padding: 12px;
+  :deep(tr:hover td) {
     background: #fafafa;
-    border-radius: 8px;
-    overflow-x: auto;
-    
-    svg {
-      max-width: 100%;
-      height: auto;
-    }
   }
+  :deep(code) { padding: 2px 4px; font-size: 13px; }
+  :deep(pre) { padding: 16px; margin: 16px 0; font-size: 12px; }
+  :deep(blockquote) { padding: 12px 16px; margin: 16px 0; font-size: 14px; }
   
-  :deep(.mermaid-placeholder) {
-    margin: 16px 0;
-    padding: 16px;
-    background: #1a1a1a;
-    color: #f0f0f0;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 12px;
-    white-space: pre-wrap;
-  }
+  :deep() { @include mermaid-styles; }
+  :deep() { @include mindmap-styles(28px, 11px); }
   
-  :deep(.mermaid-error) {
-    margin: 16px 0;
-    padding: 16px;
-    background: #fff5f5;
-    border: 1px solid #ffccc7;
-    border-radius: 8px;
-    
-    pre {
-      background: #1a1a1a;
-      color: #f0f0f0;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      font-size: 11px;
-    }
-    
-    .error-tip {
-      color: #ff4d4f;
-      font-size: 12px;
-      margin: 0;
-    }
-  }
-  
-  :deep(.mindmap-wrapper) {
-    margin: 16px 0;
-  }
-  
-  :deep(.mindmap-container) {
-    border: 1px solid #e8e8e8;
-    cursor: grab;
-    position: relative;
-    
-    &:active {
-      cursor: grabbing;
-    }
-  }
-  
-  :deep(.mindmap-tip) {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    font-size: 11px;
-    color: #999;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 4px 8px;
-    border-radius: 4px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  
-  :deep(.mindmap-toolbar) {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: flex;
-    gap: 4px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 4px;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-  
-  :deep(.mindmap-btn) {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #e8e8e8;
-    background: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-    color: #666;
-    transition: all 0.2s;
-    
-    &:active {
-      background: #f5f5f5;
-      color: $primary;
-    }
-  }
-  
-  :deep(.mindmap-loading) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    color: #999;
-    font-size: 13px;
-  }
-  
-  :deep(.mindmap-error) {
-    margin: 16px 0;
-    padding: 16px;
-    background: #fff5f5;
-    border: 1px solid #ffccc7;
-    border-radius: 8px;
-    
-    pre {
-      background: #1a1a1a;
-      color: #f0f0f0;
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-      font-size: 11px;
-      white-space: pre-wrap;
-    }
-    
-    p {
-      color: #ff4d4f;
-      font-size: 12px;
-      margin: 0;
-    }
-  }
+  :deep(.mindmap-tip) { bottom: 8px; left: 8px; padding: 4px 8px; }
+  :deep(.mindmap-toolbar) { bottom: 8px; right: 8px; padding: 4px; }
 }
 
 .footer {
@@ -755,11 +278,7 @@ $primary: #07c160;
   padding: 16px 20px;
   border-bottom: 1px solid #eee;
   
-  h2 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a1a;
-  }
+  h2 { font-size: 18px; font-weight: 600; color: #1a1a1a; }
   
   .close-btn {
     width: 36px;
@@ -790,9 +309,7 @@ $primary: #07c160;
   font-size: 15px;
   transition: all 0.2s;
   
-  &:active {
-    background: #f5f5f5;
-  }
+  &:active { background: #f5f5f5; }
   
   &.active {
     color: $primary;
@@ -819,8 +336,6 @@ $primary: #07c160;
   z-index: 50;
   transition: transform 0.2s;
   
-  &:active {
-    transform: scale(0.95);
-  }
+  &:active { transform: scale(0.95); }
 }
 </style>

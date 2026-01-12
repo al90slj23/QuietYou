@@ -1,64 +1,74 @@
 {
   "title": "轻养到家 - 商业计划白皮书",
   "version": "1.0.0",
-  "lastUpdate": "2026-01-13",
+  "lastUpdate": "2026-01-12",
   "chapters": [
     {
       "id": "summary",
-      "title": "一页看懂",
+      "order": 0,
+      "title": "一页看懂轻养到家",
       "file": "00.summary.md",
       "icon": "file-paste"
     },
     {
       "id": "overview",
+      "order": 1,
       "title": "项目概述",
       "file": "01.overview.md",
       "icon": "info-circle"
     },
     {
       "id": "market",
+      "order": 2,
       "title": "市场机会",
       "file": "02.market.md",
       "icon": "chart-line"
     },
     {
       "id": "business",
+      "order": 3,
       "title": "商业模式",
       "file": "03.business.md",
       "icon": "wallet"
     },
     {
       "id": "advantages",
+      "order": 4,
       "title": "核心优势",
       "file": "04.advantages.md",
       "icon": "star"
     },
     {
       "id": "product",
+      "order": 5,
       "title": "产品架构",
       "file": "05.product.md",
       "icon": "app"
     },
     {
       "id": "technology",
+      "order": 6,
       "title": "技术方案",
       "file": "06.technology.md",
       "icon": "code"
     },
     {
       "id": "roadmap",
+      "order": 7,
       "title": "发展规划",
       "file": "07.roadmap.md",
       "icon": "map-route"
     },
     {
       "id": "team",
+      "order": 8,
       "title": "团队与资源",
       "file": "08.team.md",
       "icon": "usergroup"
     },
     {
       "id": "cooperation",
+      "order": 9,
       "title": "合作方式",
       "file": "09.cooperation.md",
       "icon": "link"
