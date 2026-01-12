@@ -16,7 +16,6 @@
           </div>
         </div>
       </div>
-      
       <div class="hero-download" id="download">
         <div class="download-item">
           <div class="download-icon"><MobileIcon size="28px" /></div>
@@ -35,7 +34,6 @@
           <h2>为什么选择轻养到家</h2>
           <p class="subtitle">WHY CHOOSE US</p>
         </div>
-        
         <div class="features-grid">
           <div class="feature-card" v-for="feature in features" :key="feature.title">
             <div class="feature-icon"><component :is="feature.icon" size="48px" /></div>
@@ -79,7 +77,6 @@ const stats = [
 
 <style lang="scss" scoped>
 $primary-color: #07c160;
-$mobile: 768px;
 
 .hero {
   position: relative;
@@ -92,7 +89,6 @@ $mobile: 768px;
   text-align: center;
   padding: 100px 0 60px;
   background: linear-gradient(135deg, $primary-color 0%, #10b981 50%, #059669 100%);
-  @media (max-width: $mobile) { min-height: auto; padding: 120px 0 80px; }
 }
 
 .hero-bg {
@@ -107,118 +103,41 @@ $mobile: 768px;
   }
 }
 
-.hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.hero-title {
-  font-size: 56px;
-  font-weight: 700;
-  margin-bottom: 15px;
-  @media (max-width: $mobile) { font-size: 36px; }
-}
-
-.hero-subtitle {
-  font-size: 24px;
-  opacity: 0.95;
-  margin-bottom: 25px;
-  @media (max-width: $mobile) { font-size: 18px; }
-}
-
-.hero-desc {
-  font-size: 16px;
-  line-height: 1.8;
-  opacity: 0.9;
-  margin-bottom: 40px;
-  @media (max-width: $mobile) { font-size: 14px; }
-}
+.hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; padding: 0 20px; }
+.hero-title { font-size: 56px; font-weight: 700; margin-bottom: 15px; }
+.hero-subtitle { font-size: 24px; opacity: 0.95; margin-bottom: 25px; }
+.hero-desc { font-size: 16px; line-height: 1.8; opacity: 0.9; margin-bottom: 40px; }
 
 .hero-actions {
   display: flex;
   gap: 20px;
   justify-content: center;
-  flex-wrap: wrap;
   .btn { min-width: 140px; }
-  .btn-outline-white {
-    background: transparent;
-    color: #fff;
-    border: 2px solid #fff;
-    &:hover { background: #fff; color: $primary-color; }
-  }
+  .btn-outline-white { background: transparent; color: #fff; border: 2px solid #fff; &:hover { background: #fff; color: $primary-color; } }
 }
 
-.hero-download {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 40px;
-  margin-top: 60px;
-  @media (max-width: $mobile) { gap: 30px; margin-top: 40px; }
-}
-
+.hero-download { position: relative; z-index: 1; display: flex; gap: 40px; margin-top: 60px; }
 .download-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: transform 0.3s;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: transform 0.3s;
   &:hover { transform: translateY(-5px); }
-  .download-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @media (max-width: $mobile) { width: 50px; height: 50px; }
-  }
+  .download-icon { width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
   span { font-size: 14px; opacity: 0.9; }
 }
 
 .features { background: #f9fafb; }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: $mobile) { grid-template-columns: 1fr; gap: 20px; }
-}
-
+.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
 .feature-card {
-  background: #fff;
-  padding: 40px 30px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  background: #fff; padding: 40px 30px; border-radius: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); transition: transform 0.3s, box-shadow 0.3s;
   &:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); }
   .feature-icon { color: $primary-color; margin-bottom: 20px; }
   h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #333; }
   p { font-size: 14px; color: #666; line-height: 1.6; }
 }
 
-.stats {
-  background: linear-gradient(135deg, $primary-color 0%, #10b981 100%);
-  color: #fff;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  text-align: center;
-  @media (max-width: $mobile) { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
-}
-
+.stats { background: linear-gradient(135deg, $primary-color 0%, #10b981 100%); color: #fff; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; text-align: center; }
 .stat-item {
-  .stat-number { font-size: 48px; font-weight: 700; margin-bottom: 10px; @media (max-width: $mobile) { font-size: 36px; } }
+  .stat-number { font-size: 48px; font-weight: 700; margin-bottom: 10px; }
   .stat-label { font-size: 16px; opacity: 0.9; }
 }
 </style>

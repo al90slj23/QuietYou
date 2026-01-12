@@ -37,8 +37,12 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const navItems = [
   { name: '首页', path: '/home' },
-  { name: '关于我们', path: '/home/about' },
+  { name: '商户合作', path: '/home/recruit' },
+  { name: '轻养资讯', path: '/home/news' },
+  { name: '党建动态', path: '/home/party' },
+  { name: '发展历程', path: '/home/history' },
   { name: '预约渠道', path: '/home/download' },
+  { name: '关于我们', path: '/home/about' },
   { name: '联系我们', path: '/home/contact' }
 ]
 

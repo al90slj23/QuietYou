@@ -2,29 +2,21 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // 官网路由
 const homeRoutes = [
-  { 
-    path: '/', 
-    component: () => import('../layouts/HomeLayout.vue'),
-    children: [
-      { path: '', name: 'home', component: () => import('../views/home/Home.vue'), meta: { title: '首页' } },
-      { path: 'about', name: 'home-about', component: () => import('../views/home/About.vue'), meta: { title: '关于我们' } },
-      { path: 'download', name: 'home-download', component: () => import('../views/home/Download.vue'), meta: { title: '预约渠道' } },
-      { path: 'contact', name: 'home-contact', component: () => import('../views/home/Contact.vue'), meta: { title: '联系我们' } },
-      { path: 'privacy', name: 'home-privacy', component: () => import('../views/home/Privacy.vue'), meta: { title: '隐私政策' } },
-      { path: 'terms', name: 'home-terms', component: () => import('../views/home/Terms.vue'), meta: { title: '服务条款' } }
-    ]
-  },
-  // /home/ 也能访问官网
+  { path: '/', redirect: '/home' },
   { 
     path: '/home', 
     component: () => import('../layouts/HomeLayout.vue'),
     children: [
-      { path: '', component: () => import('../views/home/Home.vue'), meta: { title: '首页' } },
-      { path: 'about', component: () => import('../views/home/About.vue'), meta: { title: '关于我们' } },
-      { path: 'download', component: () => import('../views/home/Download.vue'), meta: { title: '预约渠道' } },
-      { path: 'contact', component: () => import('../views/home/Contact.vue'), meta: { title: '联系我们' } },
-      { path: 'privacy', component: () => import('../views/home/Privacy.vue'), meta: { title: '隐私政策' } },
-      { path: 'terms', component: () => import('../views/home/Terms.vue'), meta: { title: '服务条款' } }
+      { path: '', name: 'home', component: () => import('../views/home/Home/index.vue'), meta: { title: '首页' } },
+      { path: 'about', name: 'home-about', component: () => import('../views/home/About/index.vue'), meta: { title: '关于我们' } },
+      { path: 'recruit', name: 'home-recruit', component: () => import('../views/home/Recruit/index.vue'), meta: { title: '商户合作' } },
+      { path: 'news', name: 'home-news', component: () => import('../views/home/News/index.vue'), meta: { title: '轻养资讯' } },
+      { path: 'party', name: 'home-party', component: () => import('../views/home/Party/index.vue'), meta: { title: '党建动态' } },
+      { path: 'history', name: 'home-history', component: () => import('../views/home/History/index.vue'), meta: { title: '发展历程' } },
+      { path: 'download', name: 'home-download', component: () => import('../views/home/Download/index.vue'), meta: { title: '预约渠道' } },
+      { path: 'contact', name: 'home-contact', component: () => import('../views/home/Contact/index.vue'), meta: { title: '联系我们' } },
+      { path: 'privacy', name: 'home-privacy', component: () => import('../views/home/Privacy/index.vue'), meta: { title: '隐私政策' } },
+      { path: 'terms', name: 'home-terms', component: () => import('../views/home/Terms/index.vue'), meta: { title: '服务条款' } }
     ]
   }
 ]

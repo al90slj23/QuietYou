@@ -28,7 +28,6 @@
 
 <style lang="scss" scoped>
 $primary-color: #07c160;
-$mobile: 768px;
-.page-banner { background: linear-gradient(135deg, $primary-color 0%, #10b981 100%); color: #fff; text-align: center; padding: 140px 0 80px; @media (max-width: $mobile) { padding: 120px 0 60px; } h1 { font-size: 42px; font-weight: 700; margin-bottom: 10px; @media (max-width: $mobile) { font-size: 28px; } } .subtitle { font-size: 14px; opacity: 0.8; letter-spacing: 3px; } }
+.page-banner { background: linear-gradient(135deg, $primary-color 0%, #10b981 100%); color: #fff; text-align: center; padding: 140px 0 80px; h1 { font-size: 42px; font-weight: 700; margin-bottom: 10px; } .subtitle { font-size: 14px; opacity: 0.8; letter-spacing: 3px; } }
 .article { max-width: 800px; margin: 0 auto; .update-time { color: #999; font-size: 14px; margin-bottom: 30px; } h2 { font-size: 20px; font-weight: 600; color: #333; margin: 30px 0 15px; &:first-of-type { margin-top: 0; } } p { font-size: 15px; line-height: 1.8; color: #555; margin-bottom: 15px; } ul { margin: 15px 0; padding-left: 20px; li { font-size: 15px; line-height: 1.8; color: #555; margin-bottom: 8px; } } }
 </style>
