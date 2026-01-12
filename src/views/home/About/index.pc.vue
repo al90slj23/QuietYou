@@ -2,10 +2,14 @@
   <div class="about">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">ABOUT US</p>
-        <h1 class="hero-title">关于轻养到家</h1>
-        <p class="hero-desc">用科技传递健康，让专业养生服务触手可及</p>
+        <p class="hero-subtitle animate-on-scroll">ABOUT US</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">关于轻养到家</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">用科技传递健康，让专业养生服务触手可及</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -17,12 +21,12 @@
     <!-- 公司简介 -->
     <section class="section intro">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">INTRODUCTION</p>
           <h2 class="section-title">公司简介</h2>
         </div>
         <div class="intro-content">
-          <div class="intro-text">
+          <div class="intro-text animate-on-scroll animate-delay-1">
             <p>轻养到家是一家专注于上门养生推拿服务的O2O平台，致力于"让专业养生服务触手可及，为用户带来更健康、更舒适的生活体验"。</p>
             <p>我们秉承"用科技传递健康"的战略愿景，通过不断迭代的互联网系统、严格的服务培训及可追溯的服务品质，与众多专业技师一同为消费者提供便捷、安全、高效的健康服务。</p>
             <p>轻养到家始终以用户需求为中心，合规为先，注重技术研发与服务创新，不断提升服务体验。</p>
@@ -34,17 +38,23 @@
     <!-- 我们做什么 -->
     <section class="section what-we-do">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">WHAT WE DO</p>
           <h2 class="section-title">轻养到家是什么</h2>
         </div>
         <div class="feature-grid">
-          <div class="feature-card" v-for="(feature, index) in features" :key="index">
+          <div 
+            class="feature-card animate-on-scroll breathe-hover" 
+            v-for="(feature, index) in features" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="feature-icon">
               <component :is="feature.icon" size="36px" />
             </div>
             <h3 class="feature-title">{{ feature.title }}</h3>
             <p class="feature-desc">{{ feature.desc }}</p>
+            <div class="feature-line"></div>
           </div>
         </div>
       </div>
@@ -53,15 +63,20 @@
     <!-- 数据展示 -->
     <section class="section stats">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">OUR ACHIEVEMENTS</p>
           <h2 class="section-title">专业服务</h2>
         </div>
         <div class="stats-grid">
-          <div class="stat-card" v-for="(stat, index) in stats" :key="index">
+          <div 
+            class="stat-card animate-on-scroll" 
+            v-for="(stat, index) in stats" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="stat-number">{{ stat.value }}</div>
             <div class="stat-label">{{ stat.label }}</div>
-            <div class="stat-line"></div>
+            <div class="stat-bar"></div>
           </div>
         </div>
       </div>
@@ -70,12 +85,17 @@
     <!-- 企业价值观 -->
     <section class="section values">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">OUR VALUES</p>
           <h2 class="section-title">企业价值观</h2>
         </div>
         <div class="values-grid">
-          <div class="value-item" v-for="(value, index) in values" :key="index">
+          <div 
+            class="value-item animate-on-scroll" 
+            v-for="(value, index) in values" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="value-number">0{{ index + 1 }}</div>
             <h3 class="value-title">{{ value.title }}</h3>
             <p class="value-desc">{{ value.desc }}</p>
@@ -83,11 +103,25 @@
         </div>
       </div>
     </section>
+
+    <!-- 核心理念 -->
+    <section class="section belief">
+      <div class="container">
+        <div class="belief-card animate-on-scroll animate-scale">
+          <div class="belief-quote">"</div>
+          <p class="belief-text">只看手艺，不碰擦边</p>
+          <p class="belief-desc">轻养到家始终坚守这一核心理念，专注于为用户提供专业、健康、安全的养生服务</p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { UserIcon, ShopIcon, SecuredIcon, HeartIcon } from 'tdesign-icons-vue-next'
+import { UserIcon, ShopIcon, SecuredIcon } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const features = [
   { icon: UserIcon, title: '服务用户', desc: '提供O2O上门养生推拿，足不出户静享舒缓与健康' },
@@ -126,24 +160,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+  &-1 {
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    right: -100px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   
   &:nth-child(odd) { background: #fff; }
   &:nth-child(even) { background: $background-light; }
@@ -157,18 +225,19 @@ $background-light: #f8f9fa;
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .section-subtitle {
   font-size: 14px;
   color: $primary-color;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 600;
   color: $text-primary;
 }
@@ -179,12 +248,16 @@ $background-light: #f8f9fa;
 }
 
 .intro-text {
+  background: $background-light;
+  border-radius: 24px;
+  padding: 48px;
+  border-left: 4px solid $primary-color;
+  
   p {
     font-size: 17px;
     line-height: 2;
     color: $text-secondary;
     margin-bottom: 24px;
-    text-align: justify;
     
     &:last-child { margin-bottom: 0; }
   }
@@ -198,32 +271,35 @@ $background-light: #f8f9fa;
 
 .feature-card {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 48px 36px;
   text-align: center;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  }
+  position: relative;
+  overflow: hidden;
 }
 
 .feature-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 28px;
   background: $primary-light;
-  border-radius: 20px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover .feature-icon {
+  background: $primary-color;
+  color: #fff;
+  transform: scale(1.1) rotate(5deg);
 }
 
 .feature-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: $text-primary;
   margin-bottom: 16px;
@@ -235,6 +311,22 @@ $background-light: #f8f9fa;
   line-height: 1.7;
 }
 
+.feature-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: $primary-color;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover .feature-line {
+  width: 60px;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -243,16 +335,22 @@ $background-light: #f8f9fa;
 
 .stat-card {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 48px 24px;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-8px);
+    background: $primary-light;
+  }
 }
 
 .stat-number {
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 700;
   color: $primary-color;
   margin-bottom: 12px;
@@ -263,15 +361,20 @@ $background-light: #f8f9fa;
   color: $text-secondary;
 }
 
-.stat-line {
+.stat-bar {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
+  left: 0;
+  width: 100%;
   height: 4px;
-  background: $primary-color;
-  border-radius: 2px;
+  background: linear-gradient(90deg, $primary-color, #10b981);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover .stat-bar {
+  transform: scaleX(1);
 }
 
 .values-grid {
@@ -283,18 +386,31 @@ $background-light: #f8f9fa;
 .value-item {
   text-align: center;
   padding: 40px 24px;
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    background: #fff;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px);
+  }
 }
 
 .value-number {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
   color: $primary-light;
   margin-bottom: 16px;
   line-height: 1;
+  transition: color 0.4s;
+}
+
+.value-item:hover .value-number {
+  color: $primary-color;
 }
 
 .value-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: $text-primary;
   margin-bottom: 12px;
@@ -304,5 +420,41 @@ $background-light: #f8f9fa;
   font-size: 15px;
   color: $text-secondary;
   line-height: 1.7;
+}
+
+.belief {
+  padding: 100px 0;
+}
+
+.belief-card {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  background: linear-gradient(135deg, $primary-color 0%, #10b981 100%);
+  border-radius: 32px;
+  padding: 80px 60px;
+  color: #fff;
+}
+
+.belief-quote {
+  font-size: 100px;
+  font-family: Georgia, serif;
+  line-height: 0.5;
+  opacity: 0.3;
+  margin-bottom: 24px;
+}
+
+.belief-text {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.belief-desc {
+  font-size: 18px;
+  opacity: 0.9;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
 }
 </style>

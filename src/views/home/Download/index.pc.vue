@@ -2,10 +2,14 @@
   <div class="download">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">BOOKING CHANNELS</p>
-        <h1 class="hero-title">预约渠道</h1>
-        <p class="hero-desc">多种方式，随心选择</p>
+        <p class="hero-subtitle animate-on-scroll">BOOKING CHANNELS</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">预约渠道</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">多种方式，随心选择</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -17,15 +21,20 @@
     <!-- 预约渠道 -->
     <section class="section channels">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">OFFICIAL CHANNELS</p>
           <h2 class="section-title">官方预约渠道</h2>
           <p class="section-desc">请认准官方渠道，保障您的服务权益</p>
         </div>
         <div class="channels-grid">
-          <div class="channel-card" v-for="(channel, index) in channels" :key="index">
+          <div 
+            class="channel-card animate-on-scroll breathe-hover" 
+            v-for="(channel, index) in channels" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="channel-badge" v-if="channel.badge">{{ channel.badge }}</div>
-            <div class="channel-icon">
+            <div class="channel-icon float-animation">
               <component :is="channel.icon" size="40px" />
             </div>
             <h3>{{ channel.title }}</h3>
@@ -38,6 +47,7 @@
               <ChevronRightIcon size="18px" />
             </router-link>
             <p class="channel-tip">{{ channel.tip }}</p>
+            <div class="channel-line"></div>
           </div>
         </div>
       </div>
@@ -46,12 +56,17 @@
     <!-- 服务说明 -->
     <section class="section service">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">SERVICE FEATURES</p>
           <h2 class="section-title">服务特色</h2>
         </div>
         <div class="features-grid">
-          <div class="feature-item" v-for="(feature, index) in features" :key="index">
+          <div 
+            class="feature-item animate-on-scroll" 
+            v-for="(feature, index) in features" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="feature-icon">
               <component :is="feature.icon" size="28px" />
             </div>
@@ -67,7 +82,7 @@
     <!-- 安全提示 -->
     <section class="section notice">
       <div class="container">
-        <div class="notice-card">
+        <div class="notice-card animate-on-scroll animate-scale">
           <div class="notice-icon">
             <SecuredIcon size="32px" />
           </div>
@@ -87,6 +102,9 @@ import {
   SecuredIcon, TimeIcon, UserIcon, HeartIcon,
   ChevronRightIcon
 } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const channels = [
   { 
@@ -125,6 +143,7 @@ const features = [
 <style lang="scss" scoped>
 $primary-color: #07c160;
 $primary-light: #e8f8ef;
+$primary-dark: #06a050;
 $text-primary: #1a1a1a;
 $text-secondary: #666666;
 $background-light: #f8f9fa;
@@ -138,24 +157,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; }
+  &-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -50px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   
   &:nth-child(odd) { background: #fff; }
   &:nth-child(even) { background: $background-light; }
@@ -169,26 +222,27 @@ $background-light: #f8f9fa;
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .section-subtitle {
   font-size: 14px;
   color: $primary-color;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 600;
   color: $text-primary;
+  margin-bottom: 16px;
 }
 
 .section-desc {
-  font-size: 16px;
+  font-size: 18px;
   color: $text-secondary;
-  margin-top: 16px;
 }
 
 .channels-grid {
@@ -200,61 +254,63 @@ $background-light: #f8f9fa;
 .channel-card {
   position: relative;
   background: #fff;
-  border-radius: 24px;
-  padding: 48px 36px;
+  border-radius: 28px;
+  padding: 56px 40px;
   text-align: center;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  }
+  overflow: hidden;
 }
 
 .channel-badge {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 6px 14px;
+  top: 24px;
+  right: 24px;
+  padding: 8px 18px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
   color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 24px;
 }
 
 .channel-icon {
-  width: 88px;
-  height: 88px;
-  margin: 0 auto 24px;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 28px;
   background: $primary-light;
-  border-radius: 24px;
+  border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.channel-card:hover .channel-icon {
+  background: $primary-color;
+  color: #fff;
+  transform: scale(1.1);
 }
 
 .channel-card h3 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .channel-desc {
-  font-size: 14px;
+  font-size: 15px;
   color: $text-secondary;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .qrcode-box {
   width: 180px;
   height: 180px;
   background: $background-light;
-  border-radius: 16px;
-  margin: 0 auto 24px;
+  border-radius: 20px;
+  margin: 0 auto 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,27 +322,43 @@ $background-light: #f8f9fa;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   width: 180px;
-  height: 52px;
+  height: 56px;
   background: $primary-color;
   color: #fff;
   font-size: 16px;
-  font-weight: 500;
-  border-radius: 26px;
-  margin-bottom: 24px;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  border-radius: 28px;
+  margin-bottom: 28px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:hover {
-    background: #06a050;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3);
+    background: $primary-dark;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(7, 193, 96, 0.35);
   }
 }
 
 .channel-tip {
-  font-size: 13px;
+  font-size: 14px;
   color: #999;
+}
+
+.channel-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: $primary-color;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.channel-card:hover .channel-line {
+  width: 80px;
 }
 
 .features-grid {
@@ -298,54 +370,66 @@ $background-light: #f8f9fa;
 .feature-item {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  gap: 24px;
   background: #fff;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .feature-icon {
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   background: $primary-light;
-  border-radius: 16px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
   flex-shrink: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-item:hover .feature-icon {
+  background: $primary-color;
+  color: #fff;
 }
 
 .feature-content {
   h3 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: $text-primary;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   
   p {
     font-size: 15px;
     color: $text-secondary;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 }
 
 .notice-card {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
+  gap: 28px;
   background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: 28px;
+  padding: 56px;
 }
 
 .notice-icon {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   background: #fbbf24;
-  border-radius: 16px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -355,16 +439,16 @@ $background-light: #f8f9fa;
 
 .notice-content {
   h3 {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 600;
     color: #92400e;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
   }
   
   p {
-    font-size: 15px;
+    font-size: 16px;
     color: #78350f;
-    line-height: 1.8;
+    line-height: 1.9;
   }
 }
 </style>

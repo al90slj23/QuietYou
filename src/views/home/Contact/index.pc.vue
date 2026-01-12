@@ -2,10 +2,14 @@
   <div class="contact">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">CONTACT US</p>
-        <h1 class="hero-title">联系我们</h1>
-        <p class="hero-desc">期待与您的每一次沟通</p>
+        <p class="hero-subtitle animate-on-scroll">CONTACT US</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">联系我们</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">期待与您的每一次沟通</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -17,18 +21,24 @@
     <!-- 联系方式 -->
     <section class="section contact-section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">GET IN TOUCH</p>
           <h2 class="section-title">联系方式</h2>
         </div>
         <div class="contact-grid">
-          <div class="contact-card" v-for="(item, index) in contactList" :key="index">
+          <div 
+            class="contact-card animate-on-scroll breathe-hover" 
+            v-for="(item, index) in contactList" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="contact-icon">
               <component :is="item.icon" size="32px" />
             </div>
             <h3 class="contact-label">{{ item.label }}</h3>
             <p class="contact-value">{{ item.value }}</p>
             <p class="contact-desc">{{ item.desc }}</p>
+            <div class="contact-line"></div>
           </div>
         </div>
       </div>
@@ -37,22 +47,22 @@
     <!-- 关注我们 -->
     <section class="section follow-section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">FOLLOW US</p>
           <h2 class="section-title">关注我们</h2>
         </div>
         <div class="follow-content">
-          <div class="qrcode-card">
-            <div class="qrcode-box">
+          <div class="qrcode-card animate-on-scroll animate-delay-1 breathe-hover">
+            <div class="qrcode-box float-animation">
               <LogoWechatStrokeIcon size="48px" />
               <span>公众号二维码</span>
             </div>
             <h3>轻养到家公众号</h3>
             <p>关注获取最新资讯和优惠活动</p>
           </div>
-          <div class="qrcode-card">
-            <div class="qrcode-box">
-              <LogoWechatStrokeIcon size="48px" />
+          <div class="qrcode-card animate-on-scroll animate-delay-2 breathe-hover">
+            <div class="qrcode-box float-animation">
+              <MobileIcon size="48px" />
               <span>小程序二维码</span>
             </div>
             <h3>轻养到家小程序</h3>
@@ -65,7 +75,7 @@
     <!-- 温馨提示 -->
     <section class="section notice-section">
       <div class="container">
-        <div class="notice-card">
+        <div class="notice-card animate-on-scroll animate-scale">
           <div class="notice-icon">
             <SecuredIcon size="32px" />
           </div>
@@ -80,7 +90,10 @@
 </template>
 
 <script setup>
-import { CallIcon, MailIcon, LogoWechatStrokeIcon, SecuredIcon, TimeIcon } from 'tdesign-icons-vue-next'
+import { CallIcon, MailIcon, LogoWechatStrokeIcon, SecuredIcon, TimeIcon, MobileIcon } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const contactList = [
   { icon: CallIcon, label: '客服热线', value: '400-888-8888', desc: '服务咨询、意见反馈' },
@@ -105,24 +118,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; }
+  &-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -50px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   
   &:nth-child(odd) { background: #fff; }
   &:nth-child(even) { background: $background-light; }
@@ -136,18 +183,19 @@ $background-light: #f8f9fa;
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .section-subtitle {
   font-size: 14px;
   color: $primary-color;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 600;
   color: $text-primary;
 }
@@ -160,28 +208,30 @@ $background-light: #f8f9fa;
 
 .contact-card {
   background: $background-light;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 48px 36px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    background: #fff;
-  }
+  position: relative;
+  overflow: hidden;
 }
 
 .contact-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 28px;
   background: $primary-light;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contact-card:hover .contact-icon {
+  background: $primary-color;
+  color: #fff;
+  transform: scale(1.1);
 }
 
 .contact-label {
@@ -191,7 +241,7 @@ $background-light: #f8f9fa;
 }
 
 .contact-value {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 600;
   color: $text-primary;
   margin-bottom: 16px;
@@ -202,6 +252,22 @@ $background-light: #f8f9fa;
   color: $text-secondary;
 }
 
+.contact-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: $primary-color;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.contact-card:hover .contact-line {
+  width: 60px;
+}
+
 .follow-content {
   display: flex;
   justify-content: center;
@@ -210,21 +276,24 @@ $background-light: #f8f9fa;
 
 .qrcode-card {
   text-align: center;
+  padding: 40px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 .qrcode-box {
   width: 200px;
   height: 200px;
-  background: #fff;
-  border-radius: 20px;
+  background: $background-light;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
   color: $primary-color;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  margin-bottom: 28px;
   
   span {
     font-size: 14px;
@@ -233,10 +302,10 @@ $background-light: #f8f9fa;
 }
 
 .qrcode-card h3 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .qrcode-card p {
@@ -247,17 +316,17 @@ $background-light: #f8f9fa;
 .notice-card {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
+  gap: 28px;
   background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: 24px;
+  padding: 48px;
 }
 
 .notice-icon {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   background: #fbbf24;
-  border-radius: 16px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -267,16 +336,16 @@ $background-light: #f8f9fa;
 
 .notice-content {
   h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     color: #92400e;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
   
   p {
-    font-size: 15px;
+    font-size: 16px;
     color: #78350f;
-    line-height: 1.8;
+    line-height: 1.9;
   }
 }
 </style>

@@ -2,10 +2,14 @@
   <div class="party">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">PARTY BUILDING</p>
-        <h1 class="hero-title">党建动态</h1>
-        <p class="hero-desc">坚持党的领导，践行社会责任</p>
+        <p class="hero-subtitle animate-on-scroll">PARTY BUILDING</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">党建动态</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">坚持党的领导，践行社会责任</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -17,12 +21,12 @@
     <!-- 党建引领 -->
     <section class="section intro">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">PARTY LEADERSHIP</p>
           <h2 class="section-title">党建引领</h2>
         </div>
         <div class="intro-content">
-          <div class="intro-card">
+          <div class="intro-card animate-on-scroll animate-delay-1">
             <p>轻养到家始终坚持党的领导，以习近平新时代中国特色社会主义思想为指导，将党建工作与企业发展深度融合，充分发挥党组织的战斗堡垒作用和党员的先锋模范作用。</p>
             <p>我们积极响应国家号召，践行社会责任，在促进灵活就业、服务民生健康等方面贡献企业力量，努力实现经济效益与社会效益的统一。</p>
           </div>
@@ -33,17 +37,23 @@
     <!-- 主题活动 -->
     <section class="section activities">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">THEMED ACTIVITIES</p>
           <h2 class="section-title">主题活动</h2>
         </div>
         <div class="activities-grid">
-          <div class="activity-card" v-for="(activity, index) in activities" :key="index">
+          <div 
+            class="activity-card animate-on-scroll breathe-hover" 
+            v-for="(activity, index) in activities" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="activity-icon">
               <component :is="activity.icon" size="32px" />
             </div>
             <h3>{{ activity.title }}</h3>
             <p>{{ activity.desc }}</p>
+            <div class="activity-line"></div>
           </div>
         </div>
       </div>
@@ -52,12 +62,17 @@
     <!-- 党建新闻 -->
     <section class="section news">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">PARTY NEWS</p>
           <h2 class="section-title">党建新闻</h2>
         </div>
         <div class="news-grid">
-          <article class="news-card" v-for="item in newsList" :key="item.id">
+          <article 
+            class="news-card animate-on-scroll breathe-hover" 
+            v-for="(item, index) in newsList" 
+            :key="item.id"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="news-cover">
               <FlagIcon size="36px" />
             </div>
@@ -75,6 +90,7 @@
                 </span>
               </div>
             </div>
+            <div class="news-hover-line"></div>
           </article>
         </div>
       </div>
@@ -84,6 +100,9 @@
 
 <script setup>
 import { FlagIcon, HeartIcon, UsergroupIcon, BookIcon, TimeIcon, ChevronRightIcon } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const activities = [
   { icon: BookIcon, title: '理论学习', desc: '定期组织党员学习党的理论知识和方针政策，提升政治素养' },
@@ -115,24 +134,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; }
+  &-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -50px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   
   &:nth-child(odd) { background: #fff; }
   &:nth-child(even) { background: $background-light; }
@@ -146,18 +199,19 @@ $background-light: #f8f9fa;
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .section-subtitle {
   font-size: 14px;
   color: $party-color;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 600;
   color: $text-primary;
 }
@@ -166,15 +220,15 @@ $background-light: #f8f9fa;
   max-width: 900px;
   margin: 0 auto;
   background: $party-light;
-  border-radius: 20px;
-  padding: 48px;
-  border-left: 4px solid $party-color;
+  border-radius: 24px;
+  padding: 56px;
+  border-left: 5px solid $party-color;
   
   p {
     font-size: 17px;
     line-height: 2;
     color: $text-secondary;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     
     &:last-child { margin-bottom: 0; }
   }
@@ -188,89 +242,107 @@ $background-light: #f8f9fa;
 
 .activity-card {
   background: #fff;
-  border-radius: 20px;
-  padding: 40px 28px;
+  border-radius: 24px;
+  padding: 48px 32px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  }
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
 }
 
 .activity-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 20px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
   background: $party-light;
-  border-radius: 18px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $party-color;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-card:hover .activity-icon {
+  background: $party-color;
+  color: #fff;
+  transform: scale(1.1) rotate(5deg);
 }
 
 .activity-card h3 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .activity-card p {
-  font-size: 14px;
+  font-size: 15px;
   color: $text-secondary;
   line-height: 1.7;
+}
+
+.activity-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: $party-color;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-card:hover .activity-line {
+  width: 60px;
 }
 
 .news-grid {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 .news-card {
   display: flex;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-    
-    .news-link { color: $party-color; }
-  }
+  position: relative;
 }
 
 .news-cover {
-  width: 160px;
-  min-height: 160px;
+  width: 180px;
+  min-height: 180px;
   background: linear-gradient(135deg, $party-light 0%, #ffcdd2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: $party-color;
   flex-shrink: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.news-card:hover .news-cover {
+  background: linear-gradient(135deg, $party-color 0%, #b71c1c 100%);
+  color: #fff;
 }
 
 .news-body {
   flex: 1;
-  padding: 32px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
 }
 
 .news-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   line-height: 1.4;
 }
 
@@ -278,7 +350,7 @@ $background-light: #f8f9fa;
   font-size: 15px;
   color: $text-secondary;
   line-height: 1.7;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .news-footer {
@@ -303,5 +375,23 @@ $background-light: #f8f9fa;
   font-size: 14px;
   color: $text-secondary;
   transition: color 0.3s;
+}
+
+.news-card:hover .news-link {
+  color: $party-color;
+}
+
+.news-hover-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: $party-color;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.news-card:hover .news-hover-line {
+  width: 100%;
 }
 </style>

@@ -116,3 +116,97 @@ $tablet: 1024px;
     font-size: 0.75em;
   }
 }
+
+// ============================================
+// 滚动动画 - 呼吸感交互
+// ============================================
+
+// 基础动画状态
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 从左侧滑入
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.animated {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// 从右侧滑入
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.animated {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// 缩放淡入
+.animate-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.animated {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// 延迟类
+@for $i from 1 through 10 {
+  .animate-delay-#{$i} {
+    transition-delay: #{$i * 0.1}s;
+  }
+}
+
+// 呼吸感悬停效果
+.breathe-hover {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// 柔和脉动动画
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.gentle-pulse {
+  animation: gentle-pulse 3s ease-in-out infinite;
+}
+
+// 浮动动画
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 4s ease-in-out infinite;
+}

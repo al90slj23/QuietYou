@@ -2,10 +2,14 @@
   <div class="history">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">DEVELOPMENT HISTORY</p>
-        <h1 class="hero-title">发展历程</h1>
-        <p class="hero-desc">见证轻养到家的成长足迹</p>
+        <p class="hero-subtitle animate-on-scroll">DEVELOPMENT HISTORY</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">发展历程</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">见证轻养到家的成长足迹</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -19,17 +23,17 @@
       <div class="container">
         <div class="timeline">
           <div 
-            class="timeline-item" 
+            class="timeline-item animate-on-scroll" 
             v-for="(item, index) in timeline" 
             :key="item.year"
-            :class="{ reverse: index % 2 === 1 }"
+            :class="[{ reverse: index % 2 === 1 }, `animate-delay-${index + 1}`]"
           >
             <div class="timeline-dot">
               <span class="dot-inner"></span>
             </div>
             <div class="timeline-content">
               <div class="timeline-year">{{ item.year }}</div>
-              <div class="timeline-card">
+              <div class="timeline-card breathe-hover">
                 <div class="card-header">
                   <h3>{{ item.title }}</h3>
                   <span class="card-badge" v-if="item.badge">{{ item.badge }}</span>
@@ -50,17 +54,23 @@
     <!-- 未来展望 -->
     <section class="section vision">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header animate-on-scroll">
           <p class="section-subtitle">FUTURE VISION</p>
           <h2 class="section-title">未来展望</h2>
         </div>
         <div class="vision-grid">
-          <div class="vision-card" v-for="(vision, index) in visions" :key="index">
+          <div 
+            class="vision-card animate-on-scroll breathe-hover" 
+            v-for="(vision, index) in visions" 
+            :key="index"
+            :class="`animate-delay-${index + 1}`"
+          >
             <div class="vision-icon">
               <component :is="vision.icon" size="32px" />
             </div>
             <h3>{{ vision.title }}</h3>
             <p>{{ vision.desc }}</p>
+            <div class="vision-line"></div>
           </div>
         </div>
       </div>
@@ -69,7 +79,7 @@
     <!-- 核心理念 -->
     <section class="section belief">
       <div class="container">
-        <div class="belief-card">
+        <div class="belief-card animate-on-scroll animate-scale">
           <div class="belief-quote">"</div>
           <p class="belief-text">只看手艺，不碰擦边</p>
           <p class="belief-desc">轻养到家始终坚守这一核心理念，专注于为用户提供专业、健康、安全的养生服务</p>
@@ -81,6 +91,9 @@
 
 <script setup>
 import { CheckCircleIcon, RocketIcon, MapIcon, StarIcon } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const timeline = [
   { 
@@ -141,24 +154,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; }
+  &-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -50px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   
   &:nth-child(odd) { background: #fff; }
   &:nth-child(even) { background: $background-light; }
@@ -172,18 +219,19 @@ $background-light: #f8f9fa;
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .section-subtitle {
   font-size: 14px;
   color: $primary-color;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .section-title {
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 600;
   color: $text-primary;
 }
@@ -192,7 +240,7 @@ $background-light: #f8f9fa;
   position: relative;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 60px 0;
   
   &::before {
     content: '';
@@ -200,7 +248,7 @@ $background-light: #f8f9fa;
     left: 50%;
     top: 0;
     bottom: 0;
-    width: 3px;
+    width: 4px;
     background: linear-gradient(to bottom, $primary-color, #10b981);
     transform: translateX(-50%);
     border-radius: 2px;
@@ -211,13 +259,13 @@ $background-light: #f8f9fa;
   position: relative;
   display: flex;
   justify-content: flex-end;
-  padding: 30px 0;
+  padding: 40px 0;
   
   &.reverse {
     justify-content: flex-start;
     
     .timeline-content {
-      padding-left: calc(50% + 60px);
+      padding-left: calc(50% + 70px);
       padding-right: 0;
       text-align: left;
     }
@@ -235,44 +283,59 @@ $background-light: #f8f9fa;
 .timeline-dot {
   position: absolute;
   left: 50%;
-  top: 40px;
-  width: 24px;
-  height: 24px;
+  top: 50px;
+  width: 28px;
+  height: 28px;
   background: #fff;
-  border: 3px solid $primary-color;
+  border: 4px solid $primary-color;
   border-radius: 50%;
   transform: translateX(-50%);
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   .dot-inner {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     background: $primary-color;
     border-radius: 50%;
+    transition: transform 0.4s;
+  }
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: translateX(-50%) scale(1.2);
+  
+  .dot-inner {
+    transform: scale(1.2);
   }
 }
 
 .timeline-content {
   width: 100%;
-  padding-right: calc(50% + 60px);
+  padding-right: calc(50% + 70px);
   text-align: right;
 }
 
 .timeline-year {
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 700;
   color: $primary-light;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   line-height: 1;
+  transition: color 0.4s;
+}
+
+.timeline-item:hover .timeline-year {
+  color: $primary-color;
 }
 
 .timeline-card {
   background: #fff;
-  padding: 32px;
-  border-radius: 20px;
+  padding: 36px;
+  border-radius: 24px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   text-align: left;
 }
@@ -280,23 +343,23 @@ $background-light: #f8f9fa;
 .card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 24px;
   
   h3 {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 600;
     color: $text-primary;
   }
 }
 
 .card-badge {
-  padding: 4px 12px;
+  padding: 6px 16px;
   background: $primary-light;
   color: $primary-color;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 16px;
 }
 
 .timeline-events {
@@ -307,8 +370,8 @@ $background-light: #f8f9fa;
   li {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin-bottom: 16px;
     font-size: 15px;
     color: $text-secondary;
     line-height: 1.5;
@@ -332,35 +395,38 @@ $background-light: #f8f9fa;
 
 .vision-card {
   background: #fff;
-  border-radius: 20px;
-  padding: 48px 36px;
+  border-radius: 24px;
+  padding: 56px 40px;
   text-align: center;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  }
+  position: relative;
+  overflow: hidden;
 }
 
 .vision-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 28px;
   background: $primary-light;
-  border-radius: 20px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: $primary-color;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vision-card:hover .vision-icon {
+  background: $primary-color;
+  color: #fff;
+  transform: scale(1.1) rotate(5deg);
 }
 
 .vision-card h3 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .vision-card p {
@@ -369,35 +435,55 @@ $background-light: #f8f9fa;
   line-height: 1.7;
 }
 
+.vision-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4px;
+  background: $primary-color;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vision-card:hover .vision-line {
+  width: 60px;
+}
+
+.belief {
+  padding: 100px 0;
+}
+
 .belief-card {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
   background: linear-gradient(135deg, $primary-color 0%, #10b981 100%);
-  border-radius: 24px;
-  padding: 60px 48px;
+  border-radius: 32px;
+  padding: 80px 60px;
   color: #fff;
 }
 
 .belief-quote {
-  font-size: 80px;
+  font-size: 100px;
   font-family: Georgia, serif;
   line-height: 0.5;
   opacity: 0.3;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .belief-text {
-  font-size: 36px;
+  font-size: 44px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .belief-desc {
-  font-size: 16px;
+  font-size: 18px;
   opacity: 0.9;
   line-height: 1.8;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
 }
 </style>

@@ -2,10 +2,14 @@
   <div class="news">
     <!-- Hero Banner -->
     <section class="hero">
+      <div class="hero-bg">
+        <div class="hero-circle hero-circle-1"></div>
+        <div class="hero-circle hero-circle-2"></div>
+      </div>
       <div class="hero-content">
-        <p class="hero-subtitle">NEWS & ARTICLES</p>
-        <h1 class="hero-title">轻养资讯</h1>
-        <p class="hero-desc">了解轻养到家的最新动态</p>
+        <p class="hero-subtitle animate-on-scroll">NEWS & ARTICLES</p>
+        <h1 class="hero-title animate-on-scroll animate-delay-1">轻养资讯</h1>
+        <p class="hero-desc animate-on-scroll animate-delay-2">了解轻养到家的最新动态</p>
       </div>
       <div class="hero-wave">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -18,7 +22,7 @@
     <section class="section news-section">
       <div class="container">
         <!-- 分类标签 -->
-        <div class="tabs-wrapper">
+        <div class="tabs-wrapper animate-on-scroll">
           <div class="tabs">
             <button 
               v-for="tab in tabs" 
@@ -33,9 +37,15 @@
 
         <!-- 资讯网格 -->
         <div class="news-grid" v-if="filteredNews.length > 0">
-          <article class="news-card" v-for="item in filteredNews" :key="item.id">
+          <article 
+            class="news-card animate-on-scroll breathe-hover" 
+            v-for="(item, index) in filteredNews" 
+            :key="item.id"
+            :class="`animate-delay-${(index % 4) + 1}`"
+          >
             <div class="news-cover">
-              <ArticleIcon size="40px" />
+              <img :src="item.image" :alt="item.title" loading="lazy" />
+              <div class="news-cover-overlay"></div>
             </div>
             <div class="news-body">
               <div class="news-tag">{{ item.tag }}</div>
@@ -52,11 +62,12 @@
                 </span>
               </div>
             </div>
+            <div class="news-hover-line"></div>
           </article>
         </div>
 
         <!-- 空状态 -->
-        <div class="empty" v-else>
+        <div class="empty animate-on-scroll" v-else>
           <div class="empty-icon">
             <ArticleIcon size="48px" />
           </div>
@@ -64,7 +75,7 @@
         </div>
 
         <!-- 加载更多 -->
-        <div class="load-more" v-if="filteredNews.length > 0">
+        <div class="load-more animate-on-scroll" v-if="filteredNews.length > 0">
           <button class="btn-load-more">
             查看更多资讯
             <ChevronDownIcon size="20px" />
@@ -78,6 +89,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { ArticleIcon, TimeIcon, ChevronRightIcon, ChevronDownIcon } from 'tdesign-icons-vue-next'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
+
+useScrollAnimation()
 
 const activeTab = ref('all')
 const tabs = [
@@ -88,12 +102,60 @@ const tabs = [
 ]
 
 const newsList = ref([
-  { id: 1, title: '轻养到家正式上线，开启健康服务新篇章', desc: '轻养到家平台正式上线，致力于为用户提供专业、便捷的上门养生推拿服务，让健康触手可及。', date: '2026-01-10', tag: '新闻动态', type: 'news' },
-  { id: 2, title: '首批认证技师培训圆满结束', desc: '经过为期一周的专业培训，首批30名技师顺利通过认证考核，即将为用户提供专业服务。', date: '2026-01-08', tag: '新闻动态', type: 'news' },
-  { id: 3, title: '轻养公益行：关爱社区老人健康', desc: '轻养到家携手社区志愿者，为社区老人提供免费推拿服务，传递温暖与关爱。', date: '2026-01-05', tag: '公益活动', type: 'welfare' },
-  { id: 4, title: '技师风采：用双手传递健康的力量', desc: '走进轻养到家优秀技师的故事，了解他们如何用专业技能为用户带来健康与舒适。', date: '2026-01-03', tag: '出彩手艺人', type: 'technician' },
-  { id: 5, title: '轻养到家与多家企业达成战略合作', desc: '轻养到家与多家知名企业签署战略合作协议，共同推动健康服务行业发展。', date: '2026-01-01', tag: '新闻动态', type: 'news' },
-  { id: 6, title: '新年公益：为环卫工人送温暖', desc: '新年伊始，轻养到家组织技师团队为城市环卫工人提供免费推拿服务。', date: '2025-12-28', tag: '公益活动', type: 'welfare' }
+  { 
+    id: 1, 
+    title: '轻养到家正式上线，开启健康服务新篇章', 
+    desc: '轻养到家平台正式上线，致力于为用户提供专业、便捷的上门养生推拿服务，让健康触手可及。', 
+    date: '2026-01-10', 
+    tag: '新闻动态', 
+    type: 'news',
+    image: 'https://images.pexels.com/photos/7652178/pexels-photo-7652178.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  },
+  { 
+    id: 2, 
+    title: '首批认证技师培训圆满结束', 
+    desc: '经过为期一周的专业培训，首批30名技师顺利通过认证考核，即将为用户提供专业服务。', 
+    date: '2026-01-08', 
+    tag: '新闻动态', 
+    type: 'news',
+    image: 'https://images.pexels.com/photos/6076101/pexels-photo-6076101.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  },
+  { 
+    id: 3, 
+    title: '轻养公益行：关爱社区老人健康', 
+    desc: '轻养到家携手社区志愿者，为社区老人提供免费推拿服务，传递温暖与关爱。', 
+    date: '2026-01-05', 
+    tag: '公益活动', 
+    type: 'welfare',
+    image: 'https://images.pexels.com/photos/34073814/pexels-photo-34073814.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  },
+  { 
+    id: 4, 
+    title: '技师风采：用双手传递健康的力量', 
+    desc: '走进轻养到家优秀技师的故事，了解他们如何用专业技能为用户带来健康与舒适。', 
+    date: '2026-01-03', 
+    tag: '出彩手艺人', 
+    type: 'technician',
+    image: 'https://images.pexels.com/photos/5473184/pexels-photo-5473184.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  },
+  { 
+    id: 5, 
+    title: '轻养到家与多家企业达成战略合作', 
+    desc: '轻养到家与多家知名企业签署战略合作协议，共同推动健康服务行业发展。', 
+    date: '2026-01-01', 
+    tag: '新闻动态', 
+    type: 'news',
+    image: 'https://images.pexels.com/photos/7652246/pexels-photo-7652246.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  },
+  { 
+    id: 6, 
+    title: '新年公益：为环卫工人送温暖', 
+    desc: '新年伊始，轻养到家组织技师团队为城市环卫工人提供免费推拿服务。', 
+    date: '2025-12-28', 
+    tag: '公益活动', 
+    type: 'welfare',
+    image: 'https://images.pexels.com/photos/33296777/pexels-photo-33296777.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
+  }
 ])
 
 const filteredNews = computed(() => {
@@ -118,24 +180,58 @@ $background-light: #f8f9fa;
   justify-content: center;
   text-align: center;
   color: #fff;
-  padding: 120px 40px 160px;
+  padding: 140px 40px 180px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
   
-  &-content { position: relative; z-index: 1; }
-  &-subtitle { font-size: 14px; letter-spacing: 4px; opacity: 0.9; margin-bottom: 20px; }
-  &-title { font-size: 56px; font-weight: 700; margin-bottom: 24px; line-height: 1.2; }
-  &-desc { font-size: 20px; opacity: 0.9; }
+  &-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    right: -50px;
+    animation: float 8s ease-in-out infinite;
+  }
   
-  &-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    svg { display: block; width: 100%; height: 80px; }
+  &-2 {
+    width: 250px;
+    height: 250px;
+    bottom: -50px;
+    left: -50px;
+    animation: float 10s ease-in-out infinite reverse;
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero-subtitle { font-size: 14px; letter-spacing: 6px; opacity: 0.9; margin-bottom: 24px; }
+.hero-title { font-size: 64px; font-weight: 700; margin-bottom: 24px; line-height: 1.1; }
+.hero-desc { font-size: 22px; opacity: 0.9; }
+
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  svg { display: block; width: 100%; height: 100px; }
+}
+
 .section {
-  padding: 100px 0;
+  padding: 120px 0;
   background: #fff;
 }
 
@@ -148,26 +244,26 @@ $background-light: #f8f9fa;
 .tabs-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
 }
 
 .tabs {
   display: inline-flex;
   gap: 12px;
   background: $background-light;
-  padding: 8px;
-  border-radius: 30px;
+  padding: 10px;
+  border-radius: 40px;
 }
 
 .tab {
-  padding: 12px 28px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 22px;
+  border-radius: 30px;
   background: transparent;
   font-size: 15px;
   color: $text-secondary;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:hover {
     color: $primary-color;
@@ -176,7 +272,7 @@ $background-light: #f8f9fa;
   &.active {
     background: $primary-color;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+    box-shadow: 0 8px 20px rgba(7, 193, 96, 0.3);
   }
 }
 
@@ -189,62 +285,83 @@ $background-light: #f8f9fa;
 .news-card {
   display: flex;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    
-    .news-link { color: $primary-color; }
-  }
+  position: relative;
 }
 
 .news-cover {
-  width: 200px;
-  min-height: 200px;
-  background: linear-gradient(135deg, $primary-light 0%, #d1fae5 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $primary-color;
+  width: 280px;
+  min-height: 240px;
+  position: relative;
   flex-shrink: 0;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(7, 193, 96, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+}
+
+.news-card:hover .news-cover {
+  img {
+    transform: scale(1.1);
+  }
+  
+  &-overlay {
+    opacity: 1;
+  }
 }
 
 .news-body {
   flex: 1;
-  padding: 32px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
 }
 
 .news-tag {
   display: inline-block;
-  padding: 4px 12px;
+  padding: 6px 14px;
   background: $primary-light;
   color: $primary-color;
   font-size: 12px;
-  border-radius: 12px;
-  margin-bottom: 16px;
+  font-weight: 500;
+  border-radius: 16px;
+  margin-bottom: 18px;
   align-self: flex-start;
 }
 
 .news-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   line-height: 1.4;
+  transition: color 0.3s;
+}
+
+.news-card:hover .news-title {
+  color: $primary-color;
 }
 
 .news-desc {
   font-size: 15px;
   color: $text-secondary;
   line-height: 1.7;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -275,14 +392,32 @@ $background-light: #f8f9fa;
   transition: color 0.3s;
 }
 
+.news-card:hover .news-link {
+  color: $primary-color;
+}
+
+.news-hover-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: $primary-color;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.news-card:hover .news-hover-line {
+  width: 100%;
+}
+
 .empty {
   text-align: center;
-  padding: 80px 0;
+  padding: 100px 0;
   
   &-icon {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 24px;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 28px;
     background: $background-light;
     border-radius: 50%;
     display: flex;
@@ -292,32 +427,35 @@ $background-light: #f8f9fa;
   }
   
   p {
-    font-size: 16px;
+    font-size: 18px;
     color: #999;
   }
 }
 
 .load-more {
   text-align: center;
-  margin-top: 60px;
+  margin-top: 80px;
 }
 
 .btn-load-more {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 36px;
+  gap: 10px;
+  padding: 18px 48px;
   background: transparent;
   border: 2px solid $primary-color;
-  border-radius: 30px;
-  font-size: 15px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 500;
   color: $primary-color;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:hover {
     background: $primary-color;
     color: #fff;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(7, 193, 96, 0.3);
   }
 }
 </style>
