@@ -28,9 +28,10 @@
       
       <!-- 月份选择器 -->
       <t-action-sheet
-        v-model="showMonthPicker"
+        :visible="showMonthPicker"
         :items="monthOptions"
         @selected="onMonthChange"
+        @close="showMonthPicker = false"
       />
       <div class="income-list">
         <div class="income-item" v-for="item in incomeList" :key="item.id">
