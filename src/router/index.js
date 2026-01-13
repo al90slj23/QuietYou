@@ -63,13 +63,35 @@ const userRoutes = [
   }
 ]
 
-// 管理后台路由 (待开发)
+// 管理后台路由
 const adminRoutes = [
   {
     path: '/admin',
     component: () => import('../layouts/AdminLayout.vue'),
     children: [
-      { path: '', name: 'admin-home', component: () => import('../views/admin/index.vue'), meta: { title: '管理后台' } }
+      { path: '', name: 'admin-dashboard', component: () => import('../views/admin/index.vue'), meta: { title: '工作台' } },
+      // 用户管理
+      { path: 'user/list', name: 'admin-user-list', component: () => import('../views/admin/user/list.vue'), meta: { title: '用户列表' } },
+      // 技师管理
+      { path: 'tech/list', name: 'admin-tech-list', component: () => import('../views/admin/tech/list.vue'), meta: { title: '技师列表' } },
+      { path: 'tech/certification', name: 'admin-tech-certification', component: () => import('../views/admin/tech/certification.vue'), meta: { title: '认证审核' } },
+      // 商户管理
+      { path: 'merchant/list', name: 'admin-merchant-list', component: () => import('../views/admin/merchant/list.vue'), meta: { title: '商户列表' } },
+      // 订单管理
+      { path: 'order/list', name: 'admin-order-list', component: () => import('../views/admin/order/list.vue'), meta: { title: '订单列表' } },
+      { path: 'order/refund', name: 'admin-order-refund', component: () => import('../views/admin/order/refund.vue'), meta: { title: '退款处理' } },
+      // 服务管理
+      { path: 'service/category', name: 'admin-service-category', component: () => import('../views/admin/service/category.vue'), meta: { title: '服务分类' } },
+      { path: 'service/list', name: 'admin-service-list', component: () => import('../views/admin/service/list.vue'), meta: { title: '服务项目' } },
+      // 财务管理
+      { path: 'finance/income', name: 'admin-finance-income', component: () => import('../views/admin/finance/income.vue'), meta: { title: '收入统计' } },
+      { path: 'finance/withdraw', name: 'admin-finance-withdraw', component: () => import('../views/admin/finance/withdraw.vue'), meta: { title: '提现审核' } },
+      // 内容管理
+      { path: 'content/banner', name: 'admin-content-banner', component: () => import('../views/admin/content/banner.vue'), meta: { title: '轮播图' } },
+      { path: 'content/news', name: 'admin-content-news', component: () => import('../views/admin/content/news.vue'), meta: { title: '资讯管理' } },
+      // 系统设置
+      { path: 'system/config', name: 'admin-system-config', component: () => import('../views/admin/system/config.vue'), meta: { title: '基础配置' } },
+      { path: 'system/admin', name: 'admin-system-admin', component: () => import('../views/admin/system/admin.vue'), meta: { title: '管理员' } }
     ]
   }
 ]

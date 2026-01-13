@@ -78,7 +78,7 @@ import { Popup as TPopup } from 'tdesign-mobile-vue'
 import { useWhitepaper, renderMindmaps } from './Whitepaper.logic'
 import { 
   ChevronLeftIcon, ViewListIcon, CloseIcon,
-  InfoCircleIcon, ChartIcon, WalletIcon, StarIcon, 
+  InfoCircleIcon, ChartLineIcon, WalletIcon, StarIcon, 
   AppIcon, CodeIcon, MapIcon, UsergroupIcon, LinkIcon, FilePasteIcon
 } from 'tdesign-icons-vue-next'
 
@@ -90,7 +90,7 @@ const scrolled = ref(false)
 const iconMap = {
   'file-paste': FilePasteIcon,
   'info-circle': InfoCircleIcon,
-  'chart-line': ChartIcon,
+  'chart-line': ChartLineIcon,
   'wallet': WalletIcon,
   'star': StarIcon,
   'app': AppIcon,

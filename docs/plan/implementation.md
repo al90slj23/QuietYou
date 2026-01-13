@@ -226,7 +226,15 @@
 
 ## 七、实现进度
 
-### 已完成（2026-01-13）
+### 已完成（2026-01-13 更新）
+
+#### 用户端 `/user` 根据白皮书调整
+- ✅ 首页 (`/user/home`) - 快捷入口、服务分类、附近技师、附近店铺、热门服务
+- ✅ 技师列表 (`/user/technician/list`) - 服务类型筛选、性别筛选、排序、更多筛选（评分、回头率、状态）
+- ✅ 技师详情 (`/user/technician/detail`) - 多维度评分展示、评价筛选、收藏/分享、认证展示
+- ✅ 店铺列表 (`/user/shop/list`) - 距离/评分/人气排序
+- ✅ 店铺详情 (`/user/shop/detail`) - 店铺信息、服务项目、技师列表
+- ✅ 评价页面 (`/user/order/review`) - 多维度评分输入（手法、态度、准时、沟通、卫生）
 
 #### 响应式结构重构
 - ✅ 创建 `src/components/common/MobileOnlyTip.vue` - PC端统一提示"请使用移动端访问"
@@ -240,141 +248,40 @@
 - ✅ 修复构建错误：替换不存在的 TDesign 组件（EmptyIcon → InfoCircleIcon, Dropdown → ActionSheet）
 
 #### Bug 修复（2026-01-13 更新）
-- ✅ 修复 `src/views/index.vue` - `useMediaQuery` 调用方式错误，从 `useMediaQuery('(max-width: 768px)')` 改为 `const { isMobile } = useMediaQuery()`
-- ✅ 修复 `src/components/common/LoginDialog.vue` - TDesign Mobile Vue Popup 组件用法：
-  - 将 `v-model="visible"` 改为 `:visible="visible" @visible-change="onVisibleChange"`
-  - 添加 `onVisibleChange` 方法处理弹窗关闭事件
-  - 修复关闭按钮和登录成功后的关闭逻辑
-- ✅ 修复 `src/views/index.mobile.vue` - 入驻选择弹窗：
-  - 导入 `Popup as TPopup` 组件
-  - 将 `v-model="showJoinPopup"` 改为 `:visible="showJoinPopup" @visible-change="showJoinPopup = $event"`
-  - 添加 `:close-on-overlay-click="true"` 支持点击外部关闭
+- ✅ 修复 `src/views/index.vue` - `useMediaQuery` 调用方式错误
+- ✅ 修复 `src/components/common/LoginDialog.vue` - TDesign Mobile Vue Popup 组件用法
+- ✅ 修复 `src/views/index.mobile.vue` - 入驻选择弹窗
 
 #### 数据库
-- ✅ 更新 `qy_technician_list` 表：添加技师类型、认证状态、接单设置、服务范围、回头率等字段
-- ✅ 更新 `qy_order_list` 表：添加订单类型（上门/到店/借调）、来源店铺ID
-- ✅ 更新 `qy_review_list` 表：添加多维度评分（手法、态度、准时、沟通、卫生）
-- ✅ 新增 `qy_borrow_list` 表：技师借调记录
-- ✅ 新增 `qy_job_list` 表：店铺招聘信息
-- ✅ 新增 `qy_job_apply_list` 表：招聘申请记录
-- ✅ 新增 `qy_user_favorite_list` 表：用户收藏
-- ✅ 新增 `qy_coupon_list` 表：优惠券
-- ✅ 新增 `qy_user_coupon_list` 表：用户优惠券
-- ✅ 新增 `qy_message_list` 表：消息通知
+- ✅ 更新技师表、订单表、评价表
+- ✅ 新增借调、招聘、收藏、优惠券、消息等表
 
 #### 技师端 `/tech`
-- ✅ `TechLayout.vue` - 底部导航（工作台、订单、收入、我的）
-- ✅ `/tech/home` - 工作台（今日数据、快捷操作、待处理订单）
-- ✅ `/tech/order/list` - 订单列表（标签页筛选）
-- ✅ `/tech/order/detail/:id` - 订单详情
-- ✅ `/tech/income` - 收入明细
-- ✅ `/tech/income/withdraw` - 申请提现
-- ✅ `/tech/service/list` - 服务项目管理
-- ✅ `/tech/review/list` - 我的评价（多维度评分展示）
-- ✅ `/tech/setting/accept` - 接单设置（服务范围、工作时间、订单偏好）
-- ✅ `/tech/job/list` - 店铺招聘浏览
-- ✅ `/tech/profile` - 个人中心
-- ✅ `/tech/profile/edit` - 编辑资料
-- ✅ `/tech/certification` - 认证申请
+- ✅ 全部页面已完成
 
 #### 商户端 `/merchant`
-- ✅ `MerchantLayout.vue` - 底部导航（工作台、订单、技师、我的）
-- ✅ `/merchant/home` - 工作台（今日数据、待处理、近期订单）
-- ✅ `/merchant/order/list` - 订单管理
-- ✅ `/merchant/order/detail/:id` - 订单详情
-- ✅ `/merchant/tech/list` - 技师管理
-- ✅ `/merchant/tech/add` - 添加技师（手机号/二维码邀请）
-- ✅ `/merchant/tech/borrow` - 借调技师（筛选、申请）
-- ✅ `/merchant/service/list` - 服务项目管理
-- ✅ `/merchant/service/edit/:id?` - 编辑服务
-- ✅ `/merchant/income` - 收入明细
-- ✅ `/merchant/income/withdraw` - 申请提现
-- ✅ `/merchant/job/list` - 招聘管理
-- ✅ `/merchant/job/edit/:id?` - 编辑招聘
-- ✅ `/merchant/profile` - 我的（店铺信息）
-- ✅ `/merchant/profile/edit` - 编辑店铺信息
-- ✅ `/merchant/setting` - 店铺设置
+- ✅ 全部页面已完成
+
+#### 用户端增强
+- ✅ 店铺、评价、收藏、优惠券、地址、消息等页面已完成
+
+#### PHP API
+- ✅ 技师端、商户端、用户端 API 已完成
 
 ### 待完成
 
-#### 用户端增强
-- ✅ `/user/shop/list` - 附近店铺
-- ✅ `/user/shop/detail/:id` - 店铺详情
-- ✅ `/user/order/review/:id` - 评价技师（多维度评分）
-- ✅ `/user/favorite/list` - 收藏列表
-- ✅ `/user/coupon/list` - 优惠券
-- ✅ `/user/address/list` - 地址管理
-- ✅ `/user/address/edit/:id?` - 编辑地址
-- ✅ `/user/message/list` - 消息通知
-- ✅ `/user/profile` - 个人中心（已优化）
-- ✅ `/user/profile/edit` - 编辑资料
+#### 管理后台 `/admin` - ✅ 已完成（2026-01-13）
+- ✅ 工作台 (`/admin`) - 统计卡片、今日数据、待处理事项、最近订单
+- ✅ 用户管理 (`/admin/user/list`) - 用户列表、搜索、禁用/启用
+- ✅ 技师管理 (`/admin/tech/list`) - 技师列表、认证审核
+- ✅ 商户管理 (`/admin/merchant/list`) - 商户列表、禁用/启用
+- ✅ 订单管理 (`/admin/order/list`, `/admin/order/refund`) - 订单列表、退款处理
+- ✅ 服务管理 (`/admin/service/category`, `/admin/service/list`) - 服务分类、服务项目
+- ✅ 财务管理 (`/admin/finance/income`, `/admin/finance/withdraw`) - 收入统计、提现审核
+- ✅ 内容管理 (`/admin/content/banner`, `/admin/content/news`) - 轮播图、资讯管理
+- ✅ 系统设置 (`/admin/system/config`, `/admin/system/admin`) - 基础配置、管理员
 
-#### PHP API - 技师端（已完成 2026-01-13）
-- ✅ `api/tech/auth/login.api.php` - 技师登录
-- ✅ `api/tech/auth/info.api.php` - 获取技师信息
-- ✅ `api/tech/home/stats.api.php` - 工作台统计
-- ✅ `api/tech/order/list.api.php` - 订单列表
-- ✅ `api/tech/order/detail.api.php` - 订单详情
-- ✅ `api/tech/order/accept.api.php` - 接单
-- ✅ `api/tech/order/start.api.php` - 开始服务
-- ✅ `api/tech/order/complete.api.php` - 完成服务
-- ✅ `api/tech/income/list.api.php` - 收入明细
-- ✅ `api/tech/income/withdraw.api.php` - 申请提现
-- ✅ `api/tech/service/list.api.php` - 服务项目列表
-- ✅ `api/tech/service/update.api.php` - 更新服务项目
-- ✅ `api/tech/review/list.api.php` - 评价列表
-- ✅ `api/tech/review/reply.api.php` - 回复评价
-- ✅ `api/tech/setting/info.api.php` - 获取接单设置
-- ✅ `api/tech/setting/update.api.php` - 更新接单设置
-- ✅ `api/tech/profile/info.api.php` - 获取个人资料
-- ✅ `api/tech/profile/update.api.php` - 更新个人资料
-- ✅ `api/tech/certification/info.api.php` - 获取认证状态
-- ✅ `api/tech/certification/apply.api.php` - 申请认证
-- ✅ `api/tech/job/list.api.php` - 招聘列表
-- ✅ `api/tech/job/apply.api.php` - 申请职位
-
-#### PHP API - 商户端（已完成 2026-01-13）
-- ✅ `api/merchant/auth/login.api.php` - 商户登录
-- ✅ `api/merchant/auth/info.api.php` - 获取商户信息
-- ✅ `api/merchant/home/stats.api.php` - 工作台统计
-- ✅ `api/merchant/order/list.api.php` - 订单列表
-- ✅ `api/merchant/order/detail.api.php` - 订单详情
-- ✅ `api/merchant/order/assign.api.php` - 指派技师
-- ✅ `api/merchant/tech/list.api.php` - 技师列表
-- ✅ `api/merchant/tech/add.api.php` - 添加技师
-- ✅ `api/merchant/tech/remove.api.php` - 移除技师
-- ✅ `api/merchant/tech/pool.api.php` - 技师池（可借调）
-- ✅ `api/merchant/tech/borrow.api.php` - 借调技师
-- ✅ `api/merchant/service/list.api.php` - 服务项目列表
-- ✅ `api/merchant/income/list.api.php` - 收入明细
-- ✅ `api/merchant/income/withdraw.api.php` - 申请提现
-- ✅ `api/merchant/job/list.api.php` - 招聘列表
-- ✅ `api/merchant/job/save.api.php` - 保存招聘
-- ✅ `api/merchant/job/apply/list.api.php` - 申请列表
-- ✅ `api/merchant/job/apply/handle.api.php` - 处理申请
-- ✅ `api/merchant/profile/update.api.php` - 更新店铺信息
-
-#### PHP API - 用户端增强（已完成 2026-01-13）
-- ✅ `api/user/shop/list.api.php` - 附近店铺列表
-- ✅ `api/user/shop/detail.api.php` - 店铺详情
-- ✅ `api/user/favorite/list.api.php` - 收藏列表
-- ✅ `api/user/favorite/toggle.api.php` - 收藏/取消收藏
-- ✅ `api/user/coupon/list.api.php` - 优惠券列表
-- ✅ `api/user/address/list.api.php` - 地址列表
-- ✅ `api/user/address/save.api.php` - 保存地址
-- ✅ `api/user/address/delete.api.php` - 删除地址
-- ✅ `api/user/message/list.api.php` - 消息列表
-- ✅ `api/user/message/read.api.php` - 标记已读
-- ✅ `api/user/profile/info.api.php` - 获取个人资料
-- ✅ `api/user/profile/update.api.php` - 更新个人资料
-- ✅ `api/user/review/submit.api.php` - 提交评价（多维度）
-
-#### 数据库迁移
-- ✅ `sql/migration_add_auth_token.sql` - 添加认证 Token 字段
-
-#### 管理后台 `/admin`（待开发）
-- [ ] 用户管理
-- [ ] 技师管理
-- [ ] 商户管理
-- [ ] 订单管理
-- [ ] 数据统计
+#### 后续优化
+- [ ] 数据可视化图表
+- [ ] 权限管理系统
+- [ ] 操作日志

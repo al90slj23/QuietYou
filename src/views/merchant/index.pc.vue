@@ -8,11 +8,11 @@
 
 <script setup>
 import MobileOnlyTip from '@/components/common/MobileOnlyTip.vue'
-import { ShopIcon, ChartIcon, UserIcon } from 'tdesign-icons-vue-next'
+import { ShopIcon, ChartLineIcon, UserIcon } from 'tdesign-icons-vue-next'
 
 const features = [
   { icon: ShopIcon, text: '店铺管理' },
-  { icon: ChartIcon, text: '数据统计' },
+  { icon: ChartLineIcon, text: '数据统计' },
   { icon: UserIcon, text: '技师管理' }
 ]
 </script>

@@ -8,6 +8,6 @@ import { useMediaQuery } from '@/composables/useMediaQuery'
 import PcView from './index.pc.vue'
 import MobileView from './index.mobile.vue'
 
-const isMobile = useMediaQuery('(max-width: 768px)')
+const { isMobile } = useMediaQuery()
 const currentView = computed(() => isMobile.value ? MobileView : PcView)
 </script>

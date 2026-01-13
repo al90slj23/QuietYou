@@ -93,7 +93,7 @@
 import { onMounted, onUnmounted, nextTick } from 'vue'
 import { useWhitepaper, renderMindmaps } from './Whitepaper.logic'
 import { 
-  InfoCircleIcon, ChartIcon, WalletIcon, StarIcon, AppIcon, 
+  InfoCircleIcon, ChartLineIcon, WalletIcon, StarIcon, AppIcon, 
   CodeIcon, MapIcon, UsergroupIcon, LinkIcon, ChevronLeftIcon, FilePasteIcon
 } from 'tdesign-icons-vue-next'
 
@@ -106,7 +106,7 @@ const {
 const iconMap = {
   'file-paste': FilePasteIcon,
   'info-circle': InfoCircleIcon,
-  'chart-line': ChartIcon,
+  'chart-line': ChartLineIcon,
   'wallet': WalletIcon,
   'star': StarIcon,
   'app': AppIcon,
